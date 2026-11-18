@@ -1,1 +1,667 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Control Panel - اکیڈمی مینیجر</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --border: #cbd5e1;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: #1e293b; padding-bottom: 60px; }
+
+        /* Top Bar */
+        .topbar {
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        .status-online { background: #dcfce7; color: #166534; }
+        .status-offline { background: #fee2e2; color: #991b1b; }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 6px;
+            gap: 6px;
+        }
+        .tab-btn {
+            flex: 1;
+            min-width: 95px;
+            padding: 10px 8px;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #475569;
+        }
+        .tab-btn.active { background: var(--accent); color: #fff; }
+
+        .container { max-width: 750px; margin: 14px auto; padding: 0 12px; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+        .card h3 { font-size: 1.05rem; margin-bottom: 12px; color: var(--primary); border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
+
+        label { display: block; font-size: 0.88rem; font-weight: 600; margin-top: 10px; margin-bottom: 4px; }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #fff;
+        }
+        .btn {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 12px;
+            color: #fff;
+        }
+        .btn-primary { background: var(--accent); }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); }
+        .btn-sm { padding: 6px 10px; font-size: 0.8rem; width: auto; margin-top: 4px; }
+
+        /* Toggle Switch */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* List Items */
+        .item-box {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #fafafa;
+        }
+        .pin-display {
+            background: #eff6ff;
+            border: 2px dashed var(--accent);
+            padding: 14px;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 12px;
+            display: none;
+        }
+        .pin-code-text { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div>
+        <strong style="font-size:1.05rem;">🛡️ ایڈمن کنٹرول پینل</strong>
+    </div>
+    <span id="conn-status" class="status-badge status-offline">Not Connected</span>
+</div>
+
+<div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('pins-tab', this)">🔑 پِن جنریٹر</button>
+    <button class="tab-btn" onclick="switchTab('lectures-tab', this)">🎬 لیکچرز</button>
+    <button class="tab-btn" onclick="switchTab('upcoming-tab', this)">📢 آن کمنگ</button>
+    <button class="tab-btn" onclick="switchTab('qa-tab', this)">💬 سوالات</button>
+    <button class="tab-btn" onclick="switchTab('settings-tab', this)">⚙️ سیٹنگز</button>
+</div>
+
+<div class="container">
+
+    <!-- TAB 1: PIN GENERATOR & MANAGER -->
+    <div id="pins-tab" class="section active">
+        <div class="card">
+            <h3>نیا پِن (PIN) جنریٹ کریں</h3>
+            <label>لیکچر منتخب کریں:</label>
+            <select id="pin-lecture-select">
+                <option value="">پہلے لیکچر لوڈ کریں...</option>
+            </select>
+
+            <label>مدت (Duration - کتنے دن چلے):</label>
+            <select id="pin-duration">
+                <option value="1">1 دن (24 گھنٹے)</option>
+                <option value="3">3 دن</option>
+                <option value="7">7 دن (1 ہفتہ)</option>
+                <option value="15">15 دن</option>
+                <option value="30" selected>30 دن (1 مہینہ)</option>
+            </select>
+
+            <div class="toggle-row">
+                <span><strong>ایک براؤزر / ڈیوائس لاک (Optional):</strong><br><small style="color:#64748b;">ON رکھنے پر پِن صرف ایک موبائل پر چلے گا</small></span>
+                <input type="checkbox" id="pin-device-lock" checked style="width:22px; height:22px;">
+            </div>
+
+            <button class="btn btn-success" onclick="generatePin()">⚡ نیا پِن بنائیں (Generate PIN)</button>
+
+            <div id="generated-pin-box" class="pin-display">
+                <div style="font-size:0.85rem; color:#475569;">نیا پِن تیار ہے:</div>
+                <div id="new-pin-code" class="pin-code-text">L1-0000</div>
+                <button class="btn btn-primary btn-sm" onclick="copyGeneratedPin()">📋 پِن کاپی کریں (واٹس ایپ کے لیے)</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>ایکٹیو پِن لسٹ (Manage PINs)</h3>
+            <button class="btn btn-primary btn-sm" onclick="loadAllData()" style="margin-bottom:10px;">🔄 لسٹ ریفریش کریں</button>
+            <div id="pins-list"></div>
+        </div>
+    </div>
+
+    <!-- TAB 2: LECTURES MANAGER -->
+    <div id="lectures-tab" class="section">
+        <div class="card">
+            <h3>+ نیا لیکچر شامل کریں</h3>
+            <label>لیکچر نمبر (مثال: 1 یا 2):</label>
+            <input type="text" id="lec-num" placeholder="1">
+
+            <label>لیکچر کا عنوان (Title):</label>
+            <input type="text" id="lec-title" placeholder="مثال: کلاس نمبر 1 - بنیادی اصول">
+
+            <label>YouTube Unlisted ویڈیو لنک:</label>
+            <input type="text" id="lec-yt" placeholder="https://youtu.be/...">
+
+            <label>فیس (Price):</label>
+            <input type="text" id="lec-price" placeholder="مثال: 500 روپے">
+
+            <label>مختصر تفصیل (Description):</label>
+            <input type="text" id="lec-desc" placeholder="اس لیکچر میں کیا سکھایا جائے گا...">
+
+            <label>PDF نوٹس کا لنک (اختیاری - نہ ہو تو خالی چھوڑ دیں):</label>
+            <input type="text" id="lec-notes" placeholder="https://drive.google.com/...">
+
+            <button class="btn btn-primary" onclick="addLecture()">💾 لیکچر محفوظ کریں</button>
+        </div>
+
+        <div class="card">
+            <h3>موجودہ لیکچرز</h3>
+            <div id="admin-lectures-list"></div>
+        </div>
+    </div>
+
+    <!-- TAB 3: UPCOMING LECTURES TICKER -->
+    <div id="upcoming-tab" class="section">
+        <div class="card">
+            <h3>آن کمنگ لیکچر کا چلتا ہوا ٹیکسٹ شامل کریں</h3>
+            <label>اعلان / تاریخ لکھیں (بغیر کسی باکس کے صرف ٹیکسٹ چلے گا):</label>
+            <input type="text" id="upcoming-input" placeholder="مثال: اگلا لیکچر نمبر 4 بروز اتوار 20 نومبر رات 9 بجے اپ لوڈ ہوگا">
+            <button class="btn btn-primary" onclick="addUpcoming()">➕ ٹیکسٹ شامل کریں</button>
+
+            <div style="display:flex; gap:10px; margin-top:12px;">
+                <div style="flex:1;">
+                    <label>ٹیکسٹ کا رنگ (Color):</label>
+                    <input type="color" id="upcoming-color" value="#dc2626" style="height:42px;">
+                </div>
+                <div style="flex:1;">
+                    <label>ٹیکسٹ سائز (px):</label>
+                    <input type="number" id="upcoming-size" value="18" min="12" max="36">
+                </div>
+            </div>
+            <button class="btn btn-success btn-sm" onclick="saveUpcomingStyle()">🎨 رنگ اور سائز محفوظ کریں</button>
+        </div>
+
+        <div class="card">
+            <h3>چلنے والے اعلانات (تاریخ آنے پر Delete کر دیں)</h3>
+            <div id="upcoming-list"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: Q&A REPLIES -->
+    <div id="qa-tab" class="section">
+        <div class="card">
+            <h3>طلباء کے سوالات اور آپ کے جوابات</h3>
+            <button class="btn btn-primary btn-sm" onclick="loadAllData()" style="margin-bottom:10px;">🔄 سوالات چیک کریں</button>
+            <div id="admin-qa-list"></div>
+        </div>
+    </div>
+
+    <!-- TAB 5: FIREBASE & GENERAL SETTINGS -->
+    <div id="settings-tab" class="section">
+        <div class="card">
+            <h3>🔥 Firebase Connection Setup (Add & Save)</h3>
+            <p style="font-size:0.85rem; color:#64748b; margin-bottom:8px;">ایک بار سیو کرنے پر ایپ ہمیشہ خود بخود کنیکٹ ہو جائے گی۔</p>
+            <label>Firebase Realtime Database URL:</label>
+            <input type="text" id="fb-url" placeholder="https://your-project-default-rtdb.firebaseio.com">
+
+            <label>Firebase API Key (اختیاری):</label>
+            <input type="text" id="fb-apikey" placeholder="AIzaSy...">
+
+            <button class="btn btn-success" onclick="saveFirebaseConfig()">💾 Add & Save Firebase</button>
+        </div>
+
+        <div class="card">
+            <h3>🏫 ویب سائٹ، استاد اور پیمنٹ اکاؤنٹس</h3>
+            <label>ویب سائٹ / اکیڈمی کا نام:</label>
+            <input type="text" id="set-sitename" placeholder="مثال: آن لائن لیکچر اکیڈمی">
+
+            <label>ٹیچر کا نام:</label>
+            <input type="text" id="set-teacher" placeholder="مثال: پروفیسر وسیم">
+
+            <label>آپ کا واٹس ایپ نمبر (ملکی کوڈ کے ساتھ):</label>
+            <input type="text" id="set-whatsapp" placeholder="923001234567">
+
+            <label>JazzCash اکاؤنٹ نمبر اور نام:</label>
+            <input type="text" id="set-jc" placeholder="0300-1234567 (Name)">
+            <label>JazzCash QR Image Link (اختیاری):</label>
+            <input type="text" id="set-jc-qr" placeholder="https://...">
+
+            <label>EasyPaisa اکاؤنٹ نمبر اور نام:</label>
+            <input type="text" id="set-ep" placeholder="0345-1234567 (Name)">
+            <label>EasyPaisa QR Image Link (اختیاری):</label>
+            <input type="text" id="set-ep-qr" placeholder="https://...">
+
+            <label>NayaPay اکاؤنٹ / IBAN:</label>
+            <input type="text" id="set-np" placeholder="03xx-xxxxxxx / NayaPay ID">
+            <label>NayaPay QR Image Link (اختیاری):</label>
+            <input type="text" id="set-np-qr" placeholder="https://...">
+
+            <label>Raqami اکاؤنٹ / IBAN:</label>
+            <input type="text" id="set-rq" placeholder="Raqami Account / IBAN">
+            <label>Raqami QR Image Link (اختیاری):</label>
+            <input type="text" id="set-rq-qr" placeholder="https://...">
+
+            <button class="btn btn-primary" onclick="saveGeneralSettings()">💾 تمام سیٹنگز محفوظ کریں</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let dbUrl = "";
+    let cachedData = {};
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+        btn.classList.add("active");
+    }
+
+    // Auto-Connect Firebase on Load
+    function initAdmin() {
+        const savedUrl = localStorage.getItem("admin_fb_url") || "";
+        const savedKey = localStorage.getItem("admin_fb_key") || "";
+        document.getElementById("fb-url").value = savedUrl;
+        document.getElementById("fb-apikey").value = savedKey;
+
+        if (savedUrl) {
+            dbUrl = savedUrl.replace(/\/$/, "");
+            loadAllData();
+        } else {
+            // Switch to settings tab automatically if not configured yet
+            switchTab("settings-tab", document.querySelectorAll(".tab-btn")[4]);
+        }
+    }
+
+    function saveFirebaseConfig() {
+        const url = document.getElementById("fb-url").value.trim().replace(/\/$/, "");
+        const key = document.getElementById("fb-apikey").value.trim();
+        if (!url) return alert("براہ کرم Firebase Database URL درج کریں۔");
+
+        localStorage.setItem("admin_fb_url", url);
+        localStorage.setItem("admin_fb_key", key);
+        dbUrl = url;
+        alert("✅ Firebase تفصیلات محفوظ ہو گئیں! اب ایپ آٹو-کنیکٹ ہوگی۔");
+        loadAllData();
+    }
+
+    async function loadAllData() {
+        if (!dbUrl) return;
+        const badge = document.getElementById("conn-status");
+        try {
+            const res = await fetch(`${dbUrl}/.json`);
+            if (!res.ok) throw new Error("Connection failed");
+            cachedData = (await res.json()) || {};
+            badge.innerText = "Connected ●";
+            badge.className = "status-badge status-online";
+
+            populateSettingsForm();
+            renderLecturesAdmin();
+            renderPinsAdmin();
+            renderUpcomingAdmin();
+            renderQAAdmin();
+        } catch (e) {
+            badge.innerText = "Not Connected";
+            badge.className = "status-badge status-offline";
+        }
+    }
+
+    function populateSettingsForm() {
+        const s = (cachedData.portal && cachedData.portal.settings) || {};
+        document.getElementById("set-sitename").value = s.siteName || "";
+        document.getElementById("set-teacher").value = s.teacherName || "";
+        document.getElementById("set-whatsapp").value = s.whatsapp || "";
+        document.getElementById("set-jc").value = s.jazzcash || "";
+        document.getElementById("set-jc-qr").value = s.jazzcashQr || "";
+        document.getElementById("set-ep").value = s.easypaisa || "";
+        document.getElementById("set-ep-qr").value = s.easypaisaQr || "";
+        document.getElementById("set-np").value = s.nayapay || "";
+        document.getElementById("set-np-qr").value = s.nayapayQr || "";
+        document.getElementById("set-rq").value = s.raqami || "";
+        document.getElementById("set-rq-qr").value = s.raqamiQr || "";
+        if (s.upcomingColor) document.getElementById("upcoming-color").value = s.upcomingColor;
+        if (s.upcomingSize) document.getElementById("upcoming-size").value = s.upcomingSize;
+    }
+
+    async function saveGeneralSettings() {
+        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const existing = (cachedData.portal && cachedData.portal.settings) || {};
+        const payload = {
+            ...existing,
+            siteName: document.getElementById("set-sitename").value.trim(),
+            teacherName: document.getElementById("set-teacher").value.trim(),
+            whatsapp: document.getElementById("set-whatsapp").value.trim(),
+            jazzcash: document.getElementById("set-jc").value.trim(),
+            jazzcashQr: document.getElementById("set-jc-qr").value.trim(),
+            easypaisa: document.getElementById("set-ep").value.trim(),
+            easypaisaQr: document.getElementById("set-ep-qr").value.trim(),
+            nayapay: document.getElementById("set-np").value.trim(),
+            nayapayQr: document.getElementById("set-np-qr").value.trim(),
+            raqami: document.getElementById("set-rq").value.trim(),
+            raqamiQr: document.getElementById("set-rq-qr").value.trim()
+        };
+        await fetch(`${dbUrl}/portal/settings.json`, {
+            method: "PUT",
+            body: JSON.stringify(payload)
+        });
+        alert("✅ تمام سیٹنگز ویب سائٹ پر اپ ڈیٹ ہو گئیں!");
+        loadAllData();
+    }
+
+    // Lectures Management
+    async function addLecture() {
+        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const num = document.getElementById("lec-num").value.trim();
+        const title = document.getElementById("lec-title").value.trim();
+        const yt = document.getElementById("lec-yt").value.trim();
+        const price = document.getElementById("lec-price").value.trim();
+        const desc = document.getElementById("lec-desc").value.trim();
+        const notes = document.getElementById("lec-notes").value.trim();
+
+        if (!title || !yt) return alert("لیکچر کا عنوان اور یوٹیوب لنک ضروری ہے۔");
+
+        const lecId = "LEC" + (num || Date.now().toString().slice(-4));
+        const payload = { number: num, title, youtubeUrl: yt, price, desc, notesUrl: notes };
+
+        await fetch(`${dbUrl}/portal/lectures/${lecId}.json`, {
+            method: "PUT",
+            body: JSON.stringify(payload)
+        });
+
+        document.getElementById("lec-num").value = "";
+        document.getElementById("lec-title").value = "";
+        document.getElementById("lec-yt").value = "";
+        document.getElementById("lec-price").value = "";
+        document.getElementById("lec-desc").value = "";
+        document.getElementById("lec-notes").value = "";
+        alert("✅ نیا لیکچر شامل ہو گیا!");
+        loadAllData();
+    }
+
+    function renderLecturesAdmin() {
+        const list = document.getElementById("admin-lectures-list");
+        const select = document.getElementById("pin-lecture-select");
+        list.innerHTML = "";
+        select.innerHTML = "";
+
+        const lecs = (cachedData.portal && cachedData.portal.lectures) || {};
+        const keys = Object.keys(lecs);
+        if (keys.length === 0) {
+            list.innerHTML = "<p style='color:#64748b;'>کوئی لیکچر موجود نہیں۔</p>";
+            select.innerHTML = "<option value=''>کوئی لیکچر موجود نہیں</option>";
+            return;
+        }
+        keys.forEach(id => {
+            const l = lecs[id];
+            const opt = document.createElement("option");
+            opt.value = id;
+            opt.innerText = `لیکچر #${l.number || id} - ${l.title}`;
+            select.appendChild(opt);
+
+            const div = document.createElement("div");
+            div.className = "item-box";
+            div.innerHTML = `
+                <strong>لیکچر #${l.number || id}: ${l.title}</strong>
+                <div style="font-size:0.85rem; color:#475569;">فیس: ${l.price || "N/A"}</div>
+                <button class="btn btn-danger btn-sm" onclick="deleteLecture('${id}')">🗑️ ڈیلیٹ کریں</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    async function deleteLecture(id) {
+        if (!confirm("کیا آپ واقعی یہ لیکچر ڈیلیٹ کرنا چاہتے ہیں؟")) return;
+        await fetch(`${dbUrl}/portal/lectures/${id}.json`, { method: "DELETE" });
+        loadAllData();
+    }
+
+    // PIN Generation & Management
+    async function generatePin() {
+        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const lecId = document.getElementById("pin-lecture-select").value;
+        if (!lecId) return alert("پہلے کوئی لیکچر منتخب کریں۔");
+
+        const days = parseInt(document.getElementById("pin-duration").value);
+        const deviceLock = document.getElementById("pin-device-lock").checked;
+        const randomDigits = Math.floor(1000 + Math.random() * 9000);
+        const pinCode = `${lecId}-${randomDigits}`;
+        const expiresAt = Date.now() + (days * 24 * 60 * 60 * 1000);
+
+        const payload = {
+            lectureId: lecId,
+            days: days,
+            expiresAt: expiresAt,
+            deviceLock: deviceLock,
+            boundDevice: "",
+            blocked: false,
+            createdAt: Date.now()
+        };
+
+        await fetch(`${dbUrl}/pins/${pinCode}.json`, {
+            method: "PUT",
+            body: JSON.stringify(payload)
+        });
+
+        document.getElementById("new-pin-code").innerText = pinCode;
+        document.getElementById("generated-pin-box").style.display = "block";
+        loadAllData();
+    }
+
+    function copyGeneratedPin() {
+        const code = document.getElementById("new-pin-code").innerText;
+        navigator.clipboard.writeText(code);
+        alert("📋 پِن کاپی ہو گیا: " + code);
+    }
+
+    function renderPinsAdmin() {
+        const list = document.getElementById("pins-list");
+        list.innerHTML = "";
+        const pins = cachedData.pins || {};
+        const keys = Object.keys(pins).reverse();
+        if (keys.length === 0) {
+            list.innerHTML = "<p style='color:#64748b;'>ابھی کوئی پِن نہیں بنایا گیا۔</p>";
+            return;
+        }
+        keys.forEach(code => {
+            const p = pins[code];
+            const expDate = new Date(p.expiresAt).toLocaleDateString("ur-PK");
+            const isExpired = Date.now() > p.expiresAt;
+            const div = document.createElement("div");
+            div.className = "item-box";
+            div.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong style="font-size:1.05rem; color:var(--accent);">${code}</strong>
+                    <span style="font-size:0.8rem; color:${isExpired ? 'red' : 'green'}; font-weight:700;">
+                        ${isExpired ? "Expired" : "Active (" + expDate + ")"}
+                    </span>
+                </div>
+                <div style="font-size:0.82rem; color:#475569; margin-top:4px;">
+                    لیکچر: ${p.lectureId} | ڈیوائس لاک: ${p.deviceLock ? (p.boundDevice ? "🔒 لاکڈ" : "ON (خالی)") : "OFF"}
+                </div>
+                <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('${code}'); alert('کاپی ہو گیا')">📋 کاپی</button>
+                    <button class="btn btn-sm" style="background:var(--warning);" onclick="resetPinDevice('${code}')">🔓 ڈیوائس ری سیٹ</button>
+                    <button class="btn btn-danger btn-sm" onclick="deletePin('${code}')">🗑️ ختم کریں</button>
+                </div>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    async function resetPinDevice(code) {
+        await fetch(`${dbUrl}/pins/${code}/boundDevice.json`, {
+            method: "PUT",
+            body: JSON.stringify("")
+        });
+        alert("✅ ڈیوائس لاک ری سیٹ ہو گیا! اب صارف نئے موبائل پر پِن لگا سکتا ہے۔");
+        loadAllData();
+    }
+
+    async function deletePin(code) {
+        if (!confirm("یہ پِن مستقل طور پر ڈیلیٹ کر دیں؟")) return;
+        await fetch(`${dbUrl}/pins/${code}.json`, { method: "DELETE" });
+        loadAllData();
+    }
+
+    // Upcoming Announcements
+    async function addUpcoming() {
+        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const text = document.getElementById("upcoming-input").value.trim();
+        if (!text) return alert("براہ کرم ٹیکسٹ لکھیں۔");
+        await fetch(`${dbUrl}/portal/upcoming.json`, {
+            method: "POST",
+            body: JSON.stringify({ text, createdAt: Date.now() })
+        });
+        document.getElementById("upcoming-input").value = "";
+        loadAllData();
+    }
+
+    async function saveUpcomingStyle() {
+        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const color = document.getElementById("upcoming-color").value;
+        const size = document.getElementById("upcoming-size").value;
+        await fetch(`${dbUrl}/portal/settings/upcomingColor.json`, { method: "PUT", body: JSON.stringify(color) });
+        await fetch(`${dbUrl}/portal/settings/upcomingSize.json`, { method: "PUT", body: JSON.stringify(size) });
+        alert("✅ ٹیکسٹ کا رنگ اور سائز اپ ڈیٹ ہو گیا!");
+    }
+
+    function renderUpcomingAdmin() {
+        const list = document.getElementById("upcoming-list");
+        list.innerHTML = "";
+        const items = (cachedData.portal && cachedData.portal.upcoming) || {};
+        const keys = Object.keys(items);
+        if (keys.length === 0) {
+            list.innerHTML = "<p style='color:#64748b;'>کوئی آن کمنگ ٹیکسٹ موجود نہیں۔</p>";
+            return;
+        }
+        keys.forEach(id => {
+            const div = document.createElement("div");
+            div.className = "item-box";
+            div.innerHTML = `
+                <div>${items[id].text}</div>
+                <button class="btn btn-danger btn-sm" onclick="deleteUpcoming('${id}')">🗑️ Delete</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    async function deleteUpcoming(id) {
+        await fetch(`${dbUrl}/portal/upcoming/${id}.json`, { method: "DELETE" });
+        loadAllData();
+    }
+
+    // Q&A Replies
+    function renderQAAdmin() {
+        const list = document.getElementById("admin-qa-list");
+        list.innerHTML = "";
+        const allQ = cachedData.questions || {};
+        let count = 0;
+
+        Object.keys(allQ).forEach(lecId => {
+            const lecQuestions = allQ[lecId] || {};
+            Object.keys(lecQuestions).forEach(qId => {
+                count++;
+                const q = lecQuestions[qId];
+                const div = document.createElement("div");
+                div.className = "item-box";
+                div.innerHTML = `
+                    <div style="font-size:0.8rem; color:var(--accent); font-weight:700;">لیکچر: ${lecId} | ${q.name} (${q.pin})</div>
+                    <div style="margin:6px 0; font-weight:600;">سوال: ${q.text}</div>
+                    <input type="text" id="reply-input-${qId}" value="${q.reply || ""}" placeholder="یہاں اپنا جواب لکھیں...">
+                    <div style="display:flex; gap:6px; margin-top:6px;">
+                        <button class="btn btn-success btn-sm" onclick="sendReply('${lecId}', '${qId}')">💬 جواب بھیجیں</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${lecId}', '${qId}')">🗑️ ڈیلیٹ</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        });
+
+        if (count === 0) {
+            list.innerHTML = "<p style='color:#64748b;'>ابھی کوئی سوال موصول نہیں ہوا۔</p>";
+        }
+    }
+
+    async function sendReply(lecId, qId) {
+        const replyText = document.getElementById(`reply-input-${qId}`).value.trim();
+        await fetch(`${dbUrl}/questions/${lecId}/${qId}/reply.json`, {
+            method: "PUT",
+            body: JSON.stringify(replyText)
+        });
+        alert("✅ جواب شائع ہو گیا!");
+        loadAllData();
+    }
+
+    async function deleteQuestion(lecId, qId) {
+        await fetch(`${dbUrl}/questions/${lecId}/${qId}.json`, { method: "DELETE" });
+        loadAllData();
+    }
+
+    initAdmin();
+</script>
+</body>
+</html>
 
