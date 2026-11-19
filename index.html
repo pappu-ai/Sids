@@ -3,33 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">آن لائن لیکچر پورٹل</title>
+    <title id="page-title">Sids Studios | آن لائن لیکچر پورٹل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0f172a;
+            --primary: #0b1120;
+            --primary-light: #1e293b;
             --accent: #2563eb;
             --accent-hover: #1d4ed8;
+            --gold: #f59e0b;
+            --gold-light: #fef3c7;
             --success: #16a34a;
             --danger: #dc2626;
-            --bg: #f8fafc;
+            --bg: #f1f5f9;
             --card: #ffffff;
-            --text: #1e293b;
+            --text: #0f172a;
             --muted: #64748b;
             --border: #e2e8f0;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-        body { background: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 40px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--bg); color: var(--text); line-height: 1.65; padding-bottom: 50px; }
         
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        /* International Hero Banner */
+        .hero-banner {
+            position: relative;
+            background: radial-gradient(circle at 15% 20%, #1e3a8a 0%, #0f172a 55%, #070b14 100%);
             color: #fff;
-            padding: 24px 16px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 38px 18px 46px;
+            overflow: hidden;
+            border-bottom: 3px solid var(--gold);
+            box-shadow: 0 12px 30px rgba(11, 17, 32, 0.25);
         }
-        header h1 { font-size: 1.6rem; margin-bottom: 6px; font-weight: 700; }
-        header p { font-size: 0.95rem; opacity: 0.9; }
+        /* Subtle Academic Grid Overlay */
+        .hero-banner::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+            pointer-events: none;
+        }
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 920px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.35fr 0.85fr;
+            gap: 24px;
+            align-items: center;
+        }
+        @media (max-width: 720px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+        .brand-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.16);
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            color: #fcd34d;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            letter-spacing: 0.4px;
+        }
+        .brand-title {
+            font-size: 2.35rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ffffff 0%, #e2e8f0 55%, #fde68a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+        @media (max-width: 720px) {
+            .brand-title { font-size: 1.95rem; }
+        }
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #cbd5e1;
+            margin-bottom: 18px;
+            max-width: 540px;
+        }
+        @media (max-width: 720px) {
+            .hero-subtitle { margin: 0 auto 18px; }
+        }
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        @media (max-width: 720px) {
+            .hero-stats { justify-content: center; }
+        }
+        .stat-chip {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(6px);
+            padding: 7px 13px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Decorative Academic Books & Studio Illustration Card */
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .studio-emblem-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 270px;
+            text-align: center;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .studio-emblem-card svg {
+            width: 135px;
+            height: 115px;
+            margin: 0 auto 8px;
+            display: block;
+            filter: drop-shadow(0 8px 14px rgba(0,0,0,0.4));
+        }
+        .emblem-label {
+            font-size: 0.82rem;
+            color: #fde68a;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .emblem-sub {
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
 
         /* Upcoming Text Ticker / Floating Text (No Box) */
         .upcoming-container {
@@ -37,6 +160,8 @@
             text-align: center;
             overflow: hidden;
             white-space: nowrap;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
         }
         .upcoming-scroll {
             display: inline-block;
@@ -50,40 +175,109 @@
         }
 
         /* Main Container */
-        .container { max-width: 850px; margin: 16px auto; padding: 0 14px; }
+        .container { max-width: 920px; margin: 22px auto; padding: 0 16px; }
 
-        /* Lecture Grid */
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .section-heading h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .section-heading span {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        /* Lecture Grid & Cards with Auto HD Thumbnails */
         .lecture-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+            gap: 20px;
             margin-top: 12px;
         }
         .lecture-card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s;
+            transition: transform 0.22s, box-shadow 0.22s;
         }
-        .lecture-card:hover { transform: translateY(-2px); }
+        .lecture-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+        }
+        .lec-thumb-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            overflow: hidden;
+        }
+        .lec-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s;
+        }
+        .lecture-card:hover .lec-thumb-box img {
+            transform: scale(1.04);
+        }
+        .lec-thumb-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15,23,42,0.75) 0%, rgba(15,23,42,0.1) 55%, transparent 100%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 10px 12px;
+        }
         .lec-badge {
-            display: inline-block;
-            background: #eff6ff;
-            color: var(--accent);
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-bottom: 8px;
-            width: fit-content;
+            background: var(--gold);
+            color: #0f172a;
+            font-size: 0.78rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 6px;
         }
-        .lec-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
-        .lec-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 14px; }
+        .lec-hd-tag {
+            background: rgba(15, 23, 42, 0.82);
+            color: #fff;
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lec-body {
+            padding: 16px 18px 18px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+        .lec-title { font-size: 1.12rem; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
+        .lec-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 14px; }
+        .lec-features {
+            display: flex;
+            gap: 10px;
+            font-size: 0.78rem;
+            color: #475569;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
         .lec-footer {
             display: flex;
             align-items: center;
@@ -91,16 +285,17 @@
             border-top: 1px solid var(--border);
             padding-top: 12px;
         }
-        .lec-price { font-weight: 700; color: var(--success); font-size: 1rem; }
+        .lec-price { font-weight: 800; color: var(--success); font-size: 1rem; }
         .btn-open {
-            background: var(--accent);
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: #fff;
             border: none;
-            padding: 9px 18px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 9px 16px;
+            border-radius: 9px;
+            font-weight: 700;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
         }
         .btn-open:hover { background: var(--accent-hover); }
 
@@ -109,7 +304,8 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             overflow-y: auto;
             padding: 16px;
@@ -118,10 +314,10 @@
             background: #fff;
             max-width: 520px;
             margin: 24px auto;
-            border-radius: 16px;
-            padding: 22px;
+            border-radius: 18px;
+            padding: 24px;
             position: relative;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            box-shadow: 0 25px 35px -5px rgba(0,0,0,0.28);
         }
         .close-btn {
             position: absolute;
@@ -129,8 +325,8 @@
             left: 16px;
             background: #f1f5f9;
             border: none;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             font-size: 1.2rem;
             cursor: pointer;
@@ -207,17 +403,17 @@
             width: 100%;
             padding-bottom: 56.25%;
             background: #000;
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
         }
         .video-wrapper iframe {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             border: 0;
         }
-        /* Top bar blocker to hide YouTube title/share/watch-later */
         .yt-top-shield {
             position: absolute;
             top: 0; left: 0; right: 0;
@@ -225,19 +421,20 @@
             background: transparent;
             z-index: 15;
         }
-        /* Dynamic Moving Watermark */
-        .dynamic-watermark {
+        /* Subtle Fixed Corner Watermark (Non-Distracting) */
+        .fixed-watermark {
             position: absolute;
+            bottom: 42px;
+            left: 14px;
             z-index: 20;
-            color: rgba(255, 255, 255, 0.42);
-            background: rgba(0, 0, 0, 0.28);
-            padding: 3px 9px;
-            border-radius: 4px;
-            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.38);
+            background: rgba(15, 23, 42, 0.35);
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.78rem;
             font-weight: 700;
             pointer-events: none;
             letter-spacing: 1px;
-            transition: all 1.2s ease-in-out;
         }
 
         .notes-btn {
@@ -257,8 +454,8 @@
             margin-top: 22px;
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 18px;
         }
         .qa-input {
             width: 100%;
@@ -288,12 +485,62 @@
 </head>
 <body oncontextmenu="return false;">
 
-<header>
-    <h1 id="site-name">آن لائن لیکچر اکیڈمی</h1>
-    <p id="teacher-info">لیکچرز دیکھنے کے لیے متعلقہ بٹن پر کلک کریں</p>
-</header>
+<!-- International Hero Banner -->
+<section class="hero-banner">
+    <div class="hero-inner">
+        <div class="hero-text">
+            <div class="brand-pill">🎓 OFFICIAL DIGITAL LEARNING ACADEMY</div>
+            <h1 id="site-name" class="brand-title">SIDS STUDIOS</h1>
+            <p id="teacher-info" class="hero-subtitle">اعلیٰ معیار کے ویڈیو لیکچرز، مستند تعلیمی مواد اور فوری پِن رسائی کے ساتھ جدید آن لائن اکیڈمی</p>
+            <div class="hero-stats">
+                <div class="stat-chip">🎥 HD ویڈیو لیکچرز</div>
+                <div class="stat-chip">📚 پی ڈی ایف نوٹس</div>
+                <div class="stat-chip">🔐 محفوظ پِن ایکسیس</div>
+            </div>
+        </div>
 
-<!-- Upcoming Lectures Floating Text (No Box) -->
+        <div class="hero-visual">
+            <div class="studio-emblem-card">
+                <!-- Custom SVG Illustration: Stack of Academic Books, Graduation Cap & Play Badge -->
+                <svg viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Glow Circle -->
+                    <circle cx="90" cy="72" r="56" fill="url(#glowGrad)" opacity="0.28"/>
+                    <!-- Bottom Book (Navy & Gold) -->
+                    <rect x="28" y="96" width="124" height="18" rx="4" fill="#1e40af" stroke="#60a5fa" stroke-width="1.5"/>
+                    <rect x="34" y="100" width="112" height="10" rx="2" fill="#f8fafc"/>
+                    <line x1="42" y1="105" x2="138" y2="105" stroke="#cbd5e1" stroke-width="1.5"/>
+                    <!-- Middle Book (Emerald & Gold) -->
+                    <rect x="36" y="76" width="108" height="18" rx="4" fill="#0f766e" stroke="#34d399" stroke-width="1.5"/>
+                    <rect x="42" y="80" width="96" height="10" rx="2" fill="#fef3c7"/>
+                    <!-- Top Open Book -->
+                    <path d="M44 68C62 60 78 62 90 70C102 62 118 60 136 68V42C118 35 102 37 90 45C78 37 62 35 44 42V68Z" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+                    <line x1="90" y1="45" x2="90" y2="70" stroke="#f59e0b" stroke-width="2"/>
+                    <line x1="54" y1="49" x2="80" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="54" y1="56" x2="80" y2="59" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="100" y1="52" x2="126" y2="49" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+                    <line x1="100" y1="59" x2="126" y2="56" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+                    <!-- Graduation Cap Top -->
+                    <polygon points="90,10 130,24 90,36 50,24" fill="#f59e0b" stroke="#fef3c7" stroke-width="1.5"/>
+                    <path d="M124 26V38" stroke="#fcd34d" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="124" cy="40" r="2.5" fill="#fef3c7"/>
+                    <!-- Video Play Badge -->
+                    <circle cx="138" cy="92" r="17" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
+                    <polygon points="134,85 146,92 134,99" fill="#ffffff"/>
+                    <defs>
+                        <radialGradient id="glowGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(90 72) scale(56)">
+                            <stop stop-color="#f59e0b"/>
+                            <stop offset="1" stop-color="#0f172a" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                </svg>
+                <div class="emblem-label">SIDS STUDIOS</div>
+                <div class="emblem-sub">Digital Lecture Portal</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Lectures Floating Text -->
 <div id="upcoming-area" class="upcoming-container" style="display:none;">
     <div id="upcoming-text" class="upcoming-scroll"></div>
 </div>
@@ -301,12 +548,12 @@
 <div class="container">
     <!-- Active Player View -->
     <div id="player-section">
-        <button onclick="closePlayer()" style="background:#334155; color:#fff; border:none; padding:8px 14px; border-radius:8px; margin-bottom:12px; cursor:pointer;">← تمام لیکچرز پر واپس جائیں</button>
-        <h2 id="active-lec-title" style="margin-bottom:10px; color:var(--primary);"></h2>
+        <button onclick="closePlayer()" style="background:#1e293b; color:#fff; border:none; padding:9px 16px; border-radius:9px; margin-bottom:14px; cursor:pointer; font-weight:600;">← تمام لیکچرز پر واپس جائیں</button>
+        <h2 id="active-lec-title" style="margin-bottom:12px; color:var(--primary); font-weight:800;"></h2>
         
         <div class="video-wrapper" id="video-box">
             <div class="yt-top-shield"></div>
-            <div id="watermark" class="dynamic-watermark">PIN: ----</div>
+            <div id="watermark" class="fixed-watermark">PIN: ----</div>
             <div id="yt-iframe-container"></div>
         </div>
 
@@ -314,7 +561,7 @@
 
         <!-- Student Q&A Section -->
         <div class="qa-section">
-            <h3 style="font-size:1.05rem; margin-bottom:6px;">سوال و جواب (اس لیکچر کے متعلق سوال پوچھیں)</h3>
+            <h3 style="font-size:1.05rem; margin-bottom:6px; font-weight:700;">سوال و جواب (اس لیکچر کے متعلق سوال پوچھیں)</h3>
             <input type="text" id="student-name" class="qa-input" placeholder="آپ کا نام (اختیاری)">
             <textarea id="student-question" class="qa-input" rows="2" placeholder="اپنا سوال یہاں لکھیں..."></textarea>
             <button onclick="submitQuestion()" class="btn-open" style="margin-top:8px;">سوال بھیجیں</button>
@@ -324,6 +571,10 @@
 
     <!-- Lecture Buttons List -->
     <div id="lectures-view">
+        <div class="section-heading">
+            <h2>📚 دستیاب ویڈیو لیکچرز</h2>
+            <span id="lec-count-badge">کورس کیٹلاگ</span>
+        </div>
         <div id="loader" class="loading-box">لیکچرز لوڈ ہو رہے ہیں...</div>
         <div id="lecture-grid" class="lecture-grid"></div>
     </div>
@@ -333,7 +584,7 @@
 <div id="access-modal" class="modal">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
-        <h3 id="modal-lec-title" style="color:var(--primary); margin-bottom:4px;">لیکچر لاک ہے</h3>
+        <h3 id="modal-lec-title" style="color:var(--primary); margin-bottom:4px; font-weight:800;">لیکچر لاک ہے</h3>
         <p id="modal-lec-price" style="color:var(--success); font-weight:700; font-size:0.95rem;"></p>
 
         <div class="pin-box">
@@ -357,16 +608,13 @@
 </div>
 
 <script>
-    // Firebase Realtime Database URL (Connected)
     const FIREBASE_DB_URL = "https://sidsstudio-2bd24-default-rtdb.firebaseio.com";
 
     let dbUrl = FIREBASE_DB_URL.replace(/\/$/, "");
     let siteData = { settings: {}, lectures: {}, upcoming: {} };
     let selectedLectureId = null;
     let activePinCode = "";
-    let watermarkInterval = null;
 
-    // Device Fingerprint
     function getDeviceId() {
         let id = localStorage.getItem("academy_device_id");
         if (!id) {
@@ -376,7 +624,13 @@
         return id;
     }
 
-    // Load Portal Data from Firebase REST API
+    function extractYouTubeId(url) {
+        if (!url) return "";
+        const regExp = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/|live\/))([a-zA-Z0-9_-]{11})/;
+        const match = url.match(regExp);
+        return match ? match[1] : url.trim();
+    }
+
     async function initPortal() {
         try {
             const res = await fetch(`${dbUrl}/portal.json`);
@@ -398,10 +652,11 @@
         const s = siteData.settings || {};
         if (s.siteName) {
             document.getElementById("site-name").innerText = s.siteName;
-            document.getElementById("page-title").innerText = s.siteName;
+            document.getElementById("page-title").innerText = s.siteName + " | آن لائن لیکچر پورٹل";
+            document.querySelectorAll(".emblem-label").forEach(el => el.innerText = s.siteName);
         }
         if (s.teacherName) {
-            document.getElementById("teacher-info").innerText = "استاد / لیکچرار: " + s.teacherName;
+            document.getElementById("teacher-info").innerText = "لیکچرار / استاد: " + s.teacherName + " — مستند آن لائن لیکچرز اور تعلیمی مواد";
         }
     }
 
@@ -415,7 +670,7 @@
             const styleCfg = siteData.settings || {};
             textEl.innerText = combined;
             textEl.style.color = styleCfg.upcomingColor || "#dc2626";
-            textEl.style.fontSize = (styleCfg.upcomingSize || "18") + "px";
+            textEl.style.fontSize = (styleCfg.upcomingSize || "17") + "px";
             area.style.display = "block";
         } else {
             area.style.display = "none";
@@ -428,6 +683,7 @@
         grid.innerHTML = "";
         const lecs = siteData.lectures || {};
         const keys = Object.keys(lecs);
+        document.getElementById("lec-count-badge").innerText = keys.length + " لیکچرز دستیاب";
         if (keys.length === 0) {
             loader.innerText = "ابھی کوئی لیکچر دستیاب نہیں ہے۔";
             return;
@@ -435,17 +691,32 @@
         loader.style.display = "none";
         keys.forEach(id => {
             const lec = lecs[id];
+            const vidId = extractYouTubeId(lec.youtubeUrl || "");
+            const thumbUrl = vidId ? `https://i.ytimg.com/vi/${vidId}/hqdefault.jpg` : "";
             const card = document.createElement("div");
             card.className = "lecture-card";
             card.innerHTML = `
-                <div>
-                    <span class="lec-badge">لیکچر #${lec.number || id}</span>
-                    <div class="lec-title">${lec.title}</div>
-                    <div class="lec-desc">${lec.desc || "مکمل ویڈیو لیکچر (پِن کے ذریعے رسائی)"}</div>
+                <div class="lec-thumb-box">
+                    ${thumbUrl ? `<img src="${thumbUrl}" alt="${lec.title}" loading="lazy">` : ""}
+                    <div class="lec-thumb-overlay">
+                        <span class="lec-badge">لیکچر #${lec.number || id}</span>
+                        <span class="lec-hd-tag">▶ HD Video</span>
+                    </div>
                 </div>
-                <div class="lec-footer">
-                    <span class="lec-price">${lec.price ? "فیس: " + lec.price : "Paid Access"}</span>
-                    <button class="btn-open" onclick="openLectureModal('${id}')">لیکچر کھولیں 🔒</button>
+                <div class="lec-body">
+                    <div>
+                        <div class="lec-title">${lec.title}</div>
+                        <div class="lec-desc">${lec.desc || "مکمل ویڈیو لیکچر (پِن کے ذریعے فوری رسائی)"}</div>
+                        <div class="lec-features">
+                            <span>🎥 فل ایچ ڈی</span>
+                            ${lec.notesUrl ? `<span>📄 PDF نوٹس</span>` : ""}
+                            <span>💬 سوال و جواب</span>
+                        </div>
+                    </div>
+                    <div class="lec-footer">
+                        <span class="lec-price">${lec.price ? "فیس: " + lec.price : "Paid Access"}</span>
+                        <button class="btn-open" onclick="openLectureModal('${id}')">لیکچر کھولیں 🔒</button>
+                    </div>
                 </div>
             `;
             grid.appendChild(card);
@@ -460,7 +731,6 @@
         document.getElementById("pin-input").value = "";
         document.getElementById("pin-status").innerText = "";
 
-        // Render Payment Accounts
         const payGrid = document.getElementById("payment-accounts-grid");
         payGrid.innerHTML = "";
         const s = siteData.settings || {};
@@ -483,7 +753,6 @@
             }
         });
 
-        // WhatsApp Link
         const waNum = (s.whatsapp || "").replace(/[^0-9]/g, "");
         const msg = encodeURIComponent(`السلام علیکم! میں نے لیکچر #${lec.number || lecId} (${lec.title}) کی پیمنٹ کر دی ہے۔ براہ کرم مجھے اس لیکچر کا پِن (PIN) بھیج دیں۔ یہ میری رسید ہے:`);
         document.getElementById("whatsapp-pay-btn").href = waNum ? `https://wa.me/${waNum}?text=${msg}` : "#";
@@ -531,7 +800,6 @@
                 return;
             }
 
-            // Optional Device Lock Check
             const currentDevice = getDeviceId();
             if (pinData.deviceLock) {
                 if (pinData.boundDevice && pinData.boundDevice !== currentDevice) {
@@ -547,7 +815,6 @@
                 }
             }
 
-            // Success -> Open Secure Player
             activePinCode = rawPin;
             closeModal();
             launchSecurePlayer(selectedLectureId, rawPin);
@@ -556,13 +823,6 @@
             statusEl.style.color = "var(--danger)";
             statusEl.innerText = "سرور سے رابطہ نہیں ہو سکا۔ دوبارہ کوشش کریں۔";
         }
-    }
-
-    function extractYouTubeId(url) {
-        if (!url) return "";
-        const regExp = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/|live\/))([a-zA-Z0-9_-]{11})/;
-        const match = url.match(regExp);
-        return match ? match[1] : url.trim();
     }
 
     function launchSecurePlayer(lecId, pin) {
@@ -575,7 +835,6 @@
         const container = document.getElementById("yt-iframe-container");
         container.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0&controls=1&disablekb=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
 
-        // PDF Notes button if available
         const notesDiv = document.getElementById("notes-container");
         if (lec.notesUrl) {
             notesDiv.innerHTML = `<a href="${lec.notesUrl}" target="_blank" class="notes-btn">📄 لیکچر کے PDF نوٹس ڈاؤن لوڈ کریں</a>`;
@@ -583,32 +842,18 @@
             notesDiv.innerHTML = "";
         }
 
-        // Start Dynamic Moving Watermark
         const wm = document.getElementById("watermark");
         wm.innerText = `PIN: ${pin}`;
-        moveWatermark();
-        if (watermarkInterval) clearInterval(watermarkInterval);
-        watermarkInterval = setInterval(moveWatermark, 4500);
 
         loadQuestions(lecId);
     }
 
-    function moveWatermark() {
-        const wm = document.getElementById("watermark");
-        const top = Math.floor(Math.random() * 70) + 12;
-        const left = Math.floor(Math.random() * 65) + 10;
-        wm.style.top = top + "%";
-        wm.style.left = left + "%";
-    }
-
     function closePlayer() {
-        if (watermarkInterval) clearInterval(watermarkInterval);
         document.getElementById("yt-iframe-container").innerHTML = "";
         document.getElementById("player-section").style.display = "none";
         document.getElementById("lectures-view").style.display = "block";
     }
 
-    // Q&A Functions
     async function loadQuestions(lecId) {
         const list = document.getElementById("qa-list");
         list.innerHTML = "لوڈ ہو رہا ہے...";
@@ -659,4 +904,3 @@
 </script>
 </body>
 </html>
-
