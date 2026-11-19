@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title id="page-title">Sids Studios | آن لائن لیکچر پورٹل</title>
+    <title id="page-title">Sids Studios | Online Lecture Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
@@ -26,12 +26,55 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
         body { background: var(--bg); color: var(--text); line-height: 1.65; padding-bottom: 50px; }
         
+        /* Top Utility Bar with Language Switcher */
+        .top-nav {
+            background: #070b14;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 18px;
+        }
+        .top-nav-inner {
+            max-width: 920px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand-mini {
+            color: #fde68a;
+            font-weight: 800;
+            font-size: 0.92rem;
+            letter-spacing: 0.6px;
+        }
+        .lang-switch {
+            display: inline-flex;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .lang-btn.active {
+            background: var(--gold);
+            color: #0f172a;
+        }
+
         /* International Hero Banner */
         .hero-banner {
             position: relative;
             background: radial-gradient(circle at 15% 20%, #1e3a8a 0%, #0f172a 55%, #070b14 100%);
             color: #fff;
-            padding: 36px 18px 44px;
+            padding: 34px 18px 44px;
             overflow: hidden;
             border-bottom: 3px solid var(--gold);
             box-shadow: 0 12px 30px rgba(11, 17, 32, 0.25);
@@ -178,6 +221,13 @@
         }
         .upcoming-scroll:hover { animation-play-state: paused; }
         @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        [dir="rtl"] .upcoming-scroll {
+            animation: marquee-rtl 22s linear infinite;
+        }
+        @keyframes marquee-rtl {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
@@ -206,7 +256,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.1rem;
+            font-size: 1.06rem;
             font-weight: 800;
             color: var(--primary);
         }
@@ -224,7 +274,7 @@
             border-radius: 999px;
         }
         .chevron-icon {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--muted);
             transition: transform 0.25s;
         }
@@ -385,7 +435,7 @@
         .close-btn {
             position: absolute;
             top: 14px;
-            left: 16px;
+            right: 16px;
             background: #f1f5f9;
             border: none;
             width: 34px;
@@ -393,6 +443,10 @@
             border-radius: 50%;
             font-size: 1.2rem;
             cursor: pointer;
+        }
+        [dir="rtl"] .close-btn {
+            right: auto;
+            left: 16px;
         }
 
         /* PIN Form */
@@ -415,6 +469,7 @@
             margin: 10px 0;
             font-weight: 700;
             text-transform: uppercase;
+            direction: ltr;
         }
         .btn-verify {
             width: 100%;
@@ -498,6 +553,7 @@
             font-weight: 700;
             pointer-events: none;
             letter-spacing: 1px;
+            direction: ltr;
         }
 
         .notes-btn {
@@ -535,11 +591,15 @@
         .qa-item:last-child { border-bottom: none; }
         .qa-reply {
             background: #f0fdf4;
-            border-right: 3px solid var(--success);
+            border-left: 3px solid var(--success);
             padding: 8px 12px;
             margin-top: 8px;
             border-radius: 6px;
             font-size: 0.9rem;
+        }
+        [dir="rtl"] .qa-reply {
+            border-left: none;
+            border-right: 3px solid var(--success);
         }
 
         .alert-msg { font-size: 0.9rem; margin-top: 8px; font-weight: 600; }
@@ -548,16 +608,27 @@
 </head>
 <body oncontextmenu="return false;">
 
+<!-- Top Language Bar -->
+<nav class="top-nav">
+    <div class="top-nav-inner">
+        <span id="nav-brand-mini" class="nav-brand-mini">SIDS STUDIOS</span>
+        <div class="lang-switch">
+            <button type="button" id="btn-lang-en" class="lang-btn active" onclick="setLanguage('en')">English</button>
+            <button type="button" id="btn-lang-ur" class="lang-btn" onclick="setLanguage('ur')">اردو</button>
+        </div>
+    </div>
+</nav>
+
 <!-- International Hero Banner -->
 <section class="hero-banner">
     <div class="hero-inner">
         <div class="hero-text">
-            <div class="brand-pill">🎓 OFFICIAL DIGITAL LEARNING ACADEMY</div>
+            <div class="brand-pill" id="txt-brand-pill">🎓 OFFICIAL DIGITAL LEARNING ACADEMY</div>
             <h1 id="site-name" class="brand-title">SIDS STUDIOS</h1>
-            <p id="teacher-info" class="hero-subtitle">اعلیٰ معیار کے ویڈیو لیکچرز، مستند تعلیمی مواد اور فوری پِن رسائی کے ساتھ جدید آن لائن اکیڈمی</p>
+            <p id="teacher-info" class="hero-subtitle">High-definition video lectures, structured study notes, and instant PIN-protected access.</p>
             <div class="hero-actions">
-                <button type="button" id="hero-btn-lectures" class="hero-btn active-tab" onclick="openSectionDropdown('lectures')">🎥 HD ویڈیو لیکچرز</button>
-                <button type="button" id="hero-btn-notes" class="hero-btn" onclick="openSectionDropdown('notes')">📚 پی ڈی ایف نوٹس</button>
+                <button type="button" id="hero-btn-lectures" class="hero-btn active-tab" onclick="openSectionDropdown('lectures')">🎥 HD Video Lectures</button>
+                <button type="button" id="hero-btn-notes" class="hero-btn" onclick="openSectionDropdown('notes')">📚 PDF Study Notes</button>
             </div>
         </div>
 
@@ -589,7 +660,7 @@
                     </defs>
                 </svg>
                 <div class="emblem-label">SIDS STUDIOS</div>
-                <div class="emblem-sub">Digital Lecture Portal</div>
+                <div class="emblem-sub" id="txt-emblem-sub">Digital Lecture Portal</div>
             </div>
         </div>
     </div>
@@ -603,7 +674,7 @@
 <div class="container">
     <!-- Active Player View -->
     <div id="player-section">
-        <button onclick="closePlayer()" style="background:#1e293b; color:#fff; border:none; padding:9px 16px; border-radius:9px; margin-bottom:14px; cursor:pointer; font-weight:600;">← تمام لیکچرز پر واپس جائیں</button>
+        <button id="btn-back-lectures" onclick="closePlayer()" style="background:#1e293b; color:#fff; border:none; padding:9px 16px; border-radius:9px; margin-bottom:14px; cursor:pointer; font-weight:600;">← Back to All Lectures</button>
         <h2 id="active-lec-title" style="margin-bottom:12px; color:var(--primary); font-weight:800;"></h2>
         
         <div class="video-wrapper" id="video-box">
@@ -616,10 +687,10 @@
 
         <!-- Student Q&A Section -->
         <div class="qa-section">
-            <h3 style="font-size:1.05rem; margin-bottom:6px; font-weight:700;">سوال و جواب (اس لیکچر کے متعلق سوال پوچھیں)</h3>
-            <input type="text" id="student-name" class="qa-input" placeholder="آپ کا نام (اختیاری)">
-            <textarea id="student-question" class="qa-input" rows="2" placeholder="اپنا سوال یہاں لکھیں..."></textarea>
-            <button onclick="submitQuestion()" class="btn-open" style="margin-top:8px;">سوال بھیجیں</button>
+            <h3 id="txt-qa-heading" style="font-size:1.05rem; margin-bottom:6px; font-weight:700;">Q&A (Ask a question about this lecture)</h3>
+            <input type="text" id="student-name" class="qa-input" placeholder="Your Name (Optional)">
+            <textarea id="student-question" class="qa-input" rows="2" placeholder="Write your question here..."></textarea>
+            <button id="btn-submit-qa" onclick="submitQuestion()" class="btn-open" style="margin-top:8px;">Submit Question</button>
             <div id="qa-list" style="margin-top:16px;"></div>
         </div>
     </div>
@@ -629,25 +700,25 @@
         <!-- 1. HD Video Lectures Dropdown -->
         <div id="bar-lectures" class="dropdown-bar" onclick="toggleDropdown('lectures')">
             <div class="dropdown-bar-title">
-                <span>🎥 دستیاب ویڈیو لیکچرز (فہرست کھولیں)</span>
+                <span id="txt-bar-lectures">🎥 Available Video Lectures (Click to Expand)</span>
             </div>
             <div class="dropdown-bar-right">
-                <span id="lec-count-badge" class="count-pill">0 لیکچرز</span>
+                <span id="lec-count-badge" class="count-pill">0 Lectures</span>
                 <span class="chevron-icon">▼</span>
             </div>
         </div>
         <div id="panel-lectures" class="dropdown-panel">
-            <div id="loader" class="loading-box">لیکچرز لوڈ ہو رہے ہیں...</div>
+            <div id="loader" class="loading-box">Loading lectures...</div>
             <div id="lecture-grid" class="lecture-grid"></div>
         </div>
 
         <!-- 2. PDF Notes Dropdown -->
         <div id="bar-notes" class="dropdown-bar" onclick="toggleDropdown('notes')">
             <div class="dropdown-bar-title">
-                <span>📚 کورس کے پی ڈی ایف نوٹس (فہرست کھولیں)</span>
+                <span id="txt-bar-notes">📚 Course PDF Study Notes (Click to Expand)</span>
             </div>
             <div class="dropdown-bar-right">
-                <span id="notes-count-badge" class="count-pill">0 نوٹس</span>
+                <span id="notes-count-badge" class="count-pill">0 Notes</span>
                 <span class="chevron-icon">▼</span>
             </div>
         </div>
@@ -661,24 +732,24 @@
 <div id="access-modal" class="modal">
     <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">×</button>
-        <h3 id="modal-lec-title" style="color:var(--primary); margin-bottom:4px; font-weight:800;">لیکچر لاک ہے</h3>
+        <h3 id="modal-lec-title" style="color:var(--primary); margin-bottom:4px; font-weight:800;">Lecture Locked</h3>
         <p id="modal-lec-price" style="color:var(--success); font-weight:700; font-size:0.95rem;"></p>
 
         <div class="pin-box">
-            <label style="font-weight:600; font-size:0.95rem;">اس کورس / لیکچر کو کھولنے کے لیے اپنا پِن (PIN) درج کریں:</label>
-            <input type="text" id="pin-input" class="pin-input" placeholder="مثال: LEC1-4829">
-            <button onclick="verifyPin()" class="btn-verify">پِن چیک کریں اور کورس کھولیں</button>
+            <label id="txt-pin-label" style="font-weight:600; font-size:0.95rem;">Enter your access PIN to unlock this lecture:</label>
+            <input type="text" id="pin-input" class="pin-input" placeholder="e.g. LEC1-4829">
+            <button id="btn-verify-pin" onclick="verifyPin()" class="btn-verify">Verify PIN & Unlock Course</button>
             <div id="pin-status" class="alert-msg"></div>
         </div>
 
         <div class="payment-section">
-            <h4 style="font-size:0.95rem; margin-bottom:6px;">پِن حاصل کرنے کے لیے فیس ادا کریں:</h4>
-            <p style="font-size:0.85rem; color:var(--muted);">نیچے دیے گئے کسی بھی اکاؤنٹ پر اسکین کر کے یا نمبر پر پیمنٹ کریں اور واٹس ایپ پر اسکرین شاٹ بھیجیں، آپ کو فوری پِن مل جائے گا۔</p>
+            <h4 id="txt-pay-heading" style="font-size:0.95rem; margin-bottom:6px;">Pay Fee to Get Your PIN:</h4>
+            <p id="txt-pay-desc" style="font-size:0.85rem; color:var(--muted);">Scan or transfer to any account below and send your payment screenshot on WhatsApp to receive your instant PIN.</p>
             
             <div id="payment-accounts-grid" class="payment-methods"></div>
 
             <a id="whatsapp-pay-btn" href="#" target="_blank" class="btn-whatsapp">
-                📲 پیمنٹ کا اسکرین شاٹ واٹس ایپ پر بھیجیں
+                📲 Send Payment Screenshot on WhatsApp
             </a>
         </div>
     </div>
@@ -691,6 +762,163 @@
     let siteData = { settings: {}, lectures: {}, upcoming: {} };
     let selectedLectureId = null;
     let activePinCode = "";
+    let currentLang = localStorage.getItem("portal_lang") || "en";
+
+    const I18N = {
+        en: {
+            dir: "ltr",
+            pageSuffix: "Online Lecture Portal",
+            brandPill: "🎓 OFFICIAL DIGITAL LEARNING ACADEMY",
+            defaultSubtitle: "High-definition video lectures, structured study notes, and instant PIN-protected access.",
+            teacherPrefix: "Lecturer / Instructor: ",
+            teacherSuffix: " — Authentic Online Lectures & Educational Content",
+            heroBtnLectures: "🎥 HD Video Lectures",
+            heroBtnNotes: "📚 PDF Study Notes",
+            emblemSub: "Digital Lecture Portal",
+            barLectures: "🎥 Available Video Lectures (Click to Expand)",
+            barNotes: "📚 Course PDF Study Notes (Click to Expand)",
+            lecturesCount: (n) => `${n} Lecture${n === 1 ? "" : "s"}`,
+            notesCount: (n) => `${n} Note${n === 1 ? "" : "s"}`,
+            loading: "Loading lectures...",
+            noLectures: "No lectures available yet.",
+            noData: "No lectures added yet.",
+            loadError: "Unable to load data. Please check your internet connection.",
+            lecPrefix: "Lecture #",
+            defaultDesc: "Full HD Video Lecture (Instant access via PIN)",
+            feePrefix: "Fee: ",
+            pinRequired: "PIN Required",
+            selectBtn: "Select 🔒",
+            noNotesMsg: "No PDF study notes have been uploaded for any lecture yet.",
+            noteItemTitle: (num, title) => `📄 Lecture #${num}: ${title} (PDF Notes)`,
+            noteItemSub: "Download link unlocks automatically after PIN verification",
+            enterPinBtn: "Enter PIN 🔒",
+            pinLabel: "Enter your access PIN to unlock this lecture:",
+            pinPlaceholder: "e.g. LEC1-4829",
+            verifyBtn: "Verify PIN & Unlock Course",
+            payHeading: "Pay Fee to Get Your PIN:",
+            payDesc: "Scan or transfer to any account below and send your payment screenshot on WhatsApp to receive your instant PIN.",
+            whatsappBtn: "📲 Send Payment Screenshot on WhatsApp",
+            whatsappMsg: (num, title) => `Assalam-o-Alaikum! I have paid the fee for Lecture #${num} (${title}). Please send me the access PIN. Here is my receipt:`,
+            backBtn: "← Back to All Lectures",
+            downloadNotesBtn: "📄 Download Lecture PDF Notes",
+            qaHeading: "Q&A (Ask a question about this lecture)",
+            namePlaceholder: "Your Name (Optional)",
+            questionPlaceholder: "Write your question here...",
+            submitQaBtn: "Submit Question",
+            loadingQa: "Loading...",
+            noQa: "No questions asked yet.",
+            studentFallback: "Student",
+            teacherReplyLabel: "Instructor Reply:",
+            alertEmptyQuestion: "Please write your question first.",
+            pinEmpty: "Please enter your PIN code.",
+            pinChecking: "Verifying PIN...",
+            pinInvalid: "❌ Invalid PIN code! Please enter a valid PIN.",
+            pinBlocked: "🚫 This PIN has been blocked.",
+            pinWrongLec: "⚠️ This PIN is for a different lecture. Please use it on the matching lecture.",
+            pinExpired: "⌛ This PIN has expired. Please request a new PIN.",
+            pinDeviceLocked: "🔒 This PIN is already registered on another device/browser.",
+            pinNetError: "Connection error. Please try again."
+        },
+        ur: {
+            dir: "rtl",
+            pageSuffix: "آن لائن لیکچر پورٹل",
+            brandPill: "🎓 OFFICIAL DIGITAL LEARNING ACADEMY",
+            defaultSubtitle: "اعلیٰ معیار کے ویڈیو لیکچرز، مستند تعلیمی مواد اور فوری پِن رسائی کے ساتھ جدید آن لائن اکیڈمی",
+            teacherPrefix: "لیکچرار / استاد: ",
+            teacherSuffix: " — مستند آن لائن لیکچرز اور تعلیمی مواد",
+            heroBtnLectures: "🎥 HD ویڈیو لیکچرز",
+            heroBtnNotes: "📚 پی ڈی ایف نوٹس",
+            emblemSub: "ڈیجیٹل لیکچر پورٹل",
+            barLectures: "🎥 دستیاب ویڈیو لیکچرز (فہرست کھولیں)",
+            barNotes: "📚 کورس کے پی ڈی ایف نوٹس (فہرست کھولیں)",
+            lecturesCount: (n) => `${n} لیکچرز`,
+            notesCount: (n) => `${n} نوٹس`,
+            loading: "لیکچرز لوڈ ہو رہے ہیں...",
+            noLectures: "ابھی کوئی لیکچر دستیاب نہیں ہے۔",
+            noData: "ابھی تک کوئی لیکچر شامل نہیں کیا گیا۔",
+            loadError: "ڈیٹا لوڈ کرنے میں مسئلہ پیش آیا۔ انٹرنیٹ چیک کریں۔",
+            lecPrefix: "لیکچر #",
+            defaultDesc: "مکمل ویڈیو لیکچر (پِن کے ذریعے فوری رسائی)",
+            feePrefix: "فیس: ",
+            pinRequired: "پِن درکار ہے",
+            selectBtn: "منتخب کریں 🔒",
+            noNotesMsg: "ابھی کسی لیکچر کے ساتھ پی ڈی ایف نوٹس اپ لوڈ نہیں کیے گئے۔",
+            noteItemTitle: (num, title) => `📄 لیکچر #${num}: ${title} (PDF نوٹس)`,
+            noteItemSub: "پِن درج کرنے کے بعد ڈاؤن لوڈ لنک کھل جائے گا",
+            enterPinBtn: "پِن ڈالیں 🔒",
+            pinLabel: "اس کورس / لیکچر کو کھولنے کے لیے اپنا پِن (PIN) درج کریں:",
+            pinPlaceholder: "مثال: LEC1-4829",
+            verifyBtn: "پِن چیک کریں اور کورس کھولیں",
+            payHeading: "پِن حاصل کرنے کے لیے فیس ادا کریں:",
+            payDesc: "نیچے دیے گئے کسی بھی اکاؤنٹ پر اسکین کر کے یا نمبر پر پیمنٹ کریں اور واٹس ایپ پر اسکرین شاٹ بھیجیں، آپ کو فوری پِن مل جائے گا۔",
+            whatsappBtn: "📲 پیمنٹ کا اسکرین شاٹ واٹس ایپ پر بھیجیں",
+            whatsappMsg: (num, title) => `السلام علیکم! میں نے لیکچر #${num} (${title}) کی پیمنٹ کر دی ہے۔ براہ کرم مجھے اس لیکچر کا پِن (PIN) بھیج دیں۔ یہ میری رسید ہے:`,
+            backBtn: "← تمام لیکچرز پر واپس جائیں",
+            downloadNotesBtn: "📄 لیکچر کے PDF نوٹس ڈاؤن لوڈ کریں",
+            qaHeading: "سوال و جواب (اس لیکچر کے متعلق سوال پوچھیں)",
+            namePlaceholder: "آپ کا نام (اختیاری)",
+            questionPlaceholder: "اپنا سوال یہاں لکھیں...",
+            submitQaBtn: "سوال بھیجیں",
+            loadingQa: "لوڈ ہو رہا ہے...",
+            noQa: "ابھی تک کوئی سوال نہیں پوچھا گیا۔",
+            studentFallback: "طالب علم",
+            teacherReplyLabel: "استاد کا جواب:",
+            alertEmptyQuestion: "براہ کرم سوال لکھیں۔",
+            pinEmpty: "براہ کرم پِن کوڈ درج کریں۔",
+            pinChecking: "پِن کی تصدیق ہو رہی ہے...",
+            pinInvalid: "❌ غلط پِن کوڈ! براہ کرم درست پِن درج کریں۔",
+            pinBlocked: "🚫 یہ پِن بلاک کر دیا گیا ہے۔",
+            pinWrongLec: "⚠️ یہ پِن اس لیکچر کے لیے نہیں ہے۔ متعلقہ لیکچر پر استعمال کریں۔",
+            pinExpired: "⌛ اس پِن کی مدت (Expiry) ختم ہو چکی ہے۔ نیا پِن حاصل کریں۔",
+            pinDeviceLocked: "🔒 یہ پِن کسی دوسرے موبائل/براؤزر پر رجسٹر ہو چکا ہے۔",
+            pinNetError: "سرور سے رابطہ نہیں ہو سکا۔ دوبارہ کوشش کریں۔"
+        }
+    };
+
+    function setLanguage(lang) {
+        currentLang = lang === "ur" ? "ur" : "en";
+        localStorage.setItem("portal_lang", currentLang);
+        const t = I18N[currentLang];
+
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = t.dir;
+
+        document.getElementById("btn-lang-en").classList.toggle("active", currentLang === "en");
+        document.getElementById("btn-lang-ur").classList.toggle("active", currentLang === "ur");
+
+        document.getElementById("txt-brand-pill").innerText = t.brandPill;
+        document.getElementById("hero-btn-lectures").innerText = t.heroBtnLectures;
+        document.getElementById("hero-btn-notes").innerText = t.heroBtnNotes;
+        document.getElementById("txt-emblem-sub").innerText = t.emblemSub;
+        document.getElementById("txt-bar-lectures").innerText = t.barLectures;
+        document.getElementById("txt-bar-notes").innerText = t.barNotes;
+        document.getElementById("txt-pin-label").innerText = t.pinLabel;
+        document.getElementById("pin-input").placeholder = t.pinPlaceholder;
+        document.getElementById("btn-verify-pin").innerText = t.verifyBtn;
+        document.getElementById("txt-pay-heading").innerText = t.payHeading;
+        document.getElementById("txt-pay-desc").innerText = t.payDesc;
+        document.getElementById("whatsapp-pay-btn").innerText = t.whatsappBtn;
+        document.getElementById("btn-back-lectures").innerText = t.backBtn;
+        document.getElementById("txt-qa-heading").innerText = t.qaHeading;
+        document.getElementById("student-name").placeholder = t.namePlaceholder;
+        document.getElementById("student-question").placeholder = t.questionPlaceholder;
+        document.getElementById("btn-submit-qa").innerText = t.submitQaBtn;
+
+        renderBranding();
+        renderLectures();
+        renderNotesList();
+        if (selectedLectureId && document.getElementById("player-section").style.display === "block") {
+            const lec = siteData.lectures[selectedLectureId];
+            if (lec) {
+                document.getElementById("active-lec-title").innerText = `${t.lecPrefix}${lec.number || selectedLectureId}: ${lec.title}`;
+                const notesDiv = document.getElementById("notes-container");
+                if (lec.notesUrl) {
+                    notesDiv.innerHTML = `<a href="${lec.notesUrl}" target="_blank" class="notes-btn">${t.downloadNotesBtn}</a>`;
+                }
+            }
+            loadQuestions(selectedLectureId);
+        }
+    }
 
     function toggleDropdown(section) {
         const bar = document.getElementById("bar-" + section);
@@ -734,6 +962,8 @@
     }
 
     async function initPortal() {
+        setLanguage(currentLang);
+        const t = I18N[currentLang];
         try {
             const res = await fetch(`${dbUrl}/portal.json`);
             const data = await res.json();
@@ -744,22 +974,26 @@
                 renderLectures();
                 renderNotesList();
             } else {
-                document.getElementById("loader").innerText = "ابھی تک کوئی لیکچر شامل نہیں کیا گیا۔";
+                document.getElementById("loader").innerText = t.noData;
             }
         } catch (err) {
-            document.getElementById("loader").innerText = "ڈیٹا لوڈ کرنے میں مسئلہ پیش آیا۔ انٹرنیٹ چیک کریں۔";
+            document.getElementById("loader").innerText = t.loadError;
         }
     }
 
     function renderBranding() {
+        const t = I18N[currentLang];
         const s = siteData.settings || {};
-        if (s.siteName) {
-            document.getElementById("site-name").innerText = s.siteName;
-            document.getElementById("page-title").innerText = s.siteName + " | آن لائن لیکچر پورٹل";
-            document.querySelectorAll(".emblem-label").forEach(el => el.innerText = s.siteName);
-        }
+        const name = s.siteName || "SIDS STUDIOS";
+        document.getElementById("site-name").innerText = name;
+        document.getElementById("nav-brand-mini").innerText = name.toUpperCase();
+        document.getElementById("page-title").innerText = `${name} | ${t.pageSuffix}`;
+        document.querySelectorAll(".emblem-label").forEach(el => el.innerText = name);
+
         if (s.teacherName) {
-            document.getElementById("teacher-info").innerText = "لیکچرار / استاد: " + s.teacherName + " — مستند آن لائن لیکچرز اور تعلیمی مواد";
+            document.getElementById("teacher-info").innerText = `${t.teacherPrefix}${s.teacherName}${t.teacherSuffix}`;
+        } else {
+            document.getElementById("teacher-info").innerText = t.defaultSubtitle;
         }
     }
 
@@ -781,14 +1015,15 @@
     }
 
     function renderLectures() {
+        const t = I18N[currentLang];
         const grid = document.getElementById("lecture-grid");
         const loader = document.getElementById("loader");
         grid.innerHTML = "";
         const lecs = siteData.lectures || {};
         const keys = Object.keys(lecs);
-        document.getElementById("lec-count-badge").innerText = keys.length + " لیکچرز";
+        document.getElementById("lec-count-badge").innerText = t.lecturesCount(keys.length);
         if (keys.length === 0) {
-            loader.innerText = "ابھی کوئی لیکچر دستیاب نہیں ہے۔";
+            loader.innerText = t.noLectures;
             return;
         }
         loader.style.display = "none";
@@ -803,18 +1038,18 @@
                 <div class="lec-thumb-box">
                     ${thumbUrl ? `<img src="${thumbUrl}" alt="${lec.title}" loading="lazy">` : ""}
                     <div class="lec-thumb-overlay">
-                        <span class="lec-badge">لیکچر #${lec.number || id}</span>
+                        <span class="lec-badge">${t.lecPrefix}${lec.number || id}</span>
                         <span class="lec-hd-tag">▶ HD Video</span>
                     </div>
                 </div>
                 <div class="lec-body">
                     <div>
                         <div class="lec-title">${lec.title}</div>
-                        <div class="lec-desc">${lec.desc || "مکمل ویڈیو لیکچر (پِن کے ذریعے فوری رسائی)"}</div>
+                        <div class="lec-desc">${lec.desc || t.defaultDesc}</div>
                     </div>
                     <div class="lec-footer">
-                        <span class="lec-price">${lec.price ? "فیس: " + lec.price : "پِن درکار ہے"}</span>
-                        <button type="button" class="btn-open">منتخب کریں 🔒</button>
+                        <span class="lec-price">${lec.price ? t.feePrefix + lec.price : t.pinRequired}</span>
+                        <button type="button" class="btn-open">${t.selectBtn}</button>
                     </div>
                 </div>
             `;
@@ -823,14 +1058,15 @@
     }
 
     function renderNotesList() {
+        const t = I18N[currentLang];
         const notesGrid = document.getElementById("notes-grid");
         notesGrid.innerHTML = "";
         const lecs = siteData.lectures || {};
         const keysWithNotes = Object.keys(lecs).filter(id => lecs[id].notesUrl && lecs[id].notesUrl.trim() !== "");
-        document.getElementById("notes-count-badge").innerText = keysWithNotes.length + " نوٹس";
+        document.getElementById("notes-count-badge").innerText = t.notesCount(keysWithNotes.length);
 
         if (keysWithNotes.length === 0) {
-            notesGrid.innerHTML = `<div class="empty-panel-msg">ابھی کسی لیکچر کے ساتھ پی ڈی ایف نوٹس اپ لوڈ نہیں کیے گئے۔</div>`;
+            notesGrid.innerHTML = `<div class="empty-panel-msg">${t.noNotesMsg}</div>`;
             return;
         }
 
@@ -841,20 +1077,21 @@
             item.onclick = () => openLectureModal(id);
             item.innerHTML = `
                 <div>
-                    <div style="font-weight:800; color:var(--primary); font-size:0.98rem;">📄 لیکچر #${lec.number || id}: ${lec.title} (PDF نوٹس)</div>
-                    <div style="font-size:0.83rem; color:var(--muted); margin-top:2px;">پِن درج کرنے کے بعد ڈاؤن لوڈ لنک کھل جائے گا</div>
+                    <div style="font-weight:800; color:var(--primary); font-size:0.98rem;">${t.noteItemTitle(lec.number || id, lec.title)}</div>
+                    <div style="font-size:0.83rem; color:var(--muted); margin-top:2px;">${t.noteItemSub}</div>
                 </div>
-                <button type="button" class="btn-open">پِن ڈالیں 🔒</button>
+                <button type="button" class="btn-open">${t.enterPinBtn}</button>
             `;
             notesGrid.appendChild(item);
         });
     }
 
     function openLectureModal(lecId) {
+        const t = I18N[currentLang];
         selectedLectureId = lecId;
         const lec = siteData.lectures[lecId];
-        document.getElementById("modal-lec-title").innerText = `لیکچر #${lec.number || lecId}: ${lec.title}`;
-        document.getElementById("modal-lec-price").innerText = lec.price ? `فیس: ${lec.price}` : "";
+        document.getElementById("modal-lec-title").innerText = `${t.lecPrefix}${lec.number || lecId}: ${lec.title}`;
+        document.getElementById("modal-lec-price").innerText = lec.price ? `${t.feePrefix}${lec.price}` : "";
         document.getElementById("pin-input").value = "";
         document.getElementById("pin-status").innerText = "";
 
@@ -881,7 +1118,7 @@
         });
 
         const waNum = (s.whatsapp || "").replace(/[^0-9]/g, "");
-        const msg = encodeURIComponent(`السلام علیکم! میں نے لیکچر #${lec.number || lecId} (${lec.title}) کی پیمنٹ کر دی ہے۔ براہ کرم مجھے اس لیکچر کا پِن (PIN) بھیج دیں۔ یہ میری رسید ہے:`);
+        const msg = encodeURIComponent(t.whatsappMsg(lec.number || lecId, lec.title));
         document.getElementById("whatsapp-pay-btn").href = waNum ? `https://wa.me/${waNum}?text=${msg}` : "#";
 
         document.getElementById("access-modal").style.display = "block";
@@ -892,15 +1129,16 @@
     }
 
     async function verifyPin() {
+        const t = I18N[currentLang];
         const rawPin = document.getElementById("pin-input").value.trim().toUpperCase();
         const statusEl = document.getElementById("pin-status");
         if (!rawPin) {
             statusEl.style.color = "var(--danger)";
-            statusEl.innerText = "براہ کرم پِن کوڈ درج کریں۔";
+            statusEl.innerText = t.pinEmpty;
             return;
         }
         statusEl.style.color = "var(--accent)";
-        statusEl.innerText = "پِن کی تصدیق ہو رہی ہے...";
+        statusEl.innerText = t.pinChecking;
 
         try {
             const res = await fetch(`${dbUrl}/pins/${rawPin}.json`);
@@ -908,22 +1146,22 @@
 
             if (!pinData) {
                 statusEl.style.color = "var(--danger)";
-                statusEl.innerText = "❌ غلط پِن کوڈ! براہ کرم درست پِن درج کریں۔";
+                statusEl.innerText = t.pinInvalid;
                 return;
             }
             if (pinData.blocked) {
                 statusEl.style.color = "var(--danger)";
-                statusEl.innerText = "🚫 یہ پِن بلاک کر دیا گیا ہے۔";
+                statusEl.innerText = t.pinBlocked;
                 return;
             }
             if (pinData.lectureId !== selectedLectureId) {
                 statusEl.style.color = "var(--danger)";
-                statusEl.innerText = "⚠️ یہ پِن اس لیکچر کے لیے نہیں ہے۔ متعلقہ لیکچر پر استعمال کریں۔";
+                statusEl.innerText = t.pinWrongLec;
                 return;
             }
             if (Date.now() > pinData.expiresAt) {
                 statusEl.style.color = "var(--danger)";
-                statusEl.innerText = "⌛ اس پِن کی مدت (Expiry) ختم ہو چکی ہے۔ نیا پِن حاصل کریں۔";
+                statusEl.innerText = t.pinExpired;
                 return;
             }
 
@@ -931,7 +1169,7 @@
             if (pinData.deviceLock) {
                 if (pinData.boundDevice && pinData.boundDevice !== currentDevice) {
                     statusEl.style.color = "var(--danger)";
-                    statusEl.innerText = "🔒 یہ پِن کسی دوسرے موبائل/براؤزر پر رجسٹر ہو چکا ہے۔";
+                    statusEl.innerText = t.pinDeviceLocked;
                     return;
                 }
                 if (!pinData.boundDevice) {
@@ -948,15 +1186,16 @@
 
         } catch (e) {
             statusEl.style.color = "var(--danger)";
-            statusEl.innerText = "سرور سے رابطہ نہیں ہو سکا۔ دوبارہ کوشش کریں۔";
+            statusEl.innerText = t.pinNetError;
         }
     }
 
     function launchSecurePlayer(lecId, pin) {
+        const t = I18N[currentLang];
         const lec = siteData.lectures[lecId];
         document.getElementById("lectures-view").style.display = "none";
         document.getElementById("player-section").style.display = "block";
-        document.getElementById("active-lec-title").innerText = `لیکچر #${lec.number || lecId}: ${lec.title}`;
+        document.getElementById("active-lec-title").innerText = `${t.lecPrefix}${lec.number || lecId}: ${lec.title}`;
 
         const videoId = extractYouTubeId(lec.youtubeUrl || "");
         const container = document.getElementById("yt-iframe-container");
@@ -964,7 +1203,7 @@
 
         const notesDiv = document.getElementById("notes-container");
         if (lec.notesUrl) {
-            notesDiv.innerHTML = `<a href="${lec.notesUrl}" target="_blank" class="notes-btn">📄 لیکچر کے PDF نوٹس ڈاؤن لوڈ کریں</a>`;
+            notesDiv.innerHTML = `<a href="${lec.notesUrl}" target="_blank" class="notes-btn">${t.downloadNotesBtn}</a>`;
         } else {
             notesDiv.innerHTML = "";
         }
@@ -982,14 +1221,15 @@
     }
 
     async function loadQuestions(lecId) {
+        const t = I18N[currentLang];
         const list = document.getElementById("qa-list");
-        list.innerHTML = "لوڈ ہو رہا ہے...";
+        list.innerHTML = t.loadingQa;
         try {
             const res = await fetch(`${dbUrl}/questions/${lecId}.json`);
             const data = await res.json();
             list.innerHTML = "";
             if (!data) {
-                list.innerHTML = "<p style='color:var(--muted); font-size:0.9rem;'>ابھی تک کوئی سوال نہیں پوچھا گیا۔</p>";
+                list.innerHTML = `<p style='color:var(--muted); font-size:0.9rem;'>${t.noQa}</p>`;
                 return;
             }
             Object.keys(data).reverse().forEach(qId => {
@@ -997,9 +1237,9 @@
                 const div = document.createElement("div");
                 div.className = "qa-item";
                 div.innerHTML = `
-                    <div style="font-weight:700; font-size:0.9rem;">${q.name || "طالب علم"} <span style="color:var(--muted); font-weight:400; font-size:0.8rem;">(${q.pin})</span></div>
+                    <div style="font-weight:700; font-size:0.9rem;">${q.name || t.studentFallback} <span style="color:var(--muted); font-weight:400; font-size:0.8rem;">(${q.pin})</span></div>
                     <div style="margin-top:4px;">${q.text}</div>
-                    ${q.reply ? `<div class="qa-reply"><strong>استاد کا جواب:</strong> ${q.reply}</div>` : ""}
+                    ${q.reply ? `<div class="qa-reply"><strong>${t.teacherReplyLabel}</strong> ${q.reply}</div>` : ""}
                 `;
                 list.appendChild(div);
             });
@@ -1009,12 +1249,13 @@
     }
 
     async function submitQuestion() {
+        const t = I18N[currentLang];
         const name = document.getElementById("student-name").value.trim();
         const text = document.getElementById("student-question").value.trim();
-        if (!text) return alert("براہ کرم سوال لکھیں۔");
+        if (!text) return alert(t.alertEmptyQuestion);
 
         const payload = {
-            name: name || "طالب علم",
+            name: name || t.studentFallback,
             pin: activePinCode,
             text: text,
             timestamp: Date.now()
