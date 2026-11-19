@@ -1,192 +1,549 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Admin Control Panel - اکیڈمی مینیجر</title>
+    <meta name="theme-color" content="#070d19">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title id="admin-page-title">Sids Studios | Admin Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
+            --obsidian: #070d19;
             --primary: #0f172a;
-            --accent: #2563eb;
-            --success: #16a34a;
+            --accent: #1d4ed8;
+            --accent-hover: #1e40af;
+            --gold: #f59e0b;
+            --success: #15803d;
             --danger: #dc2626;
             --warning: #d97706;
             --bg: #f1f5f9;
             --card: #ffffff;
-            --border: #cbd5e1;
+            --border: #e2e8f0;
+            --input-border: #cbd5e1;
+            --muted: #64748b;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background: var(--bg); color: #1e293b; padding-bottom: 60px; }
 
-        /* Top Bar */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--primary);
+            padding-bottom: 72px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, .font-display {
+            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        }
+
+        [dir="rtl"] body,
+        [dir="rtl"] h1,
+        [dir="rtl"] h2,
+        [dir="rtl"] h3,
+        [dir="rtl"] button,
+        [dir="rtl"] input,
+        [dir="rtl"] select,
+        [dir="rtl"] textarea,
+        [dir="rtl"] label,
+        [dir="rtl"] span,
+        [dir="rtl"] div {
+            font-family: 'Noto Nastaliq Urdu', 'Plus Jakarta Sans', system-ui, sans-serif;
+            line-height: 1.85;
+        }
+
+        .mono {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+            font-variant-numeric: tabular-nums;
+            line-height: 1.4 !important;
+        }
+
+        /* Top Sticky Bar */
         .topbar {
-            background: var(--primary);
-            color: #fff;
-            padding: 14px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: var(--obsidian);
+            color: #ffffff;
+            padding: 12px 16px;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .status-badge {
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            border-radius: 20px;
+
+        .topbar-inner {
+            max-width: 820px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+            color: #070d19;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.92rem;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .brand-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .img-upload-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .img-preview-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid var(--input-border);
+            display: none;
+            background: #f8fafc;
+        }
+
+        .topbar-title {
+            font-size: 0.98rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-text {
+            font-size: 0.74rem;
             font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 7px;
+            line-height: 1.3 !important;
         }
-        .status-online { background: #dcfce7; color: #166534; }
-        .status-offline { background: #fee2e2; color: #991b1b; }
+
+        .status-online {
+            background: rgba(22, 163, 74, 0.2);
+            color: #86efac;
+            border: 1px solid rgba(134, 239, 172, 0.28);
+        }
+
+        .status-offline {
+            background: rgba(220, 38, 38, 0.22);
+            color: #fca5a5;
+            border: 1px solid rgba(252, 165, 165, 0.28);
+        }
+
+        .lang-switch {
+            display: inline-flex;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 8px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            line-height: 1.2 !important;
+            white-space: nowrap;
+        }
+
+        .lang-btn.active {
+            background: var(--gold);
+            color: #070d19;
+        }
 
         /* Navigation Tabs */
+        .nav-tabs-wrap {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 56px;
+            z-index: 90;
+        }
+
         .nav-tabs {
+            max-width: 820px;
+            margin: 0 auto;
             display: flex;
             overflow-x: auto;
-            background: #fff;
-            border-bottom: 1px solid var(--border);
-            padding: 6px;
+            padding: 8px 12px;
             gap: 6px;
         }
+
         .tab-btn {
             flex: 1;
-            min-width: 95px;
-            padding: 10px 8px;
+            min-width: 96px;
+            padding: 9px 10px;
             border: none;
             background: transparent;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             border-radius: 8px;
             cursor: pointer;
             color: #475569;
+            white-space: nowrap;
+            transition: background 0.16s ease, color 0.16s ease;
         }
-        .tab-btn.active { background: var(--accent); color: #fff; }
 
-        .container { max-width: 750px; margin: 14px auto; padding: 0 12px; }
-        .section { display: none; }
-        .section.active { display: block; }
+        .tab-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 16px auto;
+            padding: 0 14px;
+        }
+
+        /* Compact KPI Strip */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .kpi-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+        }
+
+        .kpi-label {
+            font-size: 0.74rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .kpi-val {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 2px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
 
         .card {
             background: var(--card);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 14px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
         }
-        .card h3 { font-size: 1.05rem; margin-bottom: 12px; color: var(--primary); border-bottom: 1px solid #f1f5f9; padding-bottom: 8px; }
 
-        label { display: block; font-size: 0.88rem; font-weight: 600; margin-top: 10px; margin-bottom: 4px; }
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        label {
+            display: block;
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #334155;
+            margin-top: 12px;
+            margin-bottom: 5px;
+        }
+
         input, select, textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            background: #fff;
+            padding: 10px 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 9px;
+            font-size: 0.9rem;
+            background: #ffffff;
+            color: var(--primary);
+            outline: none;
         }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+
         .btn {
             width: 100%;
-            padding: 11px;
+            min-height: 42px;
+            padding: 10px 14px;
             border: none;
-            border-radius: 8px;
+            border-radius: 9px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             cursor: pointer;
             margin-top: 12px;
-            color: #fff;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: opacity 0.16s ease;
         }
+
+        .btn:active {
+            opacity: 0.88;
+        }
+
         .btn-primary { background: var(--accent); }
         .btn-success { background: var(--success); }
         .btn-danger { background: var(--danger); }
-        .btn-sm { padding: 6px 10px; font-size: 0.8rem; width: auto; margin-top: 4px; }
+        .btn-warning { background: var(--warning); }
+        .btn-dark { background: var(--primary); }
+        .btn-outline {
+            background: #ffffff;
+            color: var(--primary);
+            border: 1px solid var(--input-border);
+        }
 
-        /* Toggle Switch */
+        .btn-sm {
+            min-height: 34px;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            width: auto;
+            margin-top: 0;
+        }
+
         .toggle-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
             background: #f8fafc;
-            padding: 10px 12px;
-            border-radius: 8px;
-            margin-top: 10px;
-            border: 1px solid #e2e8f0;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+            border: 1px solid var(--border);
         }
 
-        /* List Items */
         .item-box {
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 12px;
+            padding: 13px 14px;
             margin-bottom: 10px;
-            background: #fafafa;
+            background: #f8fafc;
         }
+
+        .item-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
         .pin-display {
             background: #eff6ff;
             border: 2px dashed var(--accent);
-            padding: 14px;
+            padding: 16px;
             text-align: center;
-            border-radius: 10px;
-            margin-top: 12px;
+            border-radius: 12px;
+            margin-top: 14px;
             display: none;
         }
-        .pin-code-text { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: 2px; }
+
+        .pin-code-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin: 4px 0 10px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--obsidian);
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.84rem;
+            font-weight: 700;
+            z-index: 200;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 560px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
     </style>
-</head>
+<script src="/_aistudio-iframe.js?v=29045eb3"></script></head>
 <body>
 
 <div class="topbar">
-    <div>
-        <strong style="font-size:1.05rem;">🛡️ ایڈمن کنٹرول پینل</strong>
+    <div class="topbar-inner">
+        <div class="brand-row">
+            <span class="brand-mark" id="admin-brand-mark">S</span>
+            <span class="topbar-title" id="txt-admin-title">Sids Studios Admin</span>
+        </div>
+        <div class="topbar-right">
+            <span id="conn-status" class="status-text status-offline">Not Connected</span>
+            <div class="lang-switch" role="group" aria-label="Language switcher">
+                <button type="button" id="btn-lang-en" class="lang-btn active" onclick="setAdminLang('en')">English</button>
+                <button type="button" id="btn-lang-ur" class="lang-btn" onclick="setAdminLang('ur')">اردو</button>
+            </div>
+        </div>
     </div>
-    <span id="conn-status" class="status-badge status-offline">Not Connected</span>
 </div>
 
-<div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('pins-tab', this)">🔑 پِن جنریٹر</button>
-    <button class="tab-btn" onclick="switchTab('lectures-tab', this)">🎬 لیکچرز</button>
-    <button class="tab-btn" onclick="switchTab('upcoming-tab', this)">📢 آن کمنگ</button>
-    <button class="tab-btn" onclick="switchTab('qa-tab', this)">💬 سوالات</button>
-    <button class="tab-btn" onclick="switchTab('settings-tab', this)">⚙️ سیٹنگز</button>
+<div class="nav-tabs-wrap">
+    <div class="nav-tabs">
+        <button class="tab-btn active" id="tab-btn-pins" onclick="switchTab('pins-tab', this)">PIN Manager</button>
+        <button class="tab-btn" id="tab-btn-lectures" onclick="switchTab('lectures-tab', this)">Lectures</button>
+        <button class="tab-btn" id="tab-btn-upcoming" onclick="switchTab('upcoming-tab', this)">Ticker</button>
+        <button class="tab-btn" id="tab-btn-qa" onclick="switchTab('qa-tab', this)">Q&A</button>
+        <button class="tab-btn" id="tab-btn-settings" onclick="switchTab('settings-tab', this)">Settings</button>
+    </div>
 </div>
 
 <div class="container">
 
+    <!-- Quick Overview KPI Strip -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label" id="txt-kpi-lecs">Total Lectures</div>
+            <div class="kpi-val mono" id="kpi-lecs-val">0</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label" id="txt-kpi-pins">Active PINs</div>
+            <div class="kpi-val mono" id="kpi-pins-val" style="color:var(--success);">0</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label" id="txt-kpi-qa">Open Q&A</div>
+            <div class="kpi-val mono" id="kpi-qa-val" style="color:var(--accent);">0</div>
+        </div>
+    </div>
+
     <!-- TAB 1: PIN GENERATOR & MANAGER -->
     <div id="pins-tab" class="section active">
         <div class="card">
-            <h3>نیا پِن (PIN) جنریٹ کریں</h3>
-            <label>لیکچر منتخب کریں:</label>
-            <select id="pin-lecture-select">
-                <option value="">پہلے لیکچر لوڈ کریں...</option>
-            </select>
-
-            <label>مدت (Duration - کتنے دن چلے):</label>
-            <select id="pin-duration">
-                <option value="1">1 دن (24 گھنٹے)</option>
-                <option value="3">3 دن</option>
-                <option value="7">7 دن (1 ہفتہ)</option>
-                <option value="15">15 دن</option>
-                <option value="30" selected>30 دن (1 مہینہ)</option>
-            </select>
-
-            <div class="toggle-row">
-                <span><strong>ایک براؤزر / ڈیوائس لاک (Optional):</strong><br><small style="color:#64748b;">ON رکھنے پر پِن صرف ایک موبائل پر چلے گا</small></span>
-                <input type="checkbox" id="pin-device-lock" checked style="width:22px; height:22px;">
+            <div class="card-head">
+                <h3 id="txt-gen-pin-head">Generate New Access PIN</h3>
             </div>
 
-            <button class="btn btn-success" onclick="generatePin()">⚡ نیا پِن بنائیں (Generate PIN)</button>
+            <label id="lbl-pin-lec">Select Lecture:</label>
+            <select id="pin-lecture-select">
+                <option value="">Loading lectures...</option>
+            </select>
+
+            <div class="grid-2">
+                <div>
+                    <label id="lbl-pin-duration">Validity Duration:</label>
+                    <select id="pin-duration">
+                        <option value="1" id="opt-d1">1 Day (24 Hours)</option>
+                        <option value="3" id="opt-d3">3 Days</option>
+                        <option value="7" id="opt-d7">7 Days (1 Week)</option>
+                        <option value="15" id="opt-d15">15 Days</option>
+                        <option value="30" id="opt-d30" selected>30 Days (1 Month)</option>
+                        <option value="90" id="opt-d90">90 Days (3 Months)</option>
+                    </select>
+                </div>
+                <div>
+                    <label id="lbl-pin-student">Student Name (Optional):</label>
+                    <input type="text" id="pin-student-name" placeholder="e.g. Ali Raza">
+                </div>
+            </div>
+
+            <div class="toggle-row">
+                <div>
+                    <strong id="lbl-dev-lock" style="font-size:0.86rem;">Single Device / Browser Lock</strong>
+                    <div id="lbl-dev-lock-sub" style="font-size:0.76rem; color:var(--muted);">When ON, this PIN only works on one mobile or browser</div>
+                </div>
+                <input type="checkbox" id="pin-device-lock" checked style="width:22px; height:22px; flex-shrink:0;">
+            </div>
+
+            <button class="btn btn-success" id="btn-gen-pin" onclick="generatePin()">Generate New PIN</button>
 
             <div id="generated-pin-box" class="pin-display">
-                <div style="font-size:0.85rem; color:#475569;">نیا پِن تیار ہے:</div>
-                <div id="new-pin-code" class="pin-code-text">L1-0000</div>
-                <button class="btn btn-primary btn-sm" onclick="copyGeneratedPin()">📋 پِن کاپی کریں (واٹس ایپ کے لیے)</button>
+                <div id="txt-pin-ready" style="font-size:0.84rem; color:#475569;">New PIN is ready:</div>
+                <div id="new-pin-code" class="pin-code-text mono">LEC1-0000</div>
+                <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                    <button class="btn btn-primary btn-sm" id="btn-copy-gen-pin" onclick="copyGeneratedPin()">Copy PIN</button>
+                    <a id="btn-wa-gen-pin" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm">Send via WhatsApp</a>
+                </div>
             </div>
         </div>
 
         <div class="card">
-            <h3>ایکٹیو پِن لسٹ (Manage PINs)</h3>
-            <button class="btn btn-primary btn-sm" onclick="loadAllData()" style="margin-bottom:10px;">🔄 لسٹ ریفریش کریں</button>
+            <div class="card-head">
+                <h3 id="txt-pins-list-head">Active & Issued PINs</h3>
+                <button class="btn btn-outline btn-sm" id="btn-refresh-pins" onclick="loadAllData()">Refresh</button>
+            </div>
+            <input type="text" id="pin-search-input" oninput="renderPinsAdmin()" placeholder="Search by PIN code or student name..." style="margin-bottom:12px;">
             <div id="pins-list"></div>
         </div>
     </div>
@@ -194,30 +551,51 @@
     <!-- TAB 2: LECTURES MANAGER -->
     <div id="lectures-tab" class="section">
         <div class="card">
-            <h3>+ نیا لیکچر شامل کریں</h3>
-            <label>لیکچر نمبر (مثال: 1 یا 2):</label>
-            <input type="text" id="lec-num" placeholder="1">
+            <div class="card-head">
+                <h3 id="txt-add-lec-head">Add New Lecture</h3>
+                <button class="btn btn-outline btn-sm" id="btn-cancel-edit" style="display:none;" onclick="cancelLectureEdit()">Cancel Edit</button>
+            </div>
+            <input type="hidden" id="edit-lec-id" value="">
 
-            <label>لیکچر کا عنوان (Title):</label>
-            <input type="text" id="lec-title" placeholder="مثال: کلاس نمبر 1 - بنیادی اصول">
+            <div class="grid-2">
+                <div>
+                    <label id="lbl-lec-num">Lecture Number (e.g. 1 or 2):</label>
+                    <input type="text" id="lec-num" placeholder="1">
+                </div>
+                <div>
+                    <label id="lbl-lec-price">Fee / Price:</label>
+                    <input type="text" id="lec-price" placeholder="e.g. PKR 1,500">
+                </div>
+            </div>
 
-            <label>YouTube Unlisted ویڈیو لنک:</label>
-            <input type="text" id="lec-yt" placeholder="https://youtu.be/...">
+            <label id="lbl-lec-title">Lecture Title:</label>
+            <input type="text" id="lec-title" placeholder="e.g. Class 01 - Core Foundations">
 
-            <label>فیس (Price):</label>
-            <input type="text" id="lec-price" placeholder="مثال: 500 روپے">
+            <label id="lbl-lec-yt">YouTube Unlisted Video Link:</label>
+            <input type="text" id="lec-yt" class="mono" placeholder="https://youtu.be/...">
 
-            <label>مختصر تفصیل (Description):</label>
-            <input type="text" id="lec-desc" placeholder="اس لیکچر میں کیا سکھایا جائے گا...">
+            <label id="lbl-lec-desc">Short Description:</label>
+            <input type="text" id="lec-desc" placeholder="What students will learn in this session...">
 
-            <label>PDF نوٹس کا لنک (اختیاری - نہ ہو تو خالی چھوڑ دیں):</label>
-            <input type="text" id="lec-notes" placeholder="https://drive.google.com/...">
+            <label id="lbl-lec-notes">PDF Notes Link (Optional):</label>
+            <input type="text" id="lec-notes" class="mono" placeholder="https://drive.google.com/...">
 
-            <button class="btn btn-primary" onclick="addLecture()">💾 لیکچر محفوظ کریں</button>
+            <label id="lbl-lec-thumb">Custom Thumbnail Image (Optional — auto uses YouTube HD if blank):</label>
+            <input type="text" id="lec-thumb" class="mono" placeholder="https://... or upload from gallery" oninput="syncImgPreview('lec-thumb', 'prev-lec-thumb')">
+            <div class="img-upload-row">
+                <img id="prev-lec-thumb" class="img-preview-thumb" alt="Thumbnail preview">
+                <input type="file" id="file-lec-thumb" accept="image/*" style="display:none;" onchange="handleGalleryUpload(this, 'lec-thumb', 'prev-lec-thumb', 640)">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-up-lec-thumb" onclick="document.getElementById('file-lec-thumb').click()">Upload from Gallery</button>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-clr-lec-thumb" onclick="clearImgField('lec-thumb', 'prev-lec-thumb')">Remove</button>
+            </div>
+
+            <button class="btn btn-primary" id="btn-save-lec" onclick="saveLecture()">Save Lecture</button>
         </div>
 
         <div class="card">
-            <h3>موجودہ لیکچرز</h3>
+            <div class="card-head">
+                <h3 id="txt-existing-lecs">Published Lectures</h3>
+            </div>
             <div id="admin-lectures-list"></div>
         </div>
     </div>
@@ -225,26 +603,30 @@
     <!-- TAB 3: UPCOMING LECTURES TICKER -->
     <div id="upcoming-tab" class="section">
         <div class="card">
-            <h3>آن کمنگ لیکچر کا چلتا ہوا ٹیکسٹ شامل کریں</h3>
-            <label>اعلان / تاریخ لکھیں (بغیر کسی باکس کے صرف ٹیکسٹ چلے گا):</label>
-            <input type="text" id="upcoming-input" placeholder="مثال: اگلا لیکچر نمبر 4 بروز اتوار 20 نومبر رات 9 بجے اپ لوڈ ہوگا">
-            <button class="btn btn-primary" onclick="addUpcoming()">➕ ٹیکسٹ شامل کریں</button>
+            <div class="card-head">
+                <h3 id="txt-up-head">Add Scrolling Announcement</h3>
+            </div>
+            <label id="lbl-up-input">Announcement / Upcoming Schedule Text:</label>
+            <input type="text" id="upcoming-input" placeholder="e.g. Lecture #4 uploads this Sunday at 9:00 PM PKT">
+            <button class="btn btn-primary" id="btn-add-up" onclick="addUpcoming()">Add Announcement</button>
 
-            <div style="display:flex; gap:10px; margin-top:12px;">
-                <div style="flex:1;">
-                    <label>ٹیکسٹ کا رنگ (Color):</label>
-                    <input type="color" id="upcoming-color" value="#dc2626" style="height:42px;">
+            <div class="grid-2" style="margin-top:8px;">
+                <div>
+                    <label id="lbl-up-color">Text Color:</label>
+                    <input type="color" id="upcoming-color" value="#dc2626" style="height:42px; padding:4px;">
                 </div>
-                <div style="flex:1;">
-                    <label>ٹیکسٹ سائز (px):</label>
-                    <input type="number" id="upcoming-size" value="18" min="12" max="36">
+                <div>
+                    <label id="lbl-up-size">Font Size (px):</label>
+                    <input type="number" id="upcoming-size" value="16" min="12" max="32">
                 </div>
             </div>
-            <button class="btn btn-success btn-sm" onclick="saveUpcomingStyle()">🎨 رنگ اور سائز محفوظ کریں</button>
+            <button class="btn btn-success btn-sm" id="btn-save-up-style" style="margin-top:12px;" onclick="saveUpcomingStyle()">Save Color & Size</button>
         </div>
 
         <div class="card">
-            <h3>چلنے والے اعلانات (تاریخ آنے پر Delete کر دیں)</h3>
+            <div class="card-head">
+                <h3 id="txt-up-list-head">Active Announcements</h3>
+            </div>
             <div id="upcoming-list"></div>
         </div>
     </div>
@@ -252,8 +634,10 @@
     <!-- TAB 4: Q&A REPLIES -->
     <div id="qa-tab" class="section">
         <div class="card">
-            <h3>طلباء کے سوالات اور آپ کے جوابات</h3>
-            <button class="btn btn-primary btn-sm" onclick="loadAllData()" style="margin-bottom:10px;">🔄 سوالات چیک کریں</button>
+            <div class="card-head">
+                <h3 id="txt-qa-head">Student Questions & Replies</h3>
+                <button class="btn btn-outline btn-sm" id="btn-refresh-qa" onclick="loadAllData()">Refresh</button>
+            </div>
             <div id="admin-qa-list"></div>
         </div>
     </div>
@@ -261,57 +645,520 @@
     <!-- TAB 5: FIREBASE & GENERAL SETTINGS -->
     <div id="settings-tab" class="section">
         <div class="card">
-            <h3>🔥 Firebase Connection Setup (Add & Save)</h3>
-            <p style="font-size:0.85rem; color:#64748b; margin-bottom:8px;">ایک بار سیو کرنے پر ایپ ہمیشہ خود بخود کنیکٹ ہو جائے گی۔</p>
-            <label>Firebase Realtime Database URL:</label>
-            <input type="text" id="fb-url" placeholder="https://your-project-default-rtdb.firebaseio.com">
+            <div class="card-head">
+                <h3 id="txt-fb-head">Firebase Connection Setup</h3>
+                <button class="btn btn-dark btn-sm" id="btn-export-backup" onclick="exportBackupJson()">Download JSON Backup</button>
+            </div>
+            <p id="txt-fb-sub" style="font-size:0.82rem; color:var(--muted); margin-bottom:8px;">Pre-configured for Sids Studios. Saving stores your database link for auto-connect in browser or APK.</p>
+            <label id="lbl-fb-url">Firebase Realtime Database URL:</label>
+            <input type="text" id="fb-url" class="mono" placeholder="https://your-project-default-rtdb.firebaseio.com">
 
-            <label>Firebase API Key (اختیاری):</label>
-            <input type="text" id="fb-apikey" placeholder="AIzaSy...">
+            <label id="lbl-fb-key">Firebase API Key (Optional):</label>
+            <input type="text" id="fb-apikey" class="mono" placeholder="AIzaSy...">
 
-            <button class="btn btn-success" onclick="saveFirebaseConfig()">💾 Add & Save Firebase</button>
+            <button class="btn btn-success" id="btn-save-fb" onclick="saveFirebaseConfig()">Save & Connect Firebase</button>
         </div>
 
         <div class="card">
-            <h3>🏫 ویب سائٹ، استاد اور پیمنٹ اکاؤنٹس</h3>
-            <label>ویب سائٹ / اکیڈمی کا نام:</label>
-            <input type="text" id="set-sitename" placeholder="مثال: آن لائن لیکچر اکیڈمی">
+            <div class="card-head">
+                <h3 id="txt-gen-set-head">Academy, Instructor & Payment Accounts</h3>
+            </div>
+            <label id="lbl-set-site">Portal / Academy Name:</label>
+            <input type="text" id="set-sitename" placeholder="SIDS STUDIOS">
 
-            <label>ٹیچر کا نام:</label>
-            <input type="text" id="set-teacher" placeholder="مثال: پروفیسر وسیم">
+            <label id="lbl-set-teacher">Instructor Name:</label>
+            <input type="text" id="set-teacher" placeholder="Instructor Name">
 
-            <label>آپ کا واٹس ایپ نمبر (ملکی کوڈ کے ساتھ):</label>
-            <input type="text" id="set-whatsapp" placeholder="923001234567">
+            <label id="lbl-set-teacher-photo">Instructor Photo (Optional — header stays normal until added):</label>
+            <input type="text" id="set-teacher-photo" class="mono" placeholder="Leave blank for normal header, or paste URL / upload" oninput="syncImgPreview('set-teacher-photo', 'prev-teacher-photo')">
+            <div class="img-upload-row">
+                <img id="prev-teacher-photo" class="img-preview-thumb" alt="Teacher photo preview">
+                <input type="file" id="file-teacher-photo" accept="image/*" style="display:none;" onchange="handleGalleryUpload(this, 'set-teacher-photo', 'prev-teacher-photo', 360)">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-up-teacher-photo" onclick="document.getElementById('file-teacher-photo').click()">Upload from Gallery</button>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-clr-teacher-photo" onclick="clearImgField('set-teacher-photo', 'prev-teacher-photo')">Remove Photo</button>
+            </div>
 
-            <label>JazzCash اکاؤنٹ نمبر اور نام:</label>
+            <label id="lbl-set-logo">Academy Logo Image (Optional):</label>
+            <input type="text" id="set-logo" class="mono" placeholder="Leave blank for monogram letter, or paste URL / upload" oninput="syncImgPreview('set-logo', 'prev-logo')">
+            <div class="img-upload-row">
+                <img id="prev-logo" class="img-preview-thumb" alt="Logo preview">
+                <input type="file" id="file-logo" accept="image/*" style="display:none;" onchange="handleGalleryUpload(this, 'set-logo', 'prev-logo', 240)">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-up-logo" onclick="document.getElementById('file-logo').click()">Upload from Gallery</button>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-clr-logo" onclick="clearImgField('set-logo', 'prev-logo')">Remove Logo</button>
+            </div>
+
+            <label id="lbl-set-wa">WhatsApp Number (with country code):</label>
+            <input type="text" id="set-whatsapp" class="mono" placeholder="923001234567">
+
+            <label id="lbl-set-jc">JazzCash Account Number & Title:</label>
             <input type="text" id="set-jc" placeholder="0300-1234567 (Name)">
-            <label>JazzCash QR Image Link (اختیاری):</label>
-            <input type="text" id="set-jc-qr" placeholder="https://...">
+            <label id="lbl-set-jc-qr">JazzCash QR Image Link (Optional):</label>
+            <input type="text" id="set-jc-qr" class="mono" placeholder="https://...">
 
-            <label>EasyPaisa اکاؤنٹ نمبر اور نام:</label>
+            <label id="lbl-set-ep">EasyPaisa Account Number & Title:</label>
             <input type="text" id="set-ep" placeholder="0345-1234567 (Name)">
-            <label>EasyPaisa QR Image Link (اختیاری):</label>
-            <input type="text" id="set-ep-qr" placeholder="https://...">
+            <label id="lbl-set-ep-qr">EasyPaisa QR Image Link (Optional):</label>
+            <input type="text" id="set-ep-qr" class="mono" placeholder="https://...">
 
-            <label>NayaPay اکاؤنٹ / IBAN:</label>
+            <label id="lbl-set-np">NayaPay Account / IBAN:</label>
             <input type="text" id="set-np" placeholder="03xx-xxxxxxx / NayaPay ID">
-            <label>NayaPay QR Image Link (اختیاری):</label>
-            <input type="text" id="set-np-qr" placeholder="https://...">
+            <label id="lbl-set-np-qr">NayaPay QR Image Link (Optional):</label>
+            <input type="text" id="set-np-qr" class="mono" placeholder="https://...">
 
-            <label>Raqami اکاؤنٹ / IBAN:</label>
+            <label id="lbl-set-rq">Raqami Account / IBAN:</label>
             <input type="text" id="set-rq" placeholder="Raqami Account / IBAN">
-            <label>Raqami QR Image Link (اختیاری):</label>
-            <input type="text" id="set-rq-qr" placeholder="https://...">
+            <label id="lbl-set-rq-qr">Raqami QR Image Link (Optional):</label>
+            <input type="text" id="set-rq-qr" class="mono" placeholder="https://...">
 
-            <button class="btn btn-primary" onclick="saveGeneralSettings()">💾 تمام سیٹنگز محفوظ کریں</button>
+            <button class="btn btn-primary" id="btn-save-settings" onclick="saveGeneralSettings()">Save All Portal Settings</button>
         </div>
     </div>
 
 </div>
 
+<div id="toast" class="toast"></div>
+
 <script>
+    const DEFAULT_FIREBASE_URL = "https://sidsstudio-2bd24-default-rtdb.firebaseio.com";
     let dbUrl = "";
     let cachedData = {};
+    let adminLang = localStorage.getItem("admin_lang") || "en";
+
+    function escapeHtml(str) {
+        return String(str || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    const ADMIN_I18N = {
+        en: {
+            dir: "ltr",
+            pageTitle: "Sids Studios | Admin Control Panel",
+            adminTitle: "Sids Studios Admin",
+            connected: "Connected",
+            offline: "Not Connected",
+            tabPins: "PIN Manager",
+            tabLectures: "Lectures",
+            tabUpcoming: "Ticker",
+            tabQa: "Q&A",
+            tabSettings: "Settings",
+            kpiLecs: "Total Lectures",
+            kpiPins: "Active PINs",
+            kpiQa: "Open Q&A",
+            genPinHead: "Generate New Access PIN",
+            lblPinLec: "Select Lecture:",
+            lblPinDuration: "Validity Duration:",
+            optD1: "1 Day (24 Hours)",
+            optD3: "3 Days",
+            optD7: "7 Days (1 Week)",
+            optD15: "15 Days",
+            optD30: "30 Days (1 Month)",
+            optD90: "90 Days (3 Months)",
+            lblPinStudent: "Student Name (Optional):",
+            phPinStudent: "e.g. Ali Raza",
+            lblDevLock: "Single Device / Browser Lock",
+            lblDevLockSub: "When ON, this PIN only works on one mobile or browser",
+            btnGenPin: "Generate New PIN",
+            pinReady: "New PIN is ready:",
+            btnCopyPin: "Copy PIN",
+            btnWaPin: "Send via WhatsApp",
+            pinsListHead: "Active & Issued PINs",
+            btnRefresh: "Refresh",
+            phPinSearch: "Search by PIN code or student name...",
+            addLecHead: "Add New Lecture",
+            editLecHead: "Edit Lecture",
+            btnCancelEdit: "Cancel Edit",
+            lblLecNum: "Lecture Number (e.g. 1 or 2):",
+            lblLecPrice: "Fee / Price:",
+            phLecPrice: "e.g. PKR 1,500",
+            lblLecTitle: "Lecture Title:",
+            phLecTitle: "e.g. Class 01 - Core Foundations",
+            lblLecYt: "YouTube Unlisted Video Link:",
+            lblLecDesc: "Short Description:",
+            phLecDesc: "What students will learn in this session...",
+            lblLecNotes: "PDF Notes Link (Optional):",
+            lblLecThumb: "Custom Thumbnail Image (Optional — auto uses YouTube HD if blank):",
+            btnUploadGallery: "Upload from Gallery",
+            btnRemoveImg: "Remove",
+            btnSaveLec: "Save Lecture",
+            btnUpdateLec: "Update Lecture",
+            existingLecs: "Published Lectures",
+            upHead: "Add Scrolling Announcement",
+            lblUpInput: "Announcement / Upcoming Schedule Text:",
+            phUpInput: "e.g. Lecture #4 uploads this Sunday at 9:00 PM PKT",
+            btnAddUp: "Add Announcement",
+            lblUpColor: "Text Color:",
+            lblUpSize: "Font Size (px):",
+            btnSaveUpStyle: "Save Color & Size",
+            upListHead: "Active Announcements",
+            qaHead: "Student Questions & Replies",
+            fbHead: "Firebase Connection Setup",
+            btnBackup: "Download JSON Backup",
+            fbSub: "Pre-configured for Sids Studios. Saving stores your database link for auto-connect in browser or APK.",
+            lblFbUrl: "Firebase Realtime Database URL:",
+            lblFbKey: "Firebase API Key (Optional):",
+            btnSaveFb: "Save & Connect Firebase",
+            genSetHead: "Academy, Instructor & Payment Accounts",
+            lblSetSite: "Portal / Academy Name:",
+            lblSetTeacher: "Instructor Name:",
+            lblSetTeacherPhoto: "Instructor Photo (Optional — header stays normal until added):",
+            lblSetLogo: "Academy Logo Image (Optional):",
+            lblSetWa: "WhatsApp Number (with country code):",
+            adminSuffix: "Admin",
+            lblSetJc: "JazzCash Account Number & Title:",
+            lblSetJcQr: "JazzCash QR Image Link (Optional):",
+            lblSetEp: "EasyPaisa Account Number & Title:",
+            lblSetEpQr: "EasyPaisa QR Image Link (Optional):",
+            lblSetNp: "NayaPay Account / IBAN:",
+            lblSetNpQr: "NayaPay QR Image Link (Optional):",
+            lblSetRq: "Raqami Account / IBAN:",
+            lblSetRqQr: "Raqami QR Image Link (Optional):",
+            btnSaveSettings: "Save All Portal Settings",
+            noLectures: "No lectures added yet.",
+            noPins: "No PINs generated yet.",
+            noUpcoming: "No active announcements.",
+            noQa: "No student questions received yet.",
+            lecWord: "Lecture",
+            feeWord: "Fee",
+            editBtn: "Edit",
+            delBtn: "Delete",
+            copyBtn: "Copy",
+            resetDevBtn: "Reset Device",
+            blockBtn: "Block",
+            unblockBtn: "Unblock",
+            replyPh: "Write your official reply...",
+            sendReplyBtn: "Publish Reply",
+            statusExpired: "Expired",
+            statusBlocked: "Blocked",
+            statusActive: "Active",
+            devLocked: "Locked",
+            devReady: "ON (Unused)",
+            devOff: "OFF",
+            waShareMsg: (code, lecName, days, portalName) => `Assalam-o-Alaikum! Your access PIN for ${portalName} (${lecName}) is ready.\n\nPIN: ${code}\nValidity: ${days} Days`,
+            confirmDelLec: "Delete this lecture permanently?",
+            confirmDelPin: "Delete this PIN permanently?",
+            toastFbSaved: "Firebase connected and saved!",
+            toastSettingsSaved: "Portal settings updated live!",
+            toastLecSaved: "Lecture saved to portal!",
+            toastPinCopied: "PIN copied: ",
+            toastDevReset: "Device lock reset successfully!",
+            toastStyleSaved: "Ticker color & size updated!",
+            toastReplySent: "Reply published!",
+            toastBackupDone: "Backup JSON downloaded!",
+            errFbMissing: "Please enter Firebase Database URL.",
+            errConnectFirst: "Please connect Firebase first.",
+            errLecRequired: "Lecture Title and YouTube link are required.",
+            errSelectLec: "Please select a lecture first.",
+            errUpEmpty: "Please enter announcement text."
+        },
+        ur: {
+            dir: "rtl",
+            pageTitle: "سڈز اسٹوڈیوز | ایڈمن کنٹرول پینل",
+            adminTitle: "سڈز اسٹوڈیوز ایڈمن",
+            connected: "کنیکٹڈ",
+            offline: "کنیکٹ نہیں ہے",
+            tabPins: "پِن مینیجر",
+            tabLectures: "لیکچرز",
+            tabUpcoming: "اعلانات",
+            tabQa: "سوال و جواب",
+            tabSettings: "سیٹنگز",
+            kpiLecs: "کل لیکچرز",
+            kpiPins: "ایکٹیو پِنز",
+            kpiQa: "نئے سوالات",
+            genPinHead: "نیا پِن (PIN) جنریٹ کریں",
+            lblPinLec: "لیکچر منتخب کریں:",
+            lblPinDuration: "مدت (کتنے دن چلے):",
+            optD1: "1 دن (24 گھنٹے)",
+            optD3: "3 دن",
+            optD7: "7 دن (1 ہفتہ)",
+            optD15: "15 دن",
+            optD30: "30 دن (1 مہینہ)",
+            optD90: "90 دن (3 مہینے)",
+            lblPinStudent: "طالب علم کا نام (اختیاری):",
+            phPinStudent: "مثال: علی رضا",
+            lblDevLock: "ایک ڈیوائس / براؤزر لاک",
+            lblDevLockSub: "ON رکھنے پر یہ پِن صرف ایک موبائل یا براؤزر پر چلے گا",
+            btnGenPin: "نیا پِن بنائیں (Generate PIN)",
+            pinReady: "نیا پِن تیار ہے:",
+            btnCopyPin: "پِن کاپی کریں",
+            btnWaPin: "واٹس ایپ پر بھیجیں",
+            pinsListHead: "موجودہ پِن لسٹ",
+            btnRefresh: "ریفریش کریں",
+            phPinSearch: "پِن کوڈ یا طالب علم کا نام تلاش کریں...",
+            addLecHead: "نیا لیکچر شامل کریں",
+            editLecHead: "لیکچر میں تبدیلی کریں",
+            btnCancelEdit: "ایڈٹ منسوخ کریں",
+            lblLecNum: "لیکچر نمبر (مثال: 1 یا 2):",
+            lblLecPrice: "فیس (Price):",
+            phLecPrice: "مثال: 1500 روپے",
+            lblLecTitle: "لیکچر کا عنوان (Title):",
+            phLecTitle: "مثال: کلاس نمبر 1 - بنیادی اصول",
+            lblLecYt: "YouTube Unlisted ویڈیو لنک:",
+            lblLecDesc: "مختصر تفصیل (Description):",
+            phLecDesc: "اس لیکچر میں کیا سکھایا جائے گا...",
+            lblLecNotes: "PDF نوٹس کا لنک (اختیاری):",
+            lblLecThumb: "کسٹم تھمب نیل تصویر (اختیاری — خالی ہو تو یوٹیوب HD تصویر خود لگے گی):",
+            btnUploadGallery: "گیلری سے منتخب کریں",
+            btnRemoveImg: "ہٹائیں",
+            btnSaveLec: "لیکچر محفوظ کریں",
+            btnUpdateLec: "تبدیلیاں محفوظ کریں",
+            existingLecs: "موجودہ لیکچرز",
+            upHead: "چلتا ہوا اعلان (Ticker) شامل کریں",
+            lblUpInput: "اعلان یا اگلے لیکچر کی تاریخ لکھیں:",
+            phUpInput: "مثال: اگلا لیکچر نمبر 4 بروز اتوار رات 9 بجے اپ لوڈ ہوگا",
+            btnAddUp: "اعلان شامل کریں",
+            lblUpColor: "ٹیکسٹ کا رنگ:",
+            lblUpSize: "ٹیکسٹ سائز (px):",
+            btnSaveUpStyle: "رنگ اور سائز محفوظ کریں",
+            upListHead: "چلنے والے اعلانات",
+            qaHead: "طلباء کے سوالات اور جوابات",
+            fbHead: "فائربیس کنکشن سیٹ اپ",
+            btnBackup: "بیک اپ ڈاؤن لوڈ (JSON)",
+            fbSub: "سڈز اسٹوڈیوز کے لیے پہلے سے سیٹ ہے۔ سیو کرنے پر براؤزر اور APK دونوں میں آٹو کنیکٹ ہوگا۔",
+            lblFbUrl: "Firebase Realtime Database URL:",
+            lblFbKey: "Firebase API Key (اختیاری):",
+            btnSaveFb: "فائربیس سیو اور کنیکٹ کریں",
+            genSetHead: "ویب سائٹ، استاد اور پیمنٹ اکاؤنٹس",
+            lblSetSite: "ویب سائٹ / اکیڈمی کا نام:",
+            lblSetTeacher: "استاد / لیکچرار کا نام:",
+            lblSetTeacherPhoto: "استاد کی تصویر (اختیاری — خالی ہو تو سادہ ہیڈر رہے گا):",
+            lblSetLogo: "اکیڈمی کا لوگو (اختیاری):",
+            lblSetWa: "واٹس ایپ نمبر (ملکی کوڈ کے ساتھ):",
+            adminSuffix: "ایڈمن",
+            lblSetJc: "JazzCash اکاؤنٹ نمبر اور نام:",
+            lblSetJcQr: "JazzCash QR لنک (اختیاری):",
+            lblSetEp: "EasyPaisa اکاؤنٹ نمبر اور نام:",
+            lblSetEpQr: "EasyPaisa QR لنک (اختیاری):",
+            lblSetNp: "NayaPay اکاؤنٹ / IBAN:",
+            lblSetNpQr: "NayaPay QR لنک (اختیاری):",
+            lblSetRq: "Raqami اکاؤنٹ / IBAN:",
+            lblSetRqQr: "Raqami QR لنک (اختیاری):",
+            btnSaveSettings: "تمام سیٹنگز محفوظ کریں",
+            noLectures: "ابھی کوئی لیکچر موجود نہیں۔",
+            noPins: "ابھی کوئی پِن نہیں بنایا گیا۔",
+            noUpcoming: "کوئی اعلان موجود نہیں۔",
+            noQa: "ابھی کوئی سوال موصول نہیں ہوا۔",
+            lecWord: "لیکچر",
+            feeWord: "فیس",
+            editBtn: "ایڈٹ",
+            delBtn: "ڈیلیٹ",
+            copyBtn: "کاپی",
+            resetDevBtn: "ڈیوائس ری سیٹ",
+            blockBtn: "بلاک",
+            unblockBtn: "ان بلاک",
+            replyPh: "یہاں اپنا جواب لکھیں...",
+            sendReplyBtn: "جواب بھیجیں",
+            statusExpired: "مدت ختم",
+            statusBlocked: "بلاکڈ",
+            statusActive: "ایکٹیو",
+            devLocked: "لاکڈ",
+            devReady: "ON (خالی)",
+            devOff: "OFF",
+            waShareMsg: (code, lecName, days, portalName) => `السلام علیکم! ${portalName} (${lecName}) کے لیے آپ کا پِن تیار ہے۔\n\nپِن کوڈ: ${code}\nمدت: ${days} دن`,
+            confirmDelLec: "کیا آپ واقعی یہ لیکچر ڈیلیٹ کرنا چاہتے ہیں؟",
+            confirmDelPin: "کیا آپ یہ پِن مستقل طور پر ڈیلیٹ کرنا چاہتے ہیں؟",
+            toastFbSaved: "فائربیس کنیکٹ اور محفوظ ہو گیا!",
+            toastSettingsSaved: "تمام سیٹنگز ویب سائٹ پر اپ ڈیٹ ہو گئیں!",
+            toastLecSaved: "لیکچر محفوظ ہو گیا!",
+            toastPinCopied: "پِن کاپی ہو گیا: ",
+            toastDevReset: "ڈیوائس لاک ری سیٹ ہو گیا!",
+            toastStyleSaved: "اعلان کا رنگ اور سائز محفوظ ہو گیا!",
+            toastReplySent: "جواب شائع ہو گیا!",
+            toastBackupDone: "بیک اپ فائل ڈاؤن لوڈ ہو گئی!",
+            errFbMissing: "براہ کرم Firebase Database URL درج کریں۔",
+            errConnectFirst: "پہلے Firebase کنیکٹ کریں۔",
+            errLecRequired: "لیکچر کا عنوان اور یوٹیوب لنک ضروری ہے۔",
+            errSelectLec: "پہلے کوئی لیکچر منتخب کریں۔",
+            errUpEmpty: "براہ کرم اعلان کا ٹیکسٹ لکھیں۔"
+        }
+    };
+
+    function showToast(msg) {
+        const el = document.getElementById("toast");
+        el.innerText = msg;
+        el.style.display = "block";
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(() => { el.style.display = "none"; }, 2400);
+    }
+
+    function setAdminLang(lang) {
+        adminLang = lang === "ur" ? "ur" : "en";
+        localStorage.setItem("admin_lang", adminLang);
+        const t = ADMIN_I18N[adminLang];
+
+        document.documentElement.lang = adminLang;
+        document.documentElement.dir = t.dir;
+
+        document.getElementById("btn-lang-en").classList.toggle("active", adminLang === "en");
+        document.getElementById("btn-lang-ur").classList.toggle("active", adminLang === "ur");
+
+        document.getElementById("admin-page-title").innerText = t.pageTitle;
+        document.getElementById("txt-admin-title").innerText = t.adminTitle;
+        document.getElementById("tab-btn-pins").innerText = t.tabPins;
+        document.getElementById("tab-btn-lectures").innerText = t.tabLectures;
+        document.getElementById("tab-btn-upcoming").innerText = t.tabUpcoming;
+        document.getElementById("tab-btn-qa").innerText = t.tabQa;
+        document.getElementById("tab-btn-settings").innerText = t.tabSettings;
+
+        document.getElementById("txt-kpi-lecs").innerText = t.kpiLecs;
+        document.getElementById("txt-kpi-pins").innerText = t.kpiPins;
+        document.getElementById("txt-kpi-qa").innerText = t.kpiQa;
+
+        document.getElementById("txt-gen-pin-head").innerText = t.genPinHead;
+        document.getElementById("lbl-pin-lec").innerText = t.lblPinLec;
+        document.getElementById("lbl-pin-duration").innerText = t.lblPinDuration;
+        document.getElementById("opt-d1").innerText = t.optD1;
+        document.getElementById("opt-d3").innerText = t.optD3;
+        document.getElementById("opt-d7").innerText = t.optD7;
+        document.getElementById("opt-d15").innerText = t.optD15;
+        document.getElementById("opt-d30").innerText = t.optD30;
+        document.getElementById("opt-d90").innerText = t.optD90;
+        document.getElementById("lbl-pin-student").innerText = t.lblPinStudent;
+        document.getElementById("pin-student-name").placeholder = t.phPinStudent;
+        document.getElementById("lbl-dev-lock").innerText = t.lblDevLock;
+        document.getElementById("lbl-dev-lock-sub").innerText = t.lblDevLockSub;
+        document.getElementById("btn-gen-pin").innerText = t.btnGenPin;
+        document.getElementById("txt-pin-ready").innerText = t.pinReady;
+        document.getElementById("btn-copy-gen-pin").innerText = t.btnCopyPin;
+        document.getElementById("btn-wa-gen-pin").innerText = t.btnWaPin;
+        document.getElementById("txt-pins-list-head").innerText = t.pinsListHead;
+        document.getElementById("btn-refresh-pins").innerText = t.btnRefresh;
+        document.getElementById("pin-search-input").placeholder = t.phPinSearch;
+
+        const isEditing = Boolean(document.getElementById("edit-lec-id").value);
+        document.getElementById("txt-add-lec-head").innerText = isEditing ? t.editLecHead : t.addLecHead;
+        document.getElementById("btn-cancel-edit").innerText = t.btnCancelEdit;
+        document.getElementById("lbl-lec-num").innerText = t.lblLecNum;
+        document.getElementById("lbl-lec-price").innerText = t.lblLecPrice;
+        document.getElementById("lec-price").placeholder = t.phLecPrice;
+        document.getElementById("lbl-lec-title").innerText = t.lblLecTitle;
+        document.getElementById("lec-title").placeholder = t.phLecTitle;
+        document.getElementById("lbl-lec-yt").innerText = t.lblLecYt;
+        document.getElementById("lbl-lec-desc").innerText = t.lblLecDesc;
+        document.getElementById("lec-desc").placeholder = t.phLecDesc;
+        document.getElementById("lbl-lec-notes").innerText = t.lblLecNotes;
+        document.getElementById("lbl-lec-thumb").innerText = t.lblLecThumb;
+        document.getElementById("btn-up-lec-thumb").innerText = t.btnUploadGallery;
+        document.getElementById("btn-clr-lec-thumb").innerText = t.btnRemoveImg;
+        document.getElementById("btn-save-lec").innerText = isEditing ? t.btnUpdateLec : t.btnSaveLec;
+        document.getElementById("txt-existing-lecs").innerText = t.existingLecs;
+
+        document.getElementById("txt-up-head").innerText = t.upHead;
+        document.getElementById("lbl-up-input").innerText = t.lblUpInput;
+        document.getElementById("upcoming-input").placeholder = t.phUpInput;
+        document.getElementById("btn-add-up").innerText = t.btnAddUp;
+        document.getElementById("lbl-up-color").innerText = t.lblUpColor;
+        document.getElementById("lbl-up-size").innerText = t.lblUpSize;
+        document.getElementById("btn-save-up-style").innerText = t.btnSaveUpStyle;
+        document.getElementById("txt-up-list-head").innerText = t.upListHead;
+
+        document.getElementById("txt-qa-head").innerText = t.qaHead;
+        document.getElementById("btn-refresh-qa").innerText = t.btnRefresh;
+
+        document.getElementById("txt-fb-head").innerText = t.fbHead;
+        document.getElementById("btn-export-backup").innerText = t.btnBackup;
+        document.getElementById("txt-fb-sub").innerText = t.fbSub;
+        document.getElementById("lbl-fb-url").innerText = t.lblFbUrl;
+        document.getElementById("lbl-fb-key").innerText = t.lblFbKey;
+        document.getElementById("btn-save-fb").innerText = t.btnSaveFb;
+
+        document.getElementById("txt-gen-set-head").innerText = t.genSetHead;
+        document.getElementById("lbl-set-site").innerText = t.lblSetSite;
+        document.getElementById("lbl-set-teacher").innerText = t.lblSetTeacher;
+        document.getElementById("lbl-set-teacher-photo").innerText = t.lblSetTeacherPhoto;
+        document.getElementById("btn-up-teacher-photo").innerText = t.btnUploadGallery;
+        document.getElementById("btn-clr-teacher-photo").innerText = t.btnRemoveImg;
+        document.getElementById("lbl-set-logo").innerText = t.lblSetLogo;
+        document.getElementById("btn-up-logo").innerText = t.btnUploadGallery;
+        document.getElementById("btn-clr-logo").innerText = t.btnRemoveImg;
+        document.getElementById("lbl-set-wa").innerText = t.lblSetWa;
+        document.getElementById("lbl-set-jc").innerText = t.lblSetJc;
+        document.getElementById("lbl-set-jc-qr").innerText = t.lblSetJcQr;
+        document.getElementById("lbl-set-ep").innerText = t.lblSetEp;
+        document.getElementById("lbl-set-ep-qr").innerText = t.lblSetEpQr;
+        document.getElementById("lbl-set-np").innerText = t.lblSetNp;
+        document.getElementById("lbl-set-np-qr").innerText = t.lblSetNpQr;
+        document.getElementById("lbl-set-rq").innerText = t.lblSetRq;
+        document.getElementById("lbl-set-rq-qr").innerText = t.lblSetRqQr;
+        document.getElementById("btn-save-settings").innerText = t.btnSaveSettings;
+
+        renderAdminBrand();
+        renderLecturesAdmin();
+        renderPinsAdmin();
+        renderUpcomingAdmin();
+        renderQAAdmin();
+        updateConnBadge();
+    }
+
+    function renderAdminBrand() {
+        const t = ADMIN_I18N[adminLang];
+        const s = (cachedData.portal && cachedData.portal.settings) || {};
+        const portalName = (s.siteName || "Sids Studios").trim();
+        document.getElementById("txt-admin-title").innerText = `${portalName} ${t.adminSuffix}`;
+        document.getElementById("admin-page-title").innerText = `${portalName} | ${t.adminSuffix}`;
+        const markEl = document.getElementById("admin-brand-mark");
+        if (s.logoUrl && s.logoUrl.trim()) {
+            markEl.innerHTML = `<img src="${escapeHtml(s.logoUrl.trim())}" alt="${escapeHtml(portalName)}" onerror="this.parentElement.innerText='${escapeHtml(portalName.charAt(0).toUpperCase() || "S")}'">`;
+        } else {
+            markEl.innerText = portalName.charAt(0).toUpperCase() || "S";
+        }
+    }
+
+    function syncImgPreview(inputId, previewId) {
+        const val = (document.getElementById(inputId).value || "").trim();
+        const img = document.getElementById(previewId);
+        if (val) {
+            img.src = val;
+            img.style.display = "block";
+        } else {
+            img.removeAttribute("src");
+            img.style.display = "none";
+        }
+    }
+
+    function clearImgField(inputId, previewId) {
+        document.getElementById(inputId).value = "";
+        syncImgPreview(inputId, previewId);
+    }
+
+    function handleGalleryUpload(fileInput, targetInputId, previewId, maxDim) {
+        const file = fileInput.files && fileInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const img = new Image();
+            img.onload = function() {
+                const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+                const w = Math.round(img.width * scale);
+                const h = Math.round(img.height * scale);
+                const canvas = document.createElement("canvas");
+                canvas.width = w;
+                canvas.height = h;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, w, h);
+                const compressed = canvas.toDataURL("image/jpeg", 0.78);
+                document.getElementById(targetInputId).value = compressed;
+                syncImgPreview(targetInputId, previewId);
+            };
+            img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+        fileInput.value = "";
+    }
+
+    function updateConnBadge(isOnline) {
+        const t = ADMIN_I18N[adminLang];
+        const badge = document.getElementById("conn-status");
+        if (typeof isOnline === "boolean") {
+            badge.dataset.online = isOnline ? "1" : "0";
+        }
+        const online = badge.dataset.online === "1";
+        badge.innerText = online ? t.connected : t.offline;
+        badge.className = "status-text " + (online ? "status-online" : "status-offline");
+    }
 
     function switchTab(tabId, btn) {
         document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
@@ -320,59 +1167,75 @@
         btn.classList.add("active");
     }
 
-    // Auto-Connect Firebase on Load
     function initAdmin() {
-        const savedUrl = localStorage.getItem("admin_fb_url") || "";
+        const savedUrl = localStorage.getItem("admin_fb_url") || DEFAULT_FIREBASE_URL;
         const savedKey = localStorage.getItem("admin_fb_key") || "";
         document.getElementById("fb-url").value = savedUrl;
         document.getElementById("fb-apikey").value = savedKey;
-
-        if (savedUrl) {
-            dbUrl = savedUrl.replace(/\/$/, "");
-            loadAllData();
-        } else {
-            // Switch to settings tab automatically if not configured yet
-            switchTab("settings-tab", document.querySelectorAll(".tab-btn")[4]);
-        }
+        dbUrl = savedUrl.replace(/\/$/, "");
+        setAdminLang(adminLang);
+        loadAllData();
     }
 
     function saveFirebaseConfig() {
+        const t = ADMIN_I18N[adminLang];
         const url = document.getElementById("fb-url").value.trim().replace(/\/$/, "");
         const key = document.getElementById("fb-apikey").value.trim();
-        if (!url) return alert("براہ کرم Firebase Database URL درج کریں۔");
+        if (!url) return showToast(t.errFbMissing);
 
         localStorage.setItem("admin_fb_url", url);
         localStorage.setItem("admin_fb_key", key);
         dbUrl = url;
-        alert("✅ Firebase تفصیلات محفوظ ہو گئیں! اب ایپ آٹو-کنیکٹ ہوگی۔");
+        showToast(t.toastFbSaved);
         loadAllData();
     }
 
     async function loadAllData() {
         if (!dbUrl) return;
-        const badge = document.getElementById("conn-status");
         try {
             const res = await fetch(`${dbUrl}/.json`);
             if (!res.ok) throw new Error("Connection failed");
             cachedData = (await res.json()) || {};
-            badge.innerText = "Connected ●";
-            badge.className = "status-badge status-online";
+            updateConnBadge(true);
 
+            updateKpis();
+            renderAdminBrand();
             populateSettingsForm();
             renderLecturesAdmin();
             renderPinsAdmin();
             renderUpcomingAdmin();
             renderQAAdmin();
         } catch (e) {
-            badge.innerText = "Not Connected";
-            badge.className = "status-badge status-offline";
+            updateConnBadge(false);
         }
+    }
+
+    function updateKpis() {
+        const lecs = (cachedData.portal && cachedData.portal.lectures) || {};
+        const pins = cachedData.pins || {};
+        const allQ = cachedData.questions || {};
+
+        const activePins = Object.values(pins).filter(p => !p.blocked && Date.now() <= p.expiresAt).length;
+        let openQ = 0;
+        Object.values(allQ).forEach(lecQ => {
+            Object.values(lecQ || {}).forEach(q => {
+                if (!q.reply || !q.reply.trim()) openQ++;
+            });
+        });
+
+        document.getElementById("kpi-lecs-val").innerText = Object.keys(lecs).length;
+        document.getElementById("kpi-pins-val").innerText = activePins;
+        document.getElementById("kpi-qa-val").innerText = openQ;
     }
 
     function populateSettingsForm() {
         const s = (cachedData.portal && cachedData.portal.settings) || {};
-        document.getElementById("set-sitename").value = s.siteName || "";
+        document.getElementById("set-sitename").value = s.siteName || "SIDS STUDIOS";
         document.getElementById("set-teacher").value = s.teacherName || "";
+        document.getElementById("set-teacher-photo").value = s.teacherPhoto || "";
+        syncImgPreview("set-teacher-photo", "prev-teacher-photo");
+        document.getElementById("set-logo").value = s.logoUrl || "";
+        syncImgPreview("set-logo", "prev-logo");
         document.getElementById("set-whatsapp").value = s.whatsapp || "";
         document.getElementById("set-jc").value = s.jazzcash || "";
         document.getElementById("set-jc-qr").value = s.jazzcashQr || "";
@@ -387,12 +1250,15 @@
     }
 
     async function saveGeneralSettings() {
-        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const t = ADMIN_I18N[adminLang];
+        if (!dbUrl) return showToast(t.errConnectFirst);
         const existing = (cachedData.portal && cachedData.portal.settings) || {};
         const payload = {
             ...existing,
             siteName: document.getElementById("set-sitename").value.trim(),
             teacherName: document.getElementById("set-teacher").value.trim(),
+            teacherPhoto: document.getElementById("set-teacher-photo").value.trim(),
+            logoUrl: document.getElementById("set-logo").value.trim(),
             whatsapp: document.getElementById("set-whatsapp").value.trim(),
             jazzcash: document.getElementById("set-jc").value.trim(),
             jazzcashQr: document.getElementById("set-jc-qr").value.trim(),
@@ -407,91 +1273,136 @@
             method: "PUT",
             body: JSON.stringify(payload)
         });
-        alert("✅ تمام سیٹنگز ویب سائٹ پر اپ ڈیٹ ہو گئیں!");
+        showToast(t.toastSettingsSaved);
         loadAllData();
     }
 
-    // Lectures Management
-    async function addLecture() {
-        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+    // Lectures Management (Add + Edit in place without breaking existing PINs)
+    async function saveLecture() {
+        const t = ADMIN_I18N[adminLang];
+        if (!dbUrl) return showToast(t.errConnectFirst);
+        const editId = document.getElementById("edit-lec-id").value.trim();
         const num = document.getElementById("lec-num").value.trim();
         const title = document.getElementById("lec-title").value.trim();
         const yt = document.getElementById("lec-yt").value.trim();
         const price = document.getElementById("lec-price").value.trim();
         const desc = document.getElementById("lec-desc").value.trim();
         const notes = document.getElementById("lec-notes").value.trim();
+        const thumbUrl = document.getElementById("lec-thumb").value.trim();
 
-        if (!title || !yt) return alert("لیکچر کا عنوان اور یوٹیوب لنک ضروری ہے۔");
+        if (!title || !yt) return showToast(t.errLecRequired);
 
-        const lecId = "LEC" + (num || Date.now().toString().slice(-4));
-        const payload = { number: num, title, youtubeUrl: yt, price, desc, notesUrl: notes };
+        const lecId = editId || ("LEC" + (num || Date.now().toString().slice(-4)));
+        const payload = { number: num, title, youtubeUrl: yt, price, desc, notesUrl: notes, thumbUrl };
 
-        await fetch(`${dbUrl}/portal/lectures/${lecId}.json`, {
+        await fetch(`${dbUrl}/portal/lectures/${encodeURIComponent(lecId)}.json`, {
             method: "PUT",
             body: JSON.stringify(payload)
         });
 
+        cancelLectureEdit();
+        showToast(t.toastLecSaved);
+        loadAllData();
+    }
+
+    function editLecture(id) {
+        const t = ADMIN_I18N[adminLang];
+        const l = cachedData.portal && cachedData.portal.lectures && cachedData.portal.lectures[id];
+        if (!l) return;
+        document.getElementById("edit-lec-id").value = id;
+        document.getElementById("lec-num").value = l.number || "";
+        document.getElementById("lec-title").value = l.title || "";
+        document.getElementById("lec-yt").value = l.youtubeUrl || "";
+        document.getElementById("lec-price").value = l.price || "";
+        document.getElementById("lec-desc").value = l.desc || "";
+        document.getElementById("lec-notes").value = l.notesUrl || "";
+        document.getElementById("lec-thumb").value = l.thumbUrl || "";
+        syncImgPreview("lec-thumb", "prev-lec-thumb");
+
+        document.getElementById("txt-add-lec-head").innerText = `${t.editLecHead} (${id})`;
+        document.getElementById("btn-save-lec").innerText = t.btnUpdateLec;
+        document.getElementById("btn-cancel-edit").style.display = "inline-flex";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function cancelLectureEdit() {
+        const t = ADMIN_I18N[adminLang];
+        document.getElementById("edit-lec-id").value = "";
         document.getElementById("lec-num").value = "";
         document.getElementById("lec-title").value = "";
         document.getElementById("lec-yt").value = "";
         document.getElementById("lec-price").value = "";
         document.getElementById("lec-desc").value = "";
         document.getElementById("lec-notes").value = "";
-        alert("✅ نیا لیکچر شامل ہو گیا!");
-        loadAllData();
+        clearImgField("lec-thumb", "prev-lec-thumb");
+        document.getElementById("txt-add-lec-head").innerText = t.addLecHead;
+        document.getElementById("btn-save-lec").innerText = t.btnSaveLec;
+        document.getElementById("btn-cancel-edit").style.display = "none";
     }
 
     function renderLecturesAdmin() {
+        const t = ADMIN_I18N[adminLang];
         const list = document.getElementById("admin-lectures-list");
         const select = document.getElementById("pin-lecture-select");
+        const prevSelect = select.value;
         list.innerHTML = "";
         select.innerHTML = "";
 
         const lecs = (cachedData.portal && cachedData.portal.lectures) || {};
         const keys = Object.keys(lecs);
         if (keys.length === 0) {
-            list.innerHTML = "<p style='color:#64748b;'>کوئی لیکچر موجود نہیں۔</p>";
-            select.innerHTML = "<option value=''>کوئی لیکچر موجود نہیں</option>";
+            list.innerHTML = `<p style='color:var(--muted); font-size:0.88rem;'>${escapeHtml(t.noLectures)}</p>`;
+            select.innerHTML = `<option value=''>${escapeHtml(t.noLectures)}</option>`;
             return;
         }
         keys.forEach(id => {
             const l = lecs[id];
             const opt = document.createElement("option");
             opt.value = id;
-            opt.innerText = `لیکچر #${l.number || id} - ${l.title}`;
+            opt.innerText = `${t.lecWord} #${l.number || id} — ${l.title}`;
             select.appendChild(opt);
 
             const div = document.createElement("div");
             div.className = "item-box";
             div.innerHTML = `
-                <strong>لیکچر #${l.number || id}: ${l.title}</strong>
-                <div style="font-size:0.85rem; color:#475569;">فیس: ${l.price || "N/A"}</div>
-                <button class="btn btn-danger btn-sm" onclick="deleteLecture('${id}')">🗑️ ڈیلیٹ کریں</button>
+                <div style="font-weight:800; font-size:0.95rem;">${escapeHtml(t.lecWord)} #${escapeHtml(l.number || id)}: ${escapeHtml(l.title)}</div>
+                <div style="font-size:0.82rem; color:var(--muted); margin-top:2px;">${escapeHtml(t.feeWord)}: ${escapeHtml(l.price || "N/A")} · ID: <span class="mono">${escapeHtml(id)}</span></div>
+                <div class="item-actions">
+                    <button class="btn btn-outline btn-sm" onclick="editLecture('${escapeHtml(id)}')">${escapeHtml(t.editBtn)}</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteLecture('${escapeHtml(id)}')">${escapeHtml(t.delBtn)}</button>
+                </div>
             `;
             list.appendChild(div);
         });
+        if (prevSelect && lecs[prevSelect]) select.value = prevSelect;
     }
 
     async function deleteLecture(id) {
-        if (!confirm("کیا آپ واقعی یہ لیکچر ڈیلیٹ کرنا چاہتے ہیں؟")) return;
-        await fetch(`${dbUrl}/portal/lectures/${id}.json`, { method: "DELETE" });
+        const t = ADMIN_I18N[adminLang];
+        if (!confirm(t.confirmDelLec)) return;
+        await fetch(`${dbUrl}/portal/lectures/${encodeURIComponent(id)}.json`, { method: "DELETE" });
         loadAllData();
     }
 
     // PIN Generation & Management
     async function generatePin() {
-        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const t = ADMIN_I18N[adminLang];
+        if (!dbUrl) return showToast(t.errConnectFirst);
         const lecId = document.getElementById("pin-lecture-select").value;
-        if (!lecId) return alert("پہلے کوئی لیکچر منتخب کریں۔");
+        if (!lecId) return showToast(t.errSelectLec);
 
-        const days = parseInt(document.getElementById("pin-duration").value);
+        const days = parseInt(document.getElementById("pin-duration").value, 10);
+        const studentName = document.getElementById("pin-student-name").value.trim();
         const deviceLock = document.getElementById("pin-device-lock").checked;
-        const randomDigits = Math.floor(1000 + Math.random() * 9000);
-        const pinCode = `${lecId}-${randomDigits}`;
+
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        const suffix = Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+        const pinCode = `${lecId}-${suffix}`;
         const expiresAt = Date.now() + (days * 24 * 60 * 60 * 1000);
 
         const payload = {
             lectureId: lecId,
+            studentName: studentName,
             days: days,
             expiresAt: expiresAt,
             deviceLock: deviceLock,
@@ -500,77 +1411,110 @@
             createdAt: Date.now()
         };
 
-        await fetch(`${dbUrl}/pins/${pinCode}.json`, {
+        await fetch(`${dbUrl}/pins/${encodeURIComponent(pinCode)}.json`, {
             method: "PUT",
             body: JSON.stringify(payload)
         });
 
+        const lecObj = cachedData.portal && cachedData.portal.lectures && cachedData.portal.lectures[lecId];
+        const lecName = lecObj ? lecObj.title : lecId;
+        const portalName = (cachedData.portal && cachedData.portal.settings && cachedData.portal.settings.siteName) || "Sids Studios";
         document.getElementById("new-pin-code").innerText = pinCode;
+        document.getElementById("btn-wa-gen-pin").href = `https://wa.me/?text=${encodeURIComponent(t.waShareMsg(pinCode, lecName, days, portalName))}`;
         document.getElementById("generated-pin-box").style.display = "block";
+        document.getElementById("pin-student-name").value = "";
         loadAllData();
     }
 
     function copyGeneratedPin() {
+        const t = ADMIN_I18N[adminLang];
         const code = document.getElementById("new-pin-code").innerText;
-        navigator.clipboard.writeText(code);
-        alert("📋 پِن کاپی ہو گیا: " + code);
+        if (navigator.clipboard) navigator.clipboard.writeText(code);
+        showToast(t.toastPinCopied + code);
     }
 
     function renderPinsAdmin() {
+        const t = ADMIN_I18N[adminLang];
         const list = document.getElementById("pins-list");
+        const q = (document.getElementById("pin-search-input")?.value || "").trim().toLowerCase();
         list.innerHTML = "";
         const pins = cachedData.pins || {};
-        const keys = Object.keys(pins).reverse();
+        const keys = Object.keys(pins).reverse().filter(code => {
+            if (!q) return true;
+            const p = pins[code];
+            return code.toLowerCase().includes(q) || String(p.studentName || "").toLowerCase().includes(q);
+        });
+
         if (keys.length === 0) {
-            list.innerHTML = "<p style='color:#64748b;'>ابھی کوئی پِن نہیں بنایا گیا۔</p>";
+            list.innerHTML = `<p style='color:var(--muted); font-size:0.88rem;'>${escapeHtml(t.noPins)}</p>`;
             return;
         }
         keys.forEach(code => {
             const p = pins[code];
-            const expDate = new Date(p.expiresAt).toLocaleDateString("ur-PK");
+            const expDate = new Date(p.expiresAt).toLocaleDateString(adminLang === "ur" ? "ur-PK" : "en-GB");
             const isExpired = Date.now() > p.expiresAt;
+            const statusText = p.blocked ? t.statusBlocked : isExpired ? t.statusExpired : `${t.statusActive} (${expDate})`;
+            const statusColor = p.blocked || isExpired ? "var(--danger)" : "var(--success)";
+            const devStatus = p.deviceLock ? (p.boundDevice ? t.devLocked : t.devReady) : t.devOff;
+
             const div = document.createElement("div");
             div.className = "item-box";
             div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong style="font-size:1.05rem; color:var(--accent);">${code}</strong>
-                    <span style="font-size:0.8rem; color:${isExpired ? 'red' : 'green'}; font-weight:700;">
-                        ${isExpired ? "Expired" : "Active (" + expDate + ")"}
-                    </span>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <strong class="mono" style="font-size:1rem; color:var(--accent);">${escapeHtml(code)}</strong>
+                    <span style="font-size:0.78rem; color:${statusColor}; font-weight:800;">${escapeHtml(statusText)}</span>
                 </div>
-                <div style="font-size:0.82rem; color:#475569; margin-top:4px;">
-                    لیکچر: ${p.lectureId} | ڈیوائس لاک: ${p.deviceLock ? (p.boundDevice ? "🔒 لاکڈ" : "ON (خالی)") : "OFF"}
+                <div style="font-size:0.82rem; color:var(--muted); margin-top:4px;">
+                    ${p.studentName ? `<strong>${escapeHtml(p.studentName)}</strong> · ` : ""}${escapeHtml(t.lecWord)}: <span class="mono">${escapeHtml(p.lectureId)}</span> · ${escapeHtml(devStatus)}
                 </div>
-                <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
-                    <button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText('${code}'); alert('کاپی ہو گیا')">📋 کاپی</button>
-                    <button class="btn btn-sm" style="background:var(--warning);" onclick="resetPinDevice('${code}')">🔓 ڈیوائس ری سیٹ</button>
-                    <button class="btn btn-danger btn-sm" onclick="deletePin('${code}')">🗑️ ختم کریں</button>
+                <div class="item-actions">
+                    <button class="btn btn-primary btn-sm" onclick="copyTextPin('${escapeHtml(code)}')">${escapeHtml(t.copyBtn)}</button>
+                    <button class="btn btn-warning btn-sm" onclick="resetPinDevice('${escapeHtml(code)}')">${escapeHtml(t.resetDevBtn)}</button>
+                    <button class="btn btn-outline btn-sm" onclick="toggleBlockPin('${escapeHtml(code)}', ${Boolean(p.blocked)})">${escapeHtml(p.blocked ? t.unblockBtn : t.blockBtn)}</button>
+                    <button class="btn btn-danger btn-sm" onclick="deletePin('${escapeHtml(code)}')">${escapeHtml(t.delBtn)}</button>
                 </div>
             `;
             list.appendChild(div);
         });
     }
 
+    function copyTextPin(code) {
+        const t = ADMIN_I18N[adminLang];
+        if (navigator.clipboard) navigator.clipboard.writeText(code);
+        showToast(t.toastPinCopied + code);
+    }
+
+    async function toggleBlockPin(code, currentlyBlocked) {
+        await fetch(`${dbUrl}/pins/${encodeURIComponent(code)}/blocked.json`, {
+            method: "PUT",
+            body: JSON.stringify(!currentlyBlocked)
+        });
+        loadAllData();
+    }
+
     async function resetPinDevice(code) {
-        await fetch(`${dbUrl}/pins/${code}/boundDevice.json`, {
+        const t = ADMIN_I18N[adminLang];
+        await fetch(`${dbUrl}/pins/${encodeURIComponent(code)}/boundDevice.json`, {
             method: "PUT",
             body: JSON.stringify("")
         });
-        alert("✅ ڈیوائس لاک ری سیٹ ہو گیا! اب صارف نئے موبائل پر پِن لگا سکتا ہے۔");
+        showToast(t.toastDevReset);
         loadAllData();
     }
 
     async function deletePin(code) {
-        if (!confirm("یہ پِن مستقل طور پر ڈیلیٹ کر دیں؟")) return;
-        await fetch(`${dbUrl}/pins/${code}.json`, { method: "DELETE" });
+        const t = ADMIN_I18N[adminLang];
+        if (!confirm(t.confirmDelPin)) return;
+        await fetch(`${dbUrl}/pins/${encodeURIComponent(code)}.json`, { method: "DELETE" });
         loadAllData();
     }
 
     // Upcoming Announcements
     async function addUpcoming() {
-        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const t = ADMIN_I18N[adminLang];
+        if (!dbUrl) return showToast(t.errConnectFirst);
         const text = document.getElementById("upcoming-input").value.trim();
-        if (!text) return alert("براہ کرم ٹیکسٹ لکھیں۔");
+        if (!text) return showToast(t.errUpEmpty);
         await fetch(`${dbUrl}/portal/upcoming.json`, {
             method: "POST",
             body: JSON.stringify({ text, createdAt: Date.now() })
@@ -580,41 +1524,46 @@
     }
 
     async function saveUpcomingStyle() {
-        if (!dbUrl) return alert("پہلے Firebase کنیکٹ کریں۔");
+        const t = ADMIN_I18N[adminLang];
+        if (!dbUrl) return showToast(t.errConnectFirst);
         const color = document.getElementById("upcoming-color").value;
         const size = document.getElementById("upcoming-size").value;
         await fetch(`${dbUrl}/portal/settings/upcomingColor.json`, { method: "PUT", body: JSON.stringify(color) });
         await fetch(`${dbUrl}/portal/settings/upcomingSize.json`, { method: "PUT", body: JSON.stringify(size) });
-        alert("✅ ٹیکسٹ کا رنگ اور سائز اپ ڈیٹ ہو گیا!");
+        showToast(t.toastStyleSaved);
     }
 
     function renderUpcomingAdmin() {
+        const t = ADMIN_I18N[adminLang];
         const list = document.getElementById("upcoming-list");
         list.innerHTML = "";
         const items = (cachedData.portal && cachedData.portal.upcoming) || {};
         const keys = Object.keys(items);
         if (keys.length === 0) {
-            list.innerHTML = "<p style='color:#64748b;'>کوئی آن کمنگ ٹیکسٹ موجود نہیں۔</p>";
+            list.innerHTML = `<p style='color:var(--muted); font-size:0.88rem;'>${escapeHtml(t.noUpcoming)}</p>`;
             return;
         }
         keys.forEach(id => {
             const div = document.createElement("div");
             div.className = "item-box";
             div.innerHTML = `
-                <div>${items[id].text}</div>
-                <button class="btn btn-danger btn-sm" onclick="deleteUpcoming('${id}')">🗑️ Delete</button>
+                <div style="font-size:0.9rem; font-weight:600;">${escapeHtml(items[id].text)}</div>
+                <div class="item-actions">
+                    <button class="btn btn-danger btn-sm" onclick="deleteUpcoming('${escapeHtml(id)}')">${escapeHtml(t.delBtn)}</button>
+                </div>
             `;
             list.appendChild(div);
         });
     }
 
     async function deleteUpcoming(id) {
-        await fetch(`${dbUrl}/portal/upcoming/${id}.json`, { method: "DELETE" });
+        await fetch(`${dbUrl}/portal/upcoming/${encodeURIComponent(id)}.json`, { method: "DELETE" });
         loadAllData();
     }
 
     // Q&A Replies
     function renderQAAdmin() {
+        const t = ADMIN_I18N[adminLang];
         const list = document.getElementById("admin-qa-list");
         list.innerHTML = "";
         const allQ = cachedData.questions || {};
@@ -628,12 +1577,12 @@
                 const div = document.createElement("div");
                 div.className = "item-box";
                 div.innerHTML = `
-                    <div style="font-size:0.8rem; color:var(--accent); font-weight:700;">لیکچر: ${lecId} | ${q.name} (${q.pin})</div>
-                    <div style="margin:6px 0; font-weight:600;">سوال: ${q.text}</div>
-                    <input type="text" id="reply-input-${qId}" value="${q.reply || ""}" placeholder="یہاں اپنا جواب لکھیں...">
-                    <div style="display:flex; gap:6px; margin-top:6px;">
-                        <button class="btn btn-success btn-sm" onclick="sendReply('${lecId}', '${qId}')">💬 جواب بھیجیں</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${lecId}', '${qId}')">🗑️ ڈیلیٹ</button>
+                    <div style="font-size:0.78rem; color:var(--accent); font-weight:700;">${escapeHtml(t.lecWord)}: <span class="mono">${escapeHtml(lecId)}</span> · ${escapeHtml(q.name)} (<span class="mono">${escapeHtml(q.pin)}</span>)</div>
+                    <div style="margin:6px 0; font-weight:600; font-size:0.92rem;">${escapeHtml(q.text)}</div>
+                    <input type="text" id="reply-input-${escapeHtml(qId)}" value="${escapeHtml(q.reply || "")}" placeholder="${escapeHtml(t.replyPh)}">
+                    <div class="item-actions">
+                        <button class="btn btn-success btn-sm" onclick="sendReply('${escapeHtml(lecId)}', '${escapeHtml(qId)}')">${escapeHtml(t.sendReplyBtn)}</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteQuestion('${escapeHtml(lecId)}', '${escapeHtml(qId)}')">${escapeHtml(t.delBtn)}</button>
                     </div>
                 `;
                 list.appendChild(div);
@@ -641,27 +1590,39 @@
         });
 
         if (count === 0) {
-            list.innerHTML = "<p style='color:#64748b;'>ابھی کوئی سوال موصول نہیں ہوا۔</p>";
+            list.innerHTML = `<p style='color:var(--muted); font-size:0.88rem;'>${escapeHtml(t.noQa)}</p>`;
         }
     }
 
     async function sendReply(lecId, qId) {
+        const t = ADMIN_I18N[adminLang];
         const replyText = document.getElementById(`reply-input-${qId}`).value.trim();
-        await fetch(`${dbUrl}/questions/${lecId}/${qId}/reply.json`, {
+        await fetch(`${dbUrl}/questions/${encodeURIComponent(lecId)}/${encodeURIComponent(qId)}/reply.json`, {
             method: "PUT",
             body: JSON.stringify(replyText)
         });
-        alert("✅ جواب شائع ہو گیا!");
+        showToast(t.toastReplySent);
         loadAllData();
     }
 
     async function deleteQuestion(lecId, qId) {
-        await fetch(`${dbUrl}/questions/${lecId}/${qId}.json`, { method: "DELETE" });
+        await fetch(`${dbUrl}/questions/${encodeURIComponent(lecId)}/${encodeURIComponent(qId)}.json`, { method: "DELETE" });
         loadAllData();
+    }
+
+    function exportBackupJson() {
+        const t = ADMIN_I18N[adminLang];
+        const blob = new Blob([JSON.stringify(cachedData, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `sids-studios-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast(t.toastBackupDone);
     }
 
     initAdmin();
 </script>
 </body>
 </html>
-
