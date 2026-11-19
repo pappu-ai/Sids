@@ -31,12 +31,11 @@
             position: relative;
             background: radial-gradient(circle at 15% 20%, #1e3a8a 0%, #0f172a 55%, #070b14 100%);
             color: #fff;
-            padding: 38px 18px 46px;
+            padding: 36px 18px 44px;
             overflow: hidden;
             border-bottom: 3px solid var(--gold);
             box-shadow: 0 12px 30px rgba(11, 17, 32, 0.25);
         }
-        /* Subtle Academic Grid Overlay */
         .hero-banner::before {
             content: "";
             position: absolute;
@@ -97,25 +96,34 @@
         @media (max-width: 720px) {
             .hero-subtitle { margin: 0 auto 18px; }
         }
-        .hero-stats {
+        /* Interactive Action Buttons in Hero */
+        .hero-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
         @media (max-width: 720px) {
-            .hero-stats { justify-content: center; }
+            .hero-actions { justify-content: center; }
         }
-        .stat-chip {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.14);
+        .hero-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(6px);
-            padding: 7px 13px;
+            padding: 9px 15px;
             border-radius: 10px;
-            font-size: 0.84rem;
+            font-size: 0.86rem;
+            font-weight: 700;
             color: #f8fafc;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 7px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .hero-btn:hover, .hero-btn.active-tab {
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
         }
 
         /* Decorative Academic Books & Studio Illustration Card */
@@ -154,7 +162,7 @@
             margin-top: 2px;
         }
 
-        /* Upcoming Text Ticker / Floating Text (No Box) */
+        /* Upcoming Text Ticker */
         .upcoming-container {
             padding: 12px 16px;
             text-align: center;
@@ -177,31 +185,67 @@
         /* Main Container */
         .container { max-width: 920px; margin: 22px auto; padding: 0 16px; }
 
-        .section-heading {
+        /* Dropdown Accordion Header */
+        .dropdown-bar {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 15px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e2e8f0;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
         }
-        .section-heading h2 {
-            font-size: 1.25rem;
+        .dropdown-bar:hover {
+            border-color: var(--accent);
+        }
+        .dropdown-bar-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--primary);
         }
-        .section-heading span {
-            font-size: 0.85rem;
+        .dropdown-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .count-pill {
+            background: #eff6ff;
+            color: var(--accent);
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+        .chevron-icon {
+            font-size: 1rem;
             color: var(--muted);
-            font-weight: 600;
+            transition: transform 0.25s;
+        }
+        .dropdown-bar.open .chevron-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown Panel Content */
+        .dropdown-panel {
+            display: none;
+            margin-bottom: 22px;
+        }
+        .dropdown-panel.open {
+            display: block;
         }
 
         /* Lecture Grid & Cards with Auto HD Thumbnails */
         .lecture-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
-            gap: 20px;
-            margin-top: 12px;
+            gap: 18px;
         }
         .lecture-card {
             background: var(--card);
@@ -213,10 +257,12 @@
             flex-direction: column;
             justify-content: space-between;
             transition: transform 0.22s, box-shadow 0.22s;
+            cursor: pointer;
         }
         .lecture-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
+            border-color: var(--accent);
         }
         .lec-thumb-box {
             position: relative;
@@ -230,15 +276,11 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.3s;
-        }
-        .lecture-card:hover .lec-thumb-box img {
-            transform: scale(1.04);
         }
         .lec-thumb-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(15,23,42,0.75) 0%, rgba(15,23,42,0.1) 55%, transparent 100%);
+            background: linear-gradient(to top, rgba(15,23,42,0.78) 0%, rgba(15,23,42,0.12) 55%, transparent 100%);
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
@@ -253,7 +295,7 @@
             border-radius: 6px;
         }
         .lec-hd-tag {
-            background: rgba(15, 23, 42, 0.82);
+            background: rgba(15, 23, 42, 0.85);
             color: #fff;
             font-size: 0.74rem;
             font-weight: 700;
@@ -262,42 +304,63 @@
             border: 1px solid rgba(255,255,255,0.2);
         }
         .lec-body {
-            padding: 16px 18px 18px;
+            padding: 15px 17px 17px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
             justify-content: space-between;
         }
-        .lec-title { font-size: 1.12rem; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
-        .lec-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 14px; }
-        .lec-features {
-            display: flex;
-            gap: 10px;
-            font-size: 0.78rem;
-            color: #475569;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
+        .lec-title { font-size: 1.08rem; font-weight: 800; margin-bottom: 6px; color: var(--primary); }
+        .lec-desc { font-size: 0.86rem; color: var(--muted); margin-bottom: 12px; }
         .lec-footer {
             display: flex;
             align-items: center;
             justify-content: space-between;
             border-top: 1px solid var(--border);
-            padding-top: 12px;
+            padding-top: 11px;
         }
-        .lec-price { font-weight: 800; color: var(--success); font-size: 1rem; }
+        .lec-price { font-weight: 800; color: var(--success); font-size: 0.96rem; }
         .btn-open {
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: #fff;
             border: none;
-            padding: 9px 16px;
+            padding: 8px 14px;
             border-radius: 9px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+            font-size: 0.88rem;
         }
-        .btn-open:hover { background: var(--accent-hover); }
+
+        /* PDF Notes Dropdown List Items */
+        .notes-list-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        .note-item-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .note-item-card:hover {
+            border-color: var(--accent);
+        }
+        .empty-panel-msg {
+            background: var(--card);
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
 
         /* Modal Overlay */
         .modal {
@@ -421,7 +484,7 @@
             background: transparent;
             z-index: 15;
         }
-        /* Subtle Fixed Corner Watermark (Non-Distracting) */
+        /* Subtle Fixed Corner Watermark */
         .fixed-watermark {
             position: absolute;
             bottom: 42px;
@@ -480,7 +543,7 @@
         }
 
         .alert-msg { font-size: 0.9rem; margin-top: 8px; font-weight: 600; }
-        .loading-box { text-align: center; padding: 40px; color: var(--muted); }
+        .loading-box { text-align: center; padding: 24px; color: var(--muted); }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -492,38 +555,30 @@
             <div class="brand-pill">🎓 OFFICIAL DIGITAL LEARNING ACADEMY</div>
             <h1 id="site-name" class="brand-title">SIDS STUDIOS</h1>
             <p id="teacher-info" class="hero-subtitle">اعلیٰ معیار کے ویڈیو لیکچرز، مستند تعلیمی مواد اور فوری پِن رسائی کے ساتھ جدید آن لائن اکیڈمی</p>
-            <div class="hero-stats">
-                <div class="stat-chip">🎥 HD ویڈیو لیکچرز</div>
-                <div class="stat-chip">📚 پی ڈی ایف نوٹس</div>
-                <div class="stat-chip">🔐 محفوظ پِن ایکسیس</div>
+            <div class="hero-actions">
+                <button type="button" id="hero-btn-lectures" class="hero-btn active-tab" onclick="openSectionDropdown('lectures')">🎥 HD ویڈیو لیکچرز</button>
+                <button type="button" id="hero-btn-notes" class="hero-btn" onclick="openSectionDropdown('notes')">📚 پی ڈی ایف نوٹس</button>
             </div>
         </div>
 
         <div class="hero-visual">
             <div class="studio-emblem-card">
-                <!-- Custom SVG Illustration: Stack of Academic Books, Graduation Cap & Play Badge -->
                 <svg viewBox="0 0 180 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Glow Circle -->
                     <circle cx="90" cy="72" r="56" fill="url(#glowGrad)" opacity="0.28"/>
-                    <!-- Bottom Book (Navy & Gold) -->
                     <rect x="28" y="96" width="124" height="18" rx="4" fill="#1e40af" stroke="#60a5fa" stroke-width="1.5"/>
                     <rect x="34" y="100" width="112" height="10" rx="2" fill="#f8fafc"/>
                     <line x1="42" y1="105" x2="138" y2="105" stroke="#cbd5e1" stroke-width="1.5"/>
-                    <!-- Middle Book (Emerald & Gold) -->
                     <rect x="36" y="76" width="108" height="18" rx="4" fill="#0f766e" stroke="#34d399" stroke-width="1.5"/>
                     <rect x="42" y="80" width="96" height="10" rx="2" fill="#fef3c7"/>
-                    <!-- Top Open Book -->
                     <path d="M44 68C62 60 78 62 90 70C102 62 118 60 136 68V42C118 35 102 37 90 45C78 37 62 35 44 42V68Z" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
                     <line x1="90" y1="45" x2="90" y2="70" stroke="#f59e0b" stroke-width="2"/>
                     <line x1="54" y1="49" x2="80" y2="52" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
                     <line x1="54" y1="56" x2="80" y2="59" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
                     <line x1="100" y1="52" x2="126" y2="49" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
                     <line x1="100" y1="59" x2="126" y2="56" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
-                    <!-- Graduation Cap Top -->
                     <polygon points="90,10 130,24 90,36 50,24" fill="#f59e0b" stroke="#fef3c7" stroke-width="1.5"/>
                     <path d="M124 26V38" stroke="#fcd34d" stroke-width="2" stroke-linecap="round"/>
                     <circle cx="124" cy="40" r="2.5" fill="#fef3c7"/>
-                    <!-- Video Play Badge -->
                     <circle cx="138" cy="92" r="17" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
                     <polygon points="134,85 146,92 134,99" fill="#ffffff"/>
                     <defs>
@@ -569,14 +624,36 @@
         </div>
     </div>
 
-    <!-- Lecture Buttons List -->
+    <!-- Collapsible Dropdown Catalogs -->
     <div id="lectures-view">
-        <div class="section-heading">
-            <h2>📚 دستیاب ویڈیو لیکچرز</h2>
-            <span id="lec-count-badge">کورس کیٹلاگ</span>
+        <!-- 1. HD Video Lectures Dropdown -->
+        <div id="bar-lectures" class="dropdown-bar" onclick="toggleDropdown('lectures')">
+            <div class="dropdown-bar-title">
+                <span>🎥 دستیاب ویڈیو لیکچرز (فہرست کھولیں)</span>
+            </div>
+            <div class="dropdown-bar-right">
+                <span id="lec-count-badge" class="count-pill">0 لیکچرز</span>
+                <span class="chevron-icon">▼</span>
+            </div>
         </div>
-        <div id="loader" class="loading-box">لیکچرز لوڈ ہو رہے ہیں...</div>
-        <div id="lecture-grid" class="lecture-grid"></div>
+        <div id="panel-lectures" class="dropdown-panel">
+            <div id="loader" class="loading-box">لیکچرز لوڈ ہو رہے ہیں...</div>
+            <div id="lecture-grid" class="lecture-grid"></div>
+        </div>
+
+        <!-- 2. PDF Notes Dropdown -->
+        <div id="bar-notes" class="dropdown-bar" onclick="toggleDropdown('notes')">
+            <div class="dropdown-bar-title">
+                <span>📚 کورس کے پی ڈی ایف نوٹس (فہرست کھولیں)</span>
+            </div>
+            <div class="dropdown-bar-right">
+                <span id="notes-count-badge" class="count-pill">0 نوٹس</span>
+                <span class="chevron-icon">▼</span>
+            </div>
+        </div>
+        <div id="panel-notes" class="dropdown-panel">
+            <div id="notes-grid" class="notes-list-grid"></div>
+        </div>
     </div>
 </div>
 
@@ -588,9 +665,9 @@
         <p id="modal-lec-price" style="color:var(--success); font-weight:700; font-size:0.95rem;"></p>
 
         <div class="pin-box">
-            <label style="font-weight:600; font-size:0.95rem;">اگر آپ کے پاس پِن (PIN) موجود ہے تو درج کریں:</label>
+            <label style="font-weight:600; font-size:0.95rem;">اس کورس / لیکچر کو کھولنے کے لیے اپنا پِن (PIN) درج کریں:</label>
             <input type="text" id="pin-input" class="pin-input" placeholder="مثال: LEC1-4829">
-            <button onclick="verifyPin()" class="btn-verify">پِن چیک کریں اور لیکچر کھولیں</button>
+            <button onclick="verifyPin()" class="btn-verify">پِن چیک کریں اور کورس کھولیں</button>
             <div id="pin-status" class="alert-msg"></div>
         </div>
 
@@ -614,6 +691,31 @@
     let siteData = { settings: {}, lectures: {}, upcoming: {} };
     let selectedLectureId = null;
     let activePinCode = "";
+
+    function toggleDropdown(section) {
+        const bar = document.getElementById("bar-" + section);
+        const panel = document.getElementById("panel-" + section);
+        const isOpen = panel.classList.contains("open");
+        if (isOpen) {
+            panel.classList.remove("open");
+            bar.classList.remove("open");
+        } else {
+            panel.classList.add("open");
+            bar.classList.add("open");
+        }
+    }
+
+    function openSectionDropdown(section) {
+        closePlayer();
+        document.getElementById("hero-btn-lectures").classList.toggle("active-tab", section === "lectures");
+        document.getElementById("hero-btn-notes").classList.toggle("active-tab", section === "notes");
+
+        const bar = document.getElementById("bar-" + section);
+        const panel = document.getElementById("panel-" + section);
+        panel.classList.add("open");
+        bar.classList.add("open");
+        bar.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 
     function getDeviceId() {
         let id = localStorage.getItem("academy_device_id");
@@ -640,6 +742,7 @@
                 renderBranding();
                 renderUpcoming();
                 renderLectures();
+                renderNotesList();
             } else {
                 document.getElementById("loader").innerText = "ابھی تک کوئی لیکچر شامل نہیں کیا گیا۔";
             }
@@ -683,7 +786,7 @@
         grid.innerHTML = "";
         const lecs = siteData.lectures || {};
         const keys = Object.keys(lecs);
-        document.getElementById("lec-count-badge").innerText = keys.length + " لیکچرز دستیاب";
+        document.getElementById("lec-count-badge").innerText = keys.length + " لیکچرز";
         if (keys.length === 0) {
             loader.innerText = "ابھی کوئی لیکچر دستیاب نہیں ہے۔";
             return;
@@ -695,6 +798,7 @@
             const thumbUrl = vidId ? `https://i.ytimg.com/vi/${vidId}/hqdefault.jpg` : "";
             const card = document.createElement("div");
             card.className = "lecture-card";
+            card.onclick = () => openLectureModal(id);
             card.innerHTML = `
                 <div class="lec-thumb-box">
                     ${thumbUrl ? `<img src="${thumbUrl}" alt="${lec.title}" loading="lazy">` : ""}
@@ -707,19 +811,42 @@
                     <div>
                         <div class="lec-title">${lec.title}</div>
                         <div class="lec-desc">${lec.desc || "مکمل ویڈیو لیکچر (پِن کے ذریعے فوری رسائی)"}</div>
-                        <div class="lec-features">
-                            <span>🎥 فل ایچ ڈی</span>
-                            ${lec.notesUrl ? `<span>📄 PDF نوٹس</span>` : ""}
-                            <span>💬 سوال و جواب</span>
-                        </div>
                     </div>
                     <div class="lec-footer">
-                        <span class="lec-price">${lec.price ? "فیس: " + lec.price : "Paid Access"}</span>
-                        <button class="btn-open" onclick="openLectureModal('${id}')">لیکچر کھولیں 🔒</button>
+                        <span class="lec-price">${lec.price ? "فیس: " + lec.price : "پِن درکار ہے"}</span>
+                        <button type="button" class="btn-open">منتخب کریں 🔒</button>
                     </div>
                 </div>
             `;
             grid.appendChild(card);
+        });
+    }
+
+    function renderNotesList() {
+        const notesGrid = document.getElementById("notes-grid");
+        notesGrid.innerHTML = "";
+        const lecs = siteData.lectures || {};
+        const keysWithNotes = Object.keys(lecs).filter(id => lecs[id].notesUrl && lecs[id].notesUrl.trim() !== "");
+        document.getElementById("notes-count-badge").innerText = keysWithNotes.length + " نوٹس";
+
+        if (keysWithNotes.length === 0) {
+            notesGrid.innerHTML = `<div class="empty-panel-msg">ابھی کسی لیکچر کے ساتھ پی ڈی ایف نوٹس اپ لوڈ نہیں کیے گئے۔</div>`;
+            return;
+        }
+
+        keysWithNotes.forEach(id => {
+            const lec = lecs[id];
+            const item = document.createElement("div");
+            item.className = "note-item-card";
+            item.onclick = () => openLectureModal(id);
+            item.innerHTML = `
+                <div>
+                    <div style="font-weight:800; color:var(--primary); font-size:0.98rem;">📄 لیکچر #${lec.number || id}: ${lec.title} (PDF نوٹس)</div>
+                    <div style="font-size:0.83rem; color:var(--muted); margin-top:2px;">پِن درج کرنے کے بعد ڈاؤن لوڈ لنک کھل جائے گا</div>
+                </div>
+                <button type="button" class="btn-open">پِن ڈالیں 🔒</button>
+            `;
+            notesGrid.appendChild(item);
         });
     }
 
