@@ -710,6 +710,17 @@
             <label id="lbl-set-rq-qr">Raqami QR Image Link (Optional):</label>
             <input type="text" id="set-rq-qr" class="mono" placeholder="https://...">
 
+            <div class="toggle-row" style="margin-top:16px;">
+                <div>
+                    <strong id="lbl-set-chat-on" style="font-size:0.86rem;">Enable Smart Course Assistant Popup</strong>
+                    <div id="lbl-set-chat-sub" style="font-size:0.76rem; color:var(--muted);">Auto-opens after portal loads to share live lecture prices & direct buy links (students can close with ×)</div>
+                </div>
+                <input type="checkbox" id="set-chat-enabled" checked style="width:22px; height:22px; flex-shrink:0;">
+            </div>
+
+            <label id="lbl-set-chat-welcome">Assistant Welcome Message (Optional):</label>
+            <input type="text" id="set-chat-welcome" placeholder="Leave blank for automatic bilingual welcome message">
+
             <button class="btn btn-primary" id="btn-save-settings" onclick="saveGeneralSettings()">Save All Portal Settings</button>
         </div>
     </div>
@@ -816,6 +827,10 @@
             lblSetNpQr: "NayaPay QR Image Link (Optional):",
             lblSetRq: "Raqami Account / IBAN:",
             lblSetRqQr: "Raqami QR Image Link (Optional):",
+            lblSetChatOn: "Enable Smart Course Assistant Popup",
+            lblSetChatSub: "Auto-opens after portal loads to share live lecture prices & direct buy links (students can close with ×)",
+            lblSetChatWelcome: "Assistant Welcome Message (Optional):",
+            phSetChatWelcome: "Leave blank for automatic bilingual welcome message",
             btnSaveSettings: "Save All Portal Settings",
             noLectures: "No lectures added yet.",
             noPins: "No PINs generated yet.",
@@ -936,6 +951,10 @@
             lblSetNpQr: "NayaPay QR لنک (اختیاری):",
             lblSetRq: "Raqami اکاؤنٹ / IBAN:",
             lblSetRqQr: "Raqami QR لنک (اختیاری):",
+            lblSetChatOn: "اسمارٹ کورس اسسٹنٹ چیٹ بوٹ آن رکھیں",
+            lblSetChatSub: "پورٹل لوڈ ہوتے ہی خود کھلے گا، لیکچرز اور فیس بتائے گا اور سیدھا خریدنے کا بٹن دے گا (× سے بند ہو سکتا ہے)",
+            lblSetChatWelcome: "چیٹ بوٹ کا خوش آمدید پیغام (اختیاری):",
+            phSetChatWelcome: "خالی چھوڑیں تو خودکار اردو/انگلش پیغام آئے گا",
             btnSaveSettings: "تمام سیٹنگز محفوظ کریں",
             noLectures: "ابھی کوئی لیکچر موجود نہیں۔",
             noPins: "ابھی کوئی پِن نہیں بنایا گیا۔",
@@ -1083,6 +1102,10 @@
         document.getElementById("lbl-set-np-qr").innerText = t.lblSetNpQr;
         document.getElementById("lbl-set-rq").innerText = t.lblSetRq;
         document.getElementById("lbl-set-rq-qr").innerText = t.lblSetRqQr;
+        document.getElementById("lbl-set-chat-on").innerText = t.lblSetChatOn;
+        document.getElementById("lbl-set-chat-sub").innerText = t.lblSetChatSub;
+        document.getElementById("lbl-set-chat-welcome").innerText = t.lblSetChatWelcome;
+        document.getElementById("set-chat-welcome").placeholder = t.phSetChatWelcome;
         document.getElementById("btn-save-settings").innerText = t.btnSaveSettings;
 
         renderAdminBrand();
@@ -1245,6 +1268,8 @@
         document.getElementById("set-np-qr").value = s.nayapayQr || "";
         document.getElementById("set-rq").value = s.raqami || "";
         document.getElementById("set-rq-qr").value = s.raqamiQr || "";
+        document.getElementById("set-chat-enabled").checked = s.chatEnabled !== false;
+        document.getElementById("set-chat-welcome").value = s.chatWelcome || "";
         if (s.upcomingColor) document.getElementById("upcoming-color").value = s.upcomingColor;
         if (s.upcomingSize) document.getElementById("upcoming-size").value = s.upcomingSize;
     }
@@ -1267,7 +1292,9 @@
             nayapay: document.getElementById("set-np").value.trim(),
             nayapayQr: document.getElementById("set-np-qr").value.trim(),
             raqami: document.getElementById("set-rq").value.trim(),
-            raqamiQr: document.getElementById("set-rq-qr").value.trim()
+            raqamiQr: document.getElementById("set-rq-qr").value.trim(),
+            chatEnabled: document.getElementById("set-chat-enabled").checked,
+            chatWelcome: document.getElementById("set-chat-welcome").value.trim()
         };
         await fetch(`${dbUrl}/portal/settings.json`, {
             method: "PUT",
