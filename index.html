@@ -1528,12 +1528,12 @@
 </div>
 
 <!-- Smart Portal Assistant Launcher & Popup -->
-<button type="button" id="chat-launcher" class="chat-launcher" onclick="openAssistant()" aria-label="Open Course Assistant">
+<button type="button" id="chat-launcher" class="chat-launcher" onclick="openAssistant()" aria-label="Ask Agent">
     <span class="chat-launcher-dot"></span>
-    <span id="txt-chat-launcher">Course Help & Fees</span>
+    <span id="txt-chat-launcher">Ask Agent</span>
 </button>
 
-<aside id="chat-widget" class="chat-widget" role="dialog" aria-label="Course Assistant">
+<aside id="chat-widget" class="chat-widget" role="dialog" aria-label="Ask Agent">
     <div class="chat-header">
         <div class="chat-header-brand">
             <div class="chat-avatar" aria-hidden="true">
@@ -1542,7 +1542,7 @@
                 </svg>
             </div>
             <div class="chat-title-wrap">
-                <div id="txt-chat-title" class="chat-title">Course Assistant</div>
+                <div id="txt-chat-title" class="chat-title">Ask Agent</div>
                 <div id="txt-chat-sub" class="chat-subtitle">Instant Lecture Details & Prices</div>
             </div>
         </div>
@@ -1646,11 +1646,12 @@
             pinNetError: "Connection error. Please try again.",
             footerSuffix: "Official Digital Academy",
             footerRight: "PIN-Protected HD Lectures",
-            chatLauncher: "Course Help & Fees",
-            chatTitle: "Course Assistant",
+            chatLauncher: "Ask Agent",
+            chatTitle: "Ask Agent",
             chatSub: "Live Lecture Details, Fees & Direct Links",
             chatPlaceholder: "Ask about lectures, fees, notes, PIN...",
             chatSend: "Send",
+            chatTyping: "Thinking...",
             qLectures: "All Lectures & Fees",
             qHowto: "How to Buy & PIN",
             qNotes: "PDF Notes",
@@ -1670,8 +1671,14 @@
             chatHowtoText: "Unlocking a lecture takes 3 quick steps:\n1. Click any lecture's 'Pay / Unlock' button.\n2. Transfer the fee via JazzCash, EasyPaisa, NayaPay, or Raqami and send your receipt on WhatsApp.\n3. Enter your received PIN to watch the HD video & download PDF notes immediately.",
             chatUpcomingHead: "Latest Announcements & Upcoming Schedule:",
             chatNoUpcoming: "No upcoming announcements right now. Check our available lectures below!",
-            chatGreetReply: (portalName, count) => `Assalam-o-Alaikum! Welcome to ${portalName}. We have ${count} live lecture${count === 1 ? "" : "s"}. Type a lecture number/topic or tap a quick button below for fees & direct links.`,
-            chatFallback: (count) => `I can help you with all ${count} lectures, fees, PDF notes, payment accounts, and PIN instructions. Try typing a lecture number (e.g. "Lecture 1") or pick a course below:`
+            chatGreetReply: (portalName, count) => `Assalam-o-Alaikum! Welcome to ${portalName}. We have ${count} live lecture${count === 1 ? "" : "s"}. How can I help you today?`,
+            chatHowAreYou: (portalName) => `Alhamdulillah, I'm doing great — thanks for asking! I'm the ${portalName} Course Assistant. Ask me about any lecture, fees, PDF notes, payment accounts, or PIN instructions.`,
+            chatWhoAreYou: (portalName, count) => `I'm the official ${portalName} Course Assistant. Here's what I can help you with:\n• View all ${count} live lectures & fees with direct Buy/Unlock links\n• Search any specific lecture by number or topic\n• Check which lectures include PDF study notes\n• Copy JazzCash, EasyPaisa, NayaPay, Raqami accounts & WhatsApp\n• Explain how to pay, get your PIN, and unlock videos`,
+            chatThanksReply: "You're very welcome! Feel free to ask anytime if you need lecture details, fees, or PIN help.",
+            chatByeReply: "Allah Hafiz! You can reopen this assistant anytime from the bottom button if you need help.",
+            chatTeacherReply: (portalName, teacher, count) => teacher ? `${portalName} lectures are taught by ${teacher}. There are currently ${count} HD lecture${count === 1 ? "" : "s"} available on this portal.` : `${portalName} currently offers ${count} HD video lecture${count === 1 ? "" : "s"} with instant PIN-protected access.`,
+            chatPinRulesReply: "Each access PIN unlocks its assigned HD lecture + PDF notes for your chosen validity period (e.g. 7–30 days). For security, PINs are locked to one mobile/browser — if you change your device or face any PIN issue, just message us on WhatsApp and Admin will reset it for you.",
+            chatFallback: (portalName) => `I'm the ${portalName} Course Assistant — I can help you with lectures, fees, PDF notes, payment accounts, and PIN access. Tap one of the quick buttons below or type a lecture number (e.g. "Lecture 1").`
         },
         ur: {
             dir: "rtl",
@@ -1736,11 +1743,12 @@
             pinNetError: "سرور سے رابطہ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
             footerSuffix: "آفیشل ڈیجیٹل اکیڈمی",
             footerRight: "محفوظ HD آن لائن لیکچرز",
-            chatLauncher: "کورس رہنمائی اور فیس",
-            chatTitle: "کورس اسسٹنٹ",
+            chatLauncher: "ایجنٹ سے پوچھیں",
+            chatTitle: "اسمارٹ ایجنٹ",
             chatSub: "لیکچرز، فیس اور ڈائریکٹ لنکس",
             chatPlaceholder: "لیکچر، فیس، نوٹس یا پِن کے بارے میں پوچھیں...",
             chatSend: "بھیجیں",
+            chatTyping: "جواب تیار ہو رہا ہے...",
             qLectures: "تمام لیکچرز اور فیس",
             qHowto: "خریدنے اور پِن کا طریقہ",
             qNotes: "پی ڈی ایف نوٹس",
@@ -1760,8 +1768,14 @@
             chatHowtoText: "لیکچر خریدنے اور چلانے کا آسان طریقہ (3 مرحلے):\n1. اپنی پسند کے لیکچر کے 'فیس ادا کریں / لیکچر کھولیں' بٹن پر کلک کریں۔\n2. JazzCash، EasyPaisa، NayaPay یا Raqami پر فیس بھیج کر رسید واٹس ایپ کریں۔\n3. ملنے والا پِن (PIN) درج کریں اور فوراً HD ویڈیو اور PDF نوٹس حاصل کریں۔",
             chatUpcomingHead: "تازہ ترین اعلانات اور آنے والے لیکچرز:",
             chatNoUpcoming: "اس وقت کوئی نیا اعلان موجود نہیں۔ نیچے دستیاب لیکچرز دیکھیں!",
-            chatGreetReply: (portalName, count) => `السلام علیکم! ${portalName} میں خوش آمدید۔ اس وقت ${count} لیکچرز موجود ہیں۔ لیکچر نمبر لکھیں یا نیچے دیے گئے بٹن استعمال کریں۔`,
-            chatFallback: (count) => `میں آپ کو تمام ${count} لیکچرز، فیس، PDF نوٹس، پیمنٹ اکاؤنٹس اور پِن کے بارے میں بتا سکتا ہوں۔ لیکچر نمبر لکھیں (مثلاً "Lecture 1") یا نیچے سے منتخب کریں:`
+            chatGreetReply: (portalName, count) => `وعلیکم السلام! ${portalName} میں خوش آمدید۔ اس وقت ${count} لیکچرز دستیاب ہیں۔ بتائیے میں آپ کی کیا مدد کر سکتا ہوں؟`,
+            chatHowAreYou: (portalName) => `الحمدللہ، میں بالکل ٹھیک ہوں — پوچھنے کا شکریہ! میں ${portalName} کا کورس اسسٹنٹ ہوں۔ آپ مجھ سے لیکچرز، فیس، PDF نوٹس، پیمنٹ اکاؤنٹس یا پِن کے بارے میں پوچھ سکتے ہیں۔`,
+            chatWhoAreYou: (portalName, count) => `میں ${portalName} کا آفیشل کورس اسسٹنٹ ہوں۔ میں آپ کی ان چیزوں میں مدد کر سکتا ہوں:\n• تمام ${count} لیکچرز اور ان کی فیس (ڈائریکٹ خریدنے کے لنک کے ساتھ)\n• کسی خاص لیکچر نمبر یا موضوع کی تفصیل\n• PDF اسٹڈی نوٹس کی فہرست\n• JazzCash، EasyPaisa، NayaPay، Raqami اکاؤنٹس اور واٹس ایپ\n• فیس ادا کرنے، پِن حاصل کرنے اور ویڈیو چلانے کا طریقہ`,
+            chatThanksReply: "آپ کا بہت شکریہ! جب بھی لیکچرز، فیس یا پِن کے متعلق مدد چاہیے ہو، بے جھجک پوچھیں۔",
+            chatByeReply: "اللہ حافظ! ضرورت پڑنے پر نیچے بٹن سے چیٹ دوبارہ کھول سکتے ہیں۔",
+            chatTeacherReply: (portalName, teacher, count) => teacher ? `${portalName} کے لیکچرز ${teacher} پڑھاتے ہیں۔ اس وقت پورٹل پر ${count} HD لیکچرز دستیاب ہیں۔` : `${portalName} پر اس وقت ${count} HD ویڈیو لیکچرز پِن رسائی کے ساتھ دستیاب ہیں۔`,
+            chatPinRulesReply: "ہر پِن (PIN) آپ کے منتخب کردہ لیکچر اور PDF نوٹس کو مقررہ مدت تک کھولتا ہے۔ سکیورٹی کے لیے پِن ایک موبائل/براؤزر پر لاک ہوتا ہے — اگر موبائل تبدیل ہو یا کوئی مسئلہ آئے تو واٹس ایپ پر رابطہ کریں، ایڈمن فوراً ری سیٹ کر دیں گے۔",
+            chatFallback: (portalName) => `میں ${portalName} کا کورس اسسٹنٹ ہوں — میں آپ کو لیکچرز، فیس، PDF نوٹس، پیمنٹ اکاؤنٹس اور پِن کے بارے میں بتا سکتا ہوں۔ نیچے دیے گئے بٹن دبائیں یا لیکچر نمبر لکھیں (مثلاً "Lecture 1")۔`
         }
     };
 
@@ -2458,12 +2472,58 @@
         appendBotMessage(pay.count > 0 ? t.chatPayHead : t.chatNoPay, pay.html);
     }
 
-    function sendChatMessage() {
+    async function sendChatMessage() {
         const input = document.getElementById("chat-input");
         const raw = (input.value || "").trim();
         if (!raw) return;
         input.value = "";
         appendUserMessage(raw);
+
+        const s = siteData.settings || {};
+        const proxyUrl = (s.chatProxyUrl || "").trim();
+        if (s.chatMode === "proxy" && /^https:\/\//i.test(proxyUrl)) {
+            const box = document.getElementById("chat-messages");
+            const typingEl = document.createElement("div");
+            typingEl.className = "chat-msg bot";
+            typingEl.innerText = I18N[currentLang].chatTyping;
+            box.appendChild(typingEl);
+            scrollChatToBottom();
+
+            try {
+                const lecs = getSortedLectures();
+                const res = await fetch(proxyUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        message: raw,
+                        lang: currentLang,
+                        provider: s.chatProvider || "gemini",
+                        model: s.chatModel || "",
+                        context: {
+                            portalName: s.siteName || "Sids Studios",
+                            teacherName: s.teacherName || "",
+                            lectures: lecs.map(l => ({ id: l.id, number: l.number, title: l.title, price: l.price, desc: l.desc, hasNotes: Boolean(l.notesUrl) })),
+                            upcoming: Object.values(siteData.upcoming || {}).map(u => u.text)
+                        }
+                    })
+                });
+                typingEl.remove();
+                if (res.ok) {
+                    const data = await res.json();
+                    const replyText = data && (data.reply || data.text || data.message);
+                    if (replyText) {
+                        const matchedLecs = Array.isArray(data.lectureIds) && data.lectureIds.length
+                            ? lecs.filter(l => data.lectureIds.includes(l.id))
+                            : (/(lecture|price|fee|buy|unlock|course|فیس|لیکچر)/i.test(raw) ? lecs : []);
+                        appendBotMessage(String(replyText), matchedLecs.length ? buildLectureCardsHtml(matchedLecs, false) : "");
+                        return;
+                    }
+                }
+            } catch (e) {
+                typingEl.remove();
+            }
+        }
+
         processAssistantQuery(raw);
     }
 
@@ -2473,8 +2533,31 @@
         const portalName = (s.siteName || "Sids Studios").trim();
         const lecs = getSortedLectures();
         const q = query.toLowerCase().trim();
+        const cleanQ = q.replace(/[?!.,]+/g, "").trim();
 
-        // 1. Check for specific lecture number match (e.g. "lecture 1", "lec 2", "#3", "class 1", or lone number "1")
+        // 1. Conversational small-talk (ALWAYS check before lecture/buy matchers)
+        if (/^(how\s+(are|r)\s+(you|u)|hru|how\s+is\s+it\s+going|what'?s\s+up|wassup|kaise\s+ho|kaisy\s+ho|kaisay\s+ho|kese\s+ho|kya\s+haal|kia\s+hal|kya\s+hal|theek\s+ho|thik\s+ho|sab\s+theek|کیسے\s+ہیں|کیا\s+حال)/.test(cleanQ)) {
+            appendBotMessage(t.chatHowAreYou(portalName));
+            return;
+        }
+        if (/^(hi|hello|hey|yo|aoa|salam|salaam|assalam[\s-]?o?[\s-]?alaikum|asalam|good\s+(morning|afternoon|evening|night)|سلام|السلام\s+علیکم)$/.test(cleanQ)) {
+            appendBotMessage(t.chatGreetReply(portalName, lecs.length));
+            return;
+        }
+        if (/(who\s+are\s+you|what\s+can\s+you\s+do|what\s+do\s+you\s+do|tum\s+kon|aap\s+kon|kon\s+ho|kya\s+kar\s+sakte|kia\s+kar\s+sakte|kia\s+kia\s+bata|kya\s+kya\s+bata|^help$|مدد|آپ\s+کون)/i.test(cleanQ)) {
+            appendBotMessage(t.chatWhoAreYou(portalName, lecs.length));
+            return;
+        }
+        if (/^(thanks?|thank\s+you|thx|ty|shukriya|shukria|jazakallah|ok|okay|okey|acha|achha|theek\s+hai|thik\s+hai|great|nice|good|awesome|شکریہ|جزاک\s+اللہ)$/.test(cleanQ)) {
+            appendBotMessage(t.chatThanksReply);
+            return;
+        }
+        if (/^(bye|goodbye|see\s+you|allah\s+hafiz|khuda\s+hafiz|اللہ\s+حافظ)$/.test(cleanQ)) {
+            appendBotMessage(t.chatByeReply);
+            return;
+        }
+
+        // 2. Specific lecture number match (e.g. "lecture 1", "lec 2", "#3", "class 1", or lone number "1")
         const numMatch = q.match(/(?:lecture|lec|class|video|part|chapter|no|num|#|لیکچر|کلاس)\s*#?\s*(\d+)/i) || q.match(/^(\d+)$/);
         if (numMatch) {
             const targetNum = numMatch[1];
@@ -2485,48 +2568,42 @@
             }
         }
 
-        // 2. Check specific topic/title keyword match against live lectures
-        const stopWords = new Set([
-            "the", "and", "for", "with", "what", "how", "much", "does", "cost", "price", "prices", "fee", "fees",
-            "rate", "rates", "all", "list", "show", "give", "send", "link", "open", "buy", "unlock", "lecture",
-            "lectures", "lec", "course", "courses", "class", "video", "videos", "detail", "details", "info",
-            "about", "notes", "note", "pdf", "pin", "pay", "payment", "kitna", "kitne", "kitnay", "hai", "hain",
-            "hay", "ka", "ki", "ke", "kay", "batao", "bataye", "batain", "chahiye", "chahye", "kholo", "kaise",
-            "kaisay", "tarika", "mein", "main", "ko", "se", "say", "aur", "sab", "puri", "poori", "mujhe", "mujhey",
-            "فیس", "قیمت", "لیکچر", "لیکچرز", "کورس", "تفصیل", "بتائیں", "کیسے", "تمام"
-        ]);
-        const tokens = q.split(/[\s,?.!:/\-]+/).filter(w => w.length >= 2 && !stopWords.has(w));
-        if (tokens.length > 0 && lecs.length > 0) {
-            const matched = lecs.filter(l => {
-                const hay = `${l.title || ""} ${l.desc || ""} ${l.number || ""}`.toLowerCase();
-                return tokens.some(tok => hay.includes(tok));
-            });
-            if (matched.length > 0 && matched.length < lecs.length) {
-                appendBotMessage(t.chatMatchedHead(matched.length), buildLectureCardsHtml(matched, false));
-                return;
-            }
+        // 3. Instructor / academy info
+        if (/(teacher|instructor|sir\b|ustad|professor|who\s+teaches|kon\s+parha|academy\s+name|استاد|لیکچرار)/i.test(q)) {
+            appendBotMessage(t.chatTeacherReply(portalName, (s.teacherName || "").trim(), lecs.length));
+            return;
         }
 
-        // 3. PDF Notes intent
-        if (/(notes?|pdf|handout|book|نوٹس|پی ڈی ایف)/i.test(q)) {
+        // 4. Device lock, expiry, PIN problem / support
+        if (/(device|lock|expire|expiry|valid|validity|days|kitne\s+din|kitnay\s+din|mobile\s+change|reset|block|issue|problem|error|not\s+working|nahi\s+chal|شئیر|ڈیوائس|مدت)/i.test(q)) {
+            const pay = buildPaymentHtml();
+            const waOnly = (s.whatsapp || "").replace(/[^0-9]/g, "")
+                ? `<a href="https://wa.me/${(s.whatsapp || "").replace(/[^0-9]/g, "")}" target="_blank" rel="noopener noreferrer" class="chat-wa-btn">${escapeHtml(t.chatWaBtn)}</a>`
+                : "";
+            appendBotMessage(t.chatPinRulesReply, waOnly);
+            return;
+        }
+
+        // 5. PDF Notes intent
+        if (/(notes?|pdf|handout|book|workbook|نوٹس|پی ڈی ایف)/i.test(q)) {
             replyNotes();
             return;
         }
 
-        // 4. Payment accounts / WhatsApp intent
+        // 6. Payment accounts / WhatsApp intent
         if (/(jazz|easypaisa|easy\s?paisa|nayapay|naya\s?pay|raqami|account|bank|whatsapp|contact|number|qr|receipt|screenshot|اکاؤنٹ|واٹس ایپ|نمبر|رابطہ|رسید)/i.test(q)) {
             replyPayment();
             return;
         }
 
-        // 5. How to buy / PIN instructions intent
-        if (/(how|kaise|kaisay|tarika|tareeqa|step|steps|process|pin\b|unlock|kharid|khareed|buy|purchase|چلا|خرید|طریقہ|پِن|کیسے)/i.test(q) && !/(price|fee|kitn|rate|فیس|قیمت)/i.test(q)) {
+        // 7. How to buy / PIN instructions intent (strict phrases — never bare "how" or "kaise")
+        if (/(how\s+to\s+(buy|pay|unlock|watch|get|use|join|register)|how\s+does\s+it\s+work|kaise\s+(kharid|khareed|buy|pay|mile|chal|unlock|dekh|open)|tarika|tareeqa|step|steps|process|pin\b|unlock|kharid|khareed|\bbuy\b|purchase|خرید|طریقہ|پِن)/i.test(q) && !/(price|fee|kitn|rate|فیس|قیمت)/i.test(q)) {
             appendBotMessage(t.chatHowtoText, buildLectureCardsHtml(lecs.slice(0, 3), false));
             return;
         }
 
-        // 6. Upcoming / announcements intent
-        if (/(upcoming|next|schedule|announcement|agla|kab\s?a|اعلان|اگلا|شیڈول)/i.test(q)) {
+        // 8. Upcoming / announcements intent
+        if (/(upcoming|next\s+lec|schedule|announcement|agla|kab\s+a|اعلان|اگلا|شیڈول)/i.test(q)) {
             const items = Object.values(siteData.upcoming || {});
             if (items.length > 0) {
                 const lines = items.map((it, i) => `${i + 1}. ${it.text}`).join("\n");
@@ -2537,20 +2614,44 @@
             return;
         }
 
-        // 7. All lectures / prices / fees / details intent
-        if (/(all|list|lecture|lectures|course|courses|price|prices|fee|fees|rate|cost|kitna|kitne|kitnay|paisa|paise|paisay|pkr|rs\b|detail|details|syllabus|video|فیس|قیمت|لیکچر|کورس|تفصیل|سب|تمام)/i.test(q)) {
+        // 9. Specific topic/title keyword match against live lectures (word-boundary, >=3 chars, strict stop-words)
+        const stopWords = new Set([
+            "the", "and", "for", "with", "what", "how", "are", "you", "your", "can", "will", "this", "that",
+            "from", "have", "has", "was", "were", "much", "does", "cost", "price", "prices", "fee", "fees",
+            "rate", "rates", "all", "list", "show", "give", "send", "link", "open", "buy", "unlock", "lecture",
+            "lectures", "lec", "course", "courses", "class", "video", "videos", "detail", "details", "info",
+            "about", "notes", "note", "pdf", "pin", "pay", "payment", "please", "pls", "bro", "bhai", "sir",
+            "tum", "aap", "kitna", "kitne", "kitnay", "hai", "hain", "hay", "kya", "kia", "hal", "haal",
+            "batao", "bataye", "batain", "chahiye", "chahye", "kholo", "kaise", "kaisay", "tarika", "mein",
+            "main", "aur", "sab", "puri", "poori", "mujhe", "mujhey", "tell", "want", "need", "get",
+            "فیس", "قیمت", "لیکچر", "لیکچرز", "کورس", "تفصیل", "بتائیں", "کیسے", "تمام"
+        ]);
+        const tokens = cleanQ.split(/[\s,?.!:/\-]+/).filter(w => w.length >= 3 && !stopWords.has(w));
+        if (tokens.length > 0 && lecs.length > 0) {
+            const matched = lecs.filter(l => {
+                const hay = `${l.title || ""} ${l.desc || ""}`.toLowerCase();
+                return tokens.some(tok => hay.includes(tok));
+            });
+            if (matched.length > 0) {
+                appendBotMessage(t.chatMatchedHead(matched.length), buildLectureCardsHtml(matched, false));
+                return;
+            }
+        }
+
+        // 10. All lectures / prices / fees / details intent
+        if (/(all|list|lecture|lectures|course|courses|price|prices|fee|fees|rate|cost|kitna|kitne|kitnay|paisa|paise|paisay|pkr|rs\b|detail|details|syllabus|video|free|demo|discount|فیس|قیمت|لیکچر|کورس|تفصیل|سب|تمام)/i.test(q)) {
             replyAllLectures();
             return;
         }
 
-        // 8. Greetings
-        if (/^(hi|hello|hey|aoa|salam|salaam|assalam|asalam|سلام|السلام)/i.test(q)) {
+        // 11. Greeting with extra text (e.g. "salam bhai")
+        if (/^(hi|hello|hey|aoa|salam|salaam|assalam|asalam|سلام|السلام)\b/i.test(cleanQ)) {
             appendBotMessage(t.chatGreetReply(portalName, lecs.length));
             return;
         }
 
-        // 9. Fallback: guide + top live lectures directly
-        appendBotMessage(t.chatFallback(lecs.length), buildLectureCardsHtml(lecs.slice(0, 4), false));
+        // 12. Clean fallback (never spam lecture cards for unrelated messages)
+        appendBotMessage(t.chatFallback(portalName));
     }
 
     initPortal();
