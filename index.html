@@ -982,6 +982,377 @@
             font-size: 0.8rem;
             color: var(--slate-500);
         }
+
+        /* Smart Portal Assistant Widget */
+        .chat-launcher {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 90;
+            display: none;
+            align-items: center;
+            gap: 9px;
+            background: var(--obsidian);
+            color: #ffffff;
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            border-radius: 12px;
+            padding: 11px 16px;
+            font-size: 0.86rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 28px -8px rgba(7, 13, 25, 0.45);
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+        .chat-launcher:hover {
+            transform: translateY(-2px);
+            background: var(--slate-900);
+            border-color: var(--gold-bright);
+        }
+        .chat-launcher-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22);
+            flex-shrink: 0;
+        }
+        [dir="rtl"] .chat-launcher {
+            right: auto;
+            left: 22px;
+        }
+
+        .chat-widget {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 95;
+            width: 372px;
+            max-width: calc(100vw - 24px);
+            height: 525px;
+            max-height: calc(100vh - 36px);
+            background: #ffffff;
+            border: 1px solid var(--slate-200);
+            border-radius: 14px;
+            box-shadow: 0 24px 52px -14px rgba(7, 13, 25, 0.36);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: chatSlideUp 0.24s ease-out;
+        }
+        .chat-widget.open {
+            display: flex;
+        }
+        [dir="rtl"] .chat-widget {
+            right: auto;
+            left: 22px;
+        }
+        @keyframes chatSlideUp {
+            from { opacity: 0; transform: translateY(14px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #070d19 0%, #111d35 100%);
+            color: #ffffff;
+            padding: 13px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+        .chat-header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .chat-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: rgba(245, 158, 11, 0.16);
+            border: 1px solid rgba(245, 158, 11, 0.42);
+            color: #fcd34d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .chat-title-wrap {
+            min-width: 0;
+        }
+        .chat-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .chat-subtitle {
+            font-size: 0.72rem;
+            color: #cbd5e1;
+            line-height: 1.25;
+        }
+        [dir="rtl"] .chat-title,
+        [dir="rtl"] .chat-subtitle {
+            line-height: 1.65;
+        }
+        .chat-close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-size: 1.25rem;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s ease;
+        }
+        .chat-close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-msg {
+            max-width: 90%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+        [dir="rtl"] .chat-msg {
+            line-height: 1.85;
+            font-size: 0.84rem;
+        }
+        .chat-msg.bot {
+            align-self: flex-start;
+            background: #ffffff;
+            color: var(--slate-900);
+            border: 1px solid var(--slate-200);
+            border-top-left-radius: 4px;
+        }
+        [dir="rtl"] .chat-msg.bot {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 4px;
+        }
+        .chat-msg.user {
+            align-self: flex-end;
+            background: var(--obsidian);
+            color: #ffffff;
+            border-top-right-radius: 4px;
+        }
+        [dir="rtl"] .chat-msg.user {
+            border-top-right-radius: 12px;
+            border-top-left-radius: 4px;
+        }
+
+        .chat-lec-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 9px;
+        }
+        .chat-lec-card {
+            background: #f8fafc;
+            border: 1px solid var(--slate-200);
+            border-radius: 10px;
+            padding: 9px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .chat-lec-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .chat-lec-name {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--slate-900);
+            line-height: 1.35;
+        }
+        .chat-lec-fee {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--success);
+            white-space: nowrap;
+        }
+        .chat-lec-desc {
+            font-size: 0.75rem;
+            color: var(--slate-500);
+            line-height: 1.4;
+        }
+        .chat-lec-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            border-radius: 7px;
+            padding: 7px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.15s ease;
+        }
+        .chat-lec-btn:hover {
+            background: var(--accent-hover);
+        }
+        .chat-wa-btn {
+            display: block;
+            width: 100%;
+            margin-top: 8px;
+            background: #15803d;
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.79rem;
+            font-weight: 700;
+        }
+        .chat-wa-btn:hover {
+            background: #166534;
+        }
+        .chat-pay-item {
+            background: #f8fafc;
+            border: 1px solid var(--slate-200);
+            border-radius: 8px;
+            padding: 7px 9px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.78rem;
+        }
+        .chat-copy-btn {
+            background: #ffffff;
+            border: 1px solid var(--slate-300);
+            color: var(--slate-700);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .chat-copy-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .chat-quick-bar {
+            padding: 8px 12px;
+            background: #ffffff;
+            border-top: 1px solid var(--slate-200);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .chat-quick-btn {
+            background: #f1f5f9;
+            color: var(--slate-800);
+            border: 1px solid var(--slate-200);
+            border-radius: 7px;
+            padding: 5px 9px;
+            font-size: 0.74rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .chat-quick-btn:hover {
+            background: #e2e8f0;
+            border-color: var(--slate-300);
+        }
+        [dir="rtl"] .chat-quick-btn {
+            line-height: 1.5;
+            padding: 3px 9px;
+        }
+
+        .chat-input-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #ffffff;
+            border-top: 1px solid var(--slate-200);
+            flex-shrink: 0;
+        }
+        .chat-input {
+            flex: 1;
+            min-width: 0;
+            border: 1px solid var(--slate-300);
+            border-radius: 8px;
+            padding: 9px 11px;
+            font-size: 0.85rem;
+            outline: none;
+            color: var(--slate-900);
+            background: #f8fafc;
+        }
+        .chat-input:focus {
+            border-color: var(--accent);
+            background: #ffffff;
+        }
+        .chat-send-btn {
+            background: var(--obsidian);
+            color: #fcd34d;
+            border: none;
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.15s ease;
+        }
+        .chat-send-btn:hover {
+            background: var(--slate-800);
+        }
+
+        @media (max-width: 520px) {
+            .chat-widget {
+                right: 12px;
+                left: 12px;
+                bottom: 12px;
+                width: auto;
+                max-width: none;
+                height: 76vh;
+                max-height: 540px;
+            }
+            [dir="rtl"] .chat-widget {
+                right: 12px;
+                left: 12px;
+            }
+            .chat-launcher {
+                bottom: 14px;
+                right: 14px;
+            }
+            [dir="rtl"] .chat-launcher {
+                right: auto;
+                left: 14px;
+            }
+        }
     </style>
 <script src="/_aistudio-iframe.js?v=29045eb3"></script></head>
 <body oncontextmenu="return false;">
@@ -1156,6 +1527,43 @@
     </div>
 </div>
 
+<!-- Smart Portal Assistant Launcher & Popup -->
+<button type="button" id="chat-launcher" class="chat-launcher" onclick="openAssistant()" aria-label="Open Course Assistant">
+    <span class="chat-launcher-dot"></span>
+    <span id="txt-chat-launcher">Course Help & Fees</span>
+</button>
+
+<aside id="chat-widget" class="chat-widget" role="dialog" aria-label="Course Assistant">
+    <div class="chat-header">
+        <div class="chat-header-brand">
+            <div class="chat-avatar" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+            </div>
+            <div class="chat-title-wrap">
+                <div id="txt-chat-title" class="chat-title">Course Assistant</div>
+                <div id="txt-chat-sub" class="chat-subtitle">Instant Lecture Details & Prices</div>
+            </div>
+        </div>
+        <button type="button" class="chat-close-btn" onclick="closeAssistant()" aria-label="Close Assistant">×</button>
+    </div>
+
+    <div id="chat-messages" class="chat-messages"></div>
+
+    <div class="chat-quick-bar" id="chat-quick-bar">
+        <button type="button" id="qbtn-lectures" class="chat-quick-btn" onclick="handleQuickQuery('lectures')">All Lectures & Fees</button>
+        <button type="button" id="qbtn-howto" class="chat-quick-btn" onclick="handleQuickQuery('howto')">How to Buy & PIN</button>
+        <button type="button" id="qbtn-notes" class="chat-quick-btn" onclick="handleQuickQuery('notes')">PDF Notes</button>
+        <button type="button" id="qbtn-payment" class="chat-quick-btn" onclick="handleQuickQuery('payment')">Payment Accounts</button>
+    </div>
+
+    <form class="chat-input-bar" onsubmit="event.preventDefault(); sendChatMessage();">
+        <input type="text" id="chat-input" class="chat-input" placeholder="Ask about lectures, prices, PIN..." autocomplete="off">
+        <button type="submit" id="chat-send-btn" class="chat-send-btn">Send</button>
+    </form>
+</aside>
+
 <script>
     const FIREBASE_DB_URL = "https://sidsstudio-2bd24-default-rtdb.firebaseio.com";
 
@@ -1237,7 +1645,33 @@
             pinDeviceLocked: "This PIN is already bound to another device/browser.",
             pinNetError: "Connection error. Please try again.",
             footerSuffix: "Official Digital Academy",
-            footerRight: "PIN-Protected HD Lectures"
+            footerRight: "PIN-Protected HD Lectures",
+            chatLauncher: "Course Help & Fees",
+            chatTitle: "Course Assistant",
+            chatSub: "Live Lecture Details, Fees & Direct Links",
+            chatPlaceholder: "Ask about lectures, fees, notes, PIN...",
+            chatSend: "Send",
+            qLectures: "All Lectures & Fees",
+            qHowto: "How to Buy & PIN",
+            qNotes: "PDF Notes",
+            qPayment: "Payment Accounts",
+            chatWelcomeDefault: (portalName, count) => `Welcome to ${portalName}! We currently have ${count} HD lecture${count === 1 ? "" : "s"} available. Ask me about any lecture, fee, PDF notes, or click a button below to open and unlock directly.`,
+            chatAllLecsHead: (count) => `Here are all ${count} available lectures with fees. Click any lecture below to pay or enter your PIN:`,
+            chatMatchedHead: (count) => count === 1 ? "Here is the lecture matching your query. Click below to pay or unlock with PIN:" : `Found ${count} matching lectures. Click any lecture to pay or unlock:`,
+            chatNoLectures: "No lectures have been published yet. Please check back shortly or contact us on WhatsApp.",
+            chatBuyBtn: "Pay / Unlock Lecture →",
+            chatNotesBtn: "Unlock & Get PDF Notes →",
+            chatNotesHead: (count) => `PDF Study Notes are included with ${count} lecture${count === 1 ? "" : "s"}. Unlock the lecture to download its PDF:`,
+            chatNoNotes: "No PDF study notes have been uploaded yet.",
+            chatHasNotes: "Includes PDF Study Notes",
+            chatPayHead: "You can pay the lecture fee using any account below, then send your payment screenshot on WhatsApp to receive your instant PIN:",
+            chatNoPay: "Payment accounts are being updated. Please contact us on WhatsApp for payment instructions.",
+            chatWaBtn: "Contact / Send Receipt on WhatsApp",
+            chatHowtoText: "Unlocking a lecture takes 3 quick steps:\n1. Click any lecture's 'Pay / Unlock' button.\n2. Transfer the fee via JazzCash, EasyPaisa, NayaPay, or Raqami and send your receipt on WhatsApp.\n3. Enter your received PIN to watch the HD video & download PDF notes immediately.",
+            chatUpcomingHead: "Latest Announcements & Upcoming Schedule:",
+            chatNoUpcoming: "No upcoming announcements right now. Check our available lectures below!",
+            chatGreetReply: (portalName, count) => `Assalam-o-Alaikum! Welcome to ${portalName}. We have ${count} live lecture${count === 1 ? "" : "s"}. Type a lecture number/topic or tap a quick button below for fees & direct links.`,
+            chatFallback: (count) => `I can help you with all ${count} lectures, fees, PDF notes, payment accounts, and PIN instructions. Try typing a lecture number (e.g. "Lecture 1") or pick a course below:`
         },
         ur: {
             dir: "rtl",
@@ -1301,7 +1735,33 @@
             pinDeviceLocked: "یہ پِن کسی دوسرے موبائل یا براؤزر پر رجسٹر ہو چکا ہے۔",
             pinNetError: "سرور سے رابطہ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
             footerSuffix: "آفیشل ڈیجیٹل اکیڈمی",
-            footerRight: "محفوظ HD آن لائن لیکچرز"
+            footerRight: "محفوظ HD آن لائن لیکچرز",
+            chatLauncher: "کورس رہنمائی اور فیس",
+            chatTitle: "کورس اسسٹنٹ",
+            chatSub: "لیکچرز، فیس اور ڈائریکٹ لنکس",
+            chatPlaceholder: "لیکچر، فیس، نوٹس یا پِن کے بارے میں پوچھیں...",
+            chatSend: "بھیجیں",
+            qLectures: "تمام لیکچرز اور فیس",
+            qHowto: "خریدنے اور پِن کا طریقہ",
+            qNotes: "پی ڈی ایف نوٹس",
+            qPayment: "پیمنٹ اکاؤنٹس",
+            chatWelcomeDefault: (portalName, count) => `${portalName} میں خوش آمدید! اس وقت ${count} HD لیکچرز دستیاب ہیں۔ کسی بھی لیکچر کی تفصیل، فیس یا نوٹس کے بارے میں پوچھیں یا نیچے بٹن پر کلک کر کے سیدھا لیکچر کھولیں۔`,
+            chatAllLecsHead: (count) => `یہ تمام ${count} دستیاب لیکچرز اور ان کی فیس ہیں۔ پیمنٹ یا پِن درج کرنے کے لیے کسی بھی لیکچر پر کلک کریں:`,
+            chatMatchedHead: (count) => count === 1 ? "آپ کے سوال کے مطابق یہ لیکچر ملا ہے۔ پیمنٹ یا پِن کے لیے نیچے کلک کریں:" : `آپ کی تلاش کے مطابق ${count} لیکچرز ملے ہیں۔ کھولنے کے لیے کلک کریں:`,
+            chatNoLectures: "ابھی تک کوئی لیکچر شامل نہیں کیا گیا۔ براہ کرم تھوڑی دیر بعد چیک کریں یا واٹس ایپ پر رابطہ کریں۔",
+            chatBuyBtn: "فیس ادا کریں / لیکچر کھولیں ←",
+            chatNotesBtn: "لیکچر کھولیں اور PDF نوٹس لیں ←",
+            chatNotesHead: (count) => `${count} لیکچرز کے ساتھ PDF نوٹس شامل ہیں۔ نوٹس ڈاؤن لوڈ کرنے کے لیے لیکچر ان لاک کریں:`,
+            chatNoNotes: "ابھی کسی لیکچر کے ساتھ پی ڈی ایف نوٹس اپ لوڈ نہیں کیے گئے۔",
+            chatHasNotes: "PDF نوٹس شامل ہیں",
+            chatPayHead: "فیس نیچے دیے گئے کسی بھی اکاؤنٹ پر ادا کریں اور اسکرین شاٹ واٹس ایپ پر بھیج کر فوری پِن حاصل کریں:",
+            chatNoPay: "پیمنٹ اکاؤنٹس اپ ڈیٹ ہو رہے ہیں۔ تفصیل کے لیے واٹس ایپ پر رابطہ کریں۔",
+            chatWaBtn: "واٹس ایپ پر رابطہ کریں / رسید بھیجیں",
+            chatHowtoText: "لیکچر خریدنے اور چلانے کا آسان طریقہ (3 مرحلے):\n1. اپنی پسند کے لیکچر کے 'فیس ادا کریں / لیکچر کھولیں' بٹن پر کلک کریں۔\n2. JazzCash، EasyPaisa، NayaPay یا Raqami پر فیس بھیج کر رسید واٹس ایپ کریں۔\n3. ملنے والا پِن (PIN) درج کریں اور فوراً HD ویڈیو اور PDF نوٹس حاصل کریں۔",
+            chatUpcomingHead: "تازہ ترین اعلانات اور آنے والے لیکچرز:",
+            chatNoUpcoming: "اس وقت کوئی نیا اعلان موجود نہیں۔ نیچے دستیاب لیکچرز دیکھیں!",
+            chatGreetReply: (portalName, count) => `السلام علیکم! ${portalName} میں خوش آمدید۔ اس وقت ${count} لیکچرز موجود ہیں۔ لیکچر نمبر لکھیں یا نیچے دیے گئے بٹن استعمال کریں۔`,
+            chatFallback: (count) => `میں آپ کو تمام ${count} لیکچرز، فیس، PDF نوٹس، پیمنٹ اکاؤنٹس اور پِن کے بارے میں بتا سکتا ہوں۔ لیکچر نمبر لکھیں (مثلاً "Lecture 1") یا نیچے سے منتخب کریں:`
         }
     };
 
@@ -1341,6 +1801,7 @@
         document.getElementById("student-question").placeholder = t.questionPlaceholder;
         document.getElementById("btn-submit-qa").innerText = t.submitQaBtn;
         document.getElementById("footer-right").innerText = t.footerRight;
+        updateAssistantUI();
 
         renderBranding();
         renderLectures();
@@ -1413,6 +1874,7 @@
         } catch (err) {
             document.getElementById("loader").innerText = t.loadError;
         }
+        initAssistant();
     }
 
     function renderBranding() {
@@ -1696,6 +2158,7 @@
     }
 
     function launchSecurePlayer(lecId, pin) {
+        closeAssistant();
         const t = I18N[currentLang];
         const lec = siteData.lectures[lecId];
         document.getElementById("lectures-view").style.display = "none";
@@ -1772,6 +2235,322 @@
         });
         document.getElementById("student-question").value = "";
         loadQuestions(selectedLectureId);
+    }
+
+    // ==========================
+    // SMART PORTAL ASSISTANT
+    // ==========================
+    let assistantInitialized = false;
+    let assistantAutoOpened = false;
+
+    function updateAssistantUI() {
+        const t = I18N[currentLang];
+        const s = siteData.settings || {};
+        const portalName = (s.siteName || "Sids Studios").trim();
+        const launcherTxt = document.getElementById("txt-chat-launcher");
+        if (!launcherTxt) return;
+        launcherTxt.innerText = t.chatLauncher;
+        document.getElementById("txt-chat-title").innerText = `${portalName} · ${t.chatTitle}`;
+        document.getElementById("txt-chat-sub").innerText = t.chatSub;
+        document.getElementById("chat-input").placeholder = t.chatPlaceholder;
+        document.getElementById("chat-send-btn").innerText = t.chatSend;
+        document.getElementById("qbtn-lectures").innerText = t.qLectures;
+        document.getElementById("qbtn-howto").innerText = t.qHowto;
+        document.getElementById("qbtn-notes").innerText = t.qNotes;
+        document.getElementById("qbtn-payment").innerText = t.qPayment;
+    }
+
+    function initAssistant() {
+        const s = siteData.settings || {};
+        const launcher = document.getElementById("chat-launcher");
+        const widget = document.getElementById("chat-widget");
+        if (!launcher || !widget) return;
+
+        if (s.chatEnabled === false) {
+            launcher.style.display = "none";
+            widget.classList.remove("open");
+            return;
+        }
+
+        updateAssistantUI();
+        launcher.style.display = "inline-flex";
+
+        if (!assistantInitialized) {
+            assistantInitialized = true;
+            const t = I18N[currentLang];
+            const portalName = (s.siteName || "Sids Studios").trim();
+            const lecs = getSortedLectures();
+            const customWelcome = (s.chatWelcome || "").trim();
+            const welcomeText = customWelcome || t.chatWelcomeDefault(portalName, lecs.length);
+            appendBotMessage(welcomeText);
+        }
+
+        if (!assistantAutoOpened) {
+            assistantAutoOpened = true;
+            setTimeout(() => {
+                const modalOpen = document.getElementById("access-modal").style.display === "block";
+                const playerOpen = document.getElementById("player-section").style.display === "block";
+                if (!modalOpen && !playerOpen) {
+                    openAssistant();
+                }
+            }, 850);
+        }
+    }
+
+    function openAssistant() {
+        const widget = document.getElementById("chat-widget");
+        const launcher = document.getElementById("chat-launcher");
+        if (!widget) return;
+        widget.classList.add("open");
+        if (launcher) launcher.style.display = "none";
+        scrollChatToBottom();
+    }
+
+    function closeAssistant() {
+        const widget = document.getElementById("chat-widget");
+        const launcher = document.getElementById("chat-launcher");
+        const s = siteData.settings || {};
+        if (widget) widget.classList.remove("open");
+        if (launcher && s.chatEnabled !== false) launcher.style.display = "inline-flex";
+    }
+
+    function openLectureFromChat(lecId) {
+        closeAssistant();
+        openLectureModal(lecId);
+    }
+
+    function scrollChatToBottom() {
+        const box = document.getElementById("chat-messages");
+        if (box) box.scrollTop = box.scrollHeight;
+    }
+
+    function getSortedLectures() {
+        const lecs = siteData.lectures || {};
+        return Object.keys(lecs)
+            .map(id => ({ id, ...lecs[id] }))
+            .sort((a, b) => {
+                const na = parseFloat(a.number);
+                const nb = parseFloat(b.number);
+                if (!isNaN(na) && !isNaN(nb)) return na - nb;
+                return String(a.number || a.id).localeCompare(String(b.number || b.id));
+            });
+    }
+
+    function appendUserMessage(text) {
+        const box = document.getElementById("chat-messages");
+        const div = document.createElement("div");
+        div.className = "chat-msg user";
+        div.innerText = text;
+        box.appendChild(div);
+        scrollChatToBottom();
+    }
+
+    function buildLectureCardsHtml(lecList, forNotes) {
+        const t = I18N[currentLang];
+        if (!lecList || lecList.length === 0) return "";
+        const btnLabel = forNotes ? t.chatNotesBtn : t.chatBuyBtn;
+        return `<div class="chat-lec-list">` + lecList.map(lec => {
+            const num = lec.number || lec.id;
+            const feeText = lec.price ? `${t.feePrefix}${lec.price}` : t.pinRequired;
+            const descLine = lec.desc ? `<div class="chat-lec-desc">${escapeHtml(lec.desc)}</div>` : "";
+            const notesTag = (lec.notesUrl && lec.notesUrl.trim()) ? `<div class="chat-lec-desc" style="color:var(--accent); font-weight:600;">• ${escapeHtml(t.chatHasNotes)}</div>` : "";
+            return `
+                <div class="chat-lec-card">
+                    <div class="chat-lec-top">
+                        <div class="chat-lec-name">${escapeHtml(t.lecPrefix)}${escapeHtml(num)}: ${escapeHtml(lec.title)}</div>
+                        <div class="chat-lec-fee mono">${escapeHtml(feeText)}</div>
+                    </div>
+                    ${descLine}
+                    ${notesTag}
+                    <button type="button" class="chat-lec-btn" data-lec-id="${escapeHtml(lec.id)}">${escapeHtml(btnLabel)}</button>
+                </div>
+            `;
+        }).join("") + `</div>`;
+    }
+
+    function appendBotMessage(text, extraHtml) {
+        const box = document.getElementById("chat-messages");
+        const div = document.createElement("div");
+        div.className = "chat-msg bot";
+        const safeText = escapeHtml(text).replace(/\n/g, "<br>");
+        div.innerHTML = `<div>${safeText}</div>${extraHtml || ""}`;
+        div.querySelectorAll(".chat-lec-btn[data-lec-id]").forEach(btn => {
+            btn.addEventListener("click", () => openLectureFromChat(btn.getAttribute("data-lec-id")));
+        });
+        div.querySelectorAll(".chat-copy-btn[data-copy]").forEach(btn => {
+            btn.addEventListener("click", () => copyAccountDetail(btn.getAttribute("data-copy"), btn));
+        });
+        box.appendChild(div);
+        scrollChatToBottom();
+    }
+
+    function buildPaymentHtml() {
+        const t = I18N[currentLang];
+        const s = siteData.settings || {};
+        const accounts = [
+            { name: "JazzCash", detail: s.jazzcash },
+            { name: "EasyPaisa", detail: s.easypaisa },
+            { name: "NayaPay", detail: s.nayapay },
+            { name: "Raqami", detail: s.raqami }
+        ].filter(a => a.detail && a.detail.trim());
+
+        let html = "";
+        accounts.forEach(a => {
+            html += `
+                <div class="chat-pay-item">
+                    <div><strong>${escapeHtml(a.name)}:</strong> <span class="mono">${escapeHtml(a.detail)}</span></div>
+                    <button type="button" class="chat-copy-btn" data-copy="${escapeHtml(a.detail)}">${escapeHtml(t.copyAccount)}</button>
+                </div>
+            `;
+        });
+        const waNum = (s.whatsapp || "").replace(/[^0-9]/g, "");
+        if (waNum) {
+            html += `<a href="https://wa.me/${waNum}" target="_blank" rel="noopener noreferrer" class="chat-wa-btn">${escapeHtml(t.chatWaBtn)}</a>`;
+        }
+        return { html, count: accounts.length, hasWa: Boolean(waNum) };
+    }
+
+    function handleQuickQuery(type) {
+        const t = I18N[currentLang];
+        if (type === "lectures") {
+            appendUserMessage(t.qLectures);
+            replyAllLectures();
+        } else if (type === "howto") {
+            appendUserMessage(t.qHowto);
+            const lecs = getSortedLectures();
+            appendBotMessage(t.chatHowtoText, buildLectureCardsHtml(lecs.slice(0, 3), false));
+        } else if (type === "notes") {
+            appendUserMessage(t.qNotes);
+            replyNotes();
+        } else if (type === "payment") {
+            appendUserMessage(t.qPayment);
+            replyPayment();
+        }
+    }
+
+    function replyAllLectures() {
+        const t = I18N[currentLang];
+        const lecs = getSortedLectures();
+        if (lecs.length === 0) {
+            appendBotMessage(t.chatNoLectures);
+            return;
+        }
+        appendBotMessage(t.chatAllLecsHead(lecs.length), buildLectureCardsHtml(lecs, false));
+    }
+
+    function replyNotes() {
+        const t = I18N[currentLang];
+        const lecsWithNotes = getSortedLectures().filter(l => l.notesUrl && l.notesUrl.trim());
+        if (lecsWithNotes.length === 0) {
+            appendBotMessage(t.chatNoNotes);
+            return;
+        }
+        appendBotMessage(t.chatNotesHead(lecsWithNotes.length), buildLectureCardsHtml(lecsWithNotes, true));
+    }
+
+    function replyPayment() {
+        const t = I18N[currentLang];
+        const pay = buildPaymentHtml();
+        if (pay.count === 0 && !pay.hasWa) {
+            appendBotMessage(t.chatNoPay);
+            return;
+        }
+        appendBotMessage(pay.count > 0 ? t.chatPayHead : t.chatNoPay, pay.html);
+    }
+
+    function sendChatMessage() {
+        const input = document.getElementById("chat-input");
+        const raw = (input.value || "").trim();
+        if (!raw) return;
+        input.value = "";
+        appendUserMessage(raw);
+        processAssistantQuery(raw);
+    }
+
+    function processAssistantQuery(query) {
+        const t = I18N[currentLang];
+        const s = siteData.settings || {};
+        const portalName = (s.siteName || "Sids Studios").trim();
+        const lecs = getSortedLectures();
+        const q = query.toLowerCase().trim();
+
+        // 1. Check for specific lecture number match (e.g. "lecture 1", "lec 2", "#3", "class 1", or lone number "1")
+        const numMatch = q.match(/(?:lecture|lec|class|video|part|chapter|no|num|#|لیکچر|کلاس)\s*#?\s*(\d+)/i) || q.match(/^(\d+)$/);
+        if (numMatch) {
+            const targetNum = numMatch[1];
+            const exact = lecs.filter(l => String(l.number || "").trim() === targetNum || String(l.id).toLowerCase() === "lec" + targetNum);
+            if (exact.length > 0) {
+                appendBotMessage(t.chatMatchedHead(exact.length), buildLectureCardsHtml(exact, false));
+                return;
+            }
+        }
+
+        // 2. Check specific topic/title keyword match against live lectures
+        const stopWords = new Set([
+            "the", "and", "for", "with", "what", "how", "much", "does", "cost", "price", "prices", "fee", "fees",
+            "rate", "rates", "all", "list", "show", "give", "send", "link", "open", "buy", "unlock", "lecture",
+            "lectures", "lec", "course", "courses", "class", "video", "videos", "detail", "details", "info",
+            "about", "notes", "note", "pdf", "pin", "pay", "payment", "kitna", "kitne", "kitnay", "hai", "hain",
+            "hay", "ka", "ki", "ke", "kay", "batao", "bataye", "batain", "chahiye", "chahye", "kholo", "kaise",
+            "kaisay", "tarika", "mein", "main", "ko", "se", "say", "aur", "sab", "puri", "poori", "mujhe", "mujhey",
+            "فیس", "قیمت", "لیکچر", "لیکچرز", "کورس", "تفصیل", "بتائیں", "کیسے", "تمام"
+        ]);
+        const tokens = q.split(/[\s,?.!:/\-]+/).filter(w => w.length >= 2 && !stopWords.has(w));
+        if (tokens.length > 0 && lecs.length > 0) {
+            const matched = lecs.filter(l => {
+                const hay = `${l.title || ""} ${l.desc || ""} ${l.number || ""}`.toLowerCase();
+                return tokens.some(tok => hay.includes(tok));
+            });
+            if (matched.length > 0 && matched.length < lecs.length) {
+                appendBotMessage(t.chatMatchedHead(matched.length), buildLectureCardsHtml(matched, false));
+                return;
+            }
+        }
+
+        // 3. PDF Notes intent
+        if (/(notes?|pdf|handout|book|نوٹس|پی ڈی ایف)/i.test(q)) {
+            replyNotes();
+            return;
+        }
+
+        // 4. Payment accounts / WhatsApp intent
+        if (/(jazz|easypaisa|easy\s?paisa|nayapay|naya\s?pay|raqami|account|bank|whatsapp|contact|number|qr|receipt|screenshot|اکاؤنٹ|واٹس ایپ|نمبر|رابطہ|رسید)/i.test(q)) {
+            replyPayment();
+            return;
+        }
+
+        // 5. How to buy / PIN instructions intent
+        if (/(how|kaise|kaisay|tarika|tareeqa|step|steps|process|pin\b|unlock|kharid|khareed|buy|purchase|چلا|خرید|طریقہ|پِن|کیسے)/i.test(q) && !/(price|fee|kitn|rate|فیس|قیمت)/i.test(q)) {
+            appendBotMessage(t.chatHowtoText, buildLectureCardsHtml(lecs.slice(0, 3), false));
+            return;
+        }
+
+        // 6. Upcoming / announcements intent
+        if (/(upcoming|next|schedule|announcement|agla|kab\s?a|اعلان|اگلا|شیڈول)/i.test(q)) {
+            const items = Object.values(siteData.upcoming || {});
+            if (items.length > 0) {
+                const lines = items.map((it, i) => `${i + 1}. ${it.text}`).join("\n");
+                appendBotMessage(`${t.chatUpcomingHead}\n${lines}`);
+            } else {
+                appendBotMessage(t.chatNoUpcoming, buildLectureCardsHtml(lecs.slice(0, 3), false));
+            }
+            return;
+        }
+
+        // 7. All lectures / prices / fees / details intent
+        if (/(all|list|lecture|lectures|course|courses|price|prices|fee|fees|rate|cost|kitna|kitne|kitnay|paisa|paise|paisay|pkr|rs\b|detail|details|syllabus|video|فیس|قیمت|لیکچر|کورس|تفصیل|سب|تمام)/i.test(q)) {
+            replyAllLectures();
+            return;
+        }
+
+        // 8. Greetings
+        if (/^(hi|hello|hey|aoa|salam|salaam|assalam|asalam|سلام|السلام)/i.test(q)) {
+            appendBotMessage(t.chatGreetReply(portalName, lecs.length));
+            return;
+        }
+
+        // 9. Fallback: guide + top live lectures directly
+        appendBotMessage(t.chatFallback(lecs.length), buildLectureCardsHtml(lecs.slice(0, 4), false));
     }
 
     initPortal();
