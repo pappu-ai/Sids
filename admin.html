@@ -712,13 +712,41 @@
 
             <div class="toggle-row" style="margin-top:16px;">
                 <div>
-                    <strong id="lbl-set-chat-on" style="font-size:0.86rem;">Enable Smart Course Assistant Popup</strong>
+                    <strong id="lbl-set-chat-on" style="font-size:0.86rem;">Enable "Ask Agent" Popup on Portal</strong>
                     <div id="lbl-set-chat-sub" style="font-size:0.76rem; color:var(--muted);">Auto-opens after portal loads to share live lecture prices & direct buy links (students can close with ×)</div>
                 </div>
                 <input type="checkbox" id="set-chat-enabled" checked style="width:22px; height:22px; flex-shrink:0;">
             </div>
 
-            <label id="lbl-set-chat-welcome">Assistant Welcome Message (Optional):</label>
+            <label id="lbl-set-chat-mode">Active Agent Engine (1-Click Switch):</label>
+            <select id="set-chat-mode" onchange="toggleProxyFields()">
+                <option value="builtin" id="opt-chat-builtin">Built-in GitHub Agent (Free · Zero Server · Instant)</option>
+                <option value="proxy" id="opt-chat-proxy">Secure AI Server Endpoint (Gemini / OpenRouter / Groq)</option>
+            </select>
+
+            <div id="chat-proxy-fields" style="display:none; background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:12px; margin-top:10px;">
+                <div style="font-size:0.76rem; color:var(--muted); margin-bottom:8px;" id="txt-proxy-note">
+                    Keep your Gemini / OpenRouter / Groq API key safely on a server (.env) and paste your HTTPS endpoint URL here. If offline, the portal automatically falls back to the Built-in Agent.
+                </div>
+                <div class="grid-2">
+                    <div>
+                        <label id="lbl-set-chat-provider" style="margin-top:4px;">AI Provider:</label>
+                        <select id="set-chat-provider">
+                            <option value="gemini">Google Gemini</option>
+                            <option value="openrouter">OpenRouter (Multi-Model)</option>
+                            <option value="groq">Groq / Grok</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="lbl-set-chat-model" style="margin-top:4px;">Model Name (Optional):</label>
+                        <input type="text" id="set-chat-model" class="mono" placeholder="e.g. gemini-2.5-flash">
+                    </div>
+                </div>
+                <label id="lbl-set-chat-proxy-url">Secure HTTPS Backend Endpoint URL:</label>
+                <input type="text" id="set-chat-proxy-url" class="mono" placeholder="https://your-backend.vercel.app/api/chat">
+            </div>
+
+            <label id="lbl-set-chat-welcome">Ask Agent Welcome Message (Optional):</label>
             <input type="text" id="set-chat-welcome" placeholder="Leave blank for automatic bilingual welcome message">
 
             <button class="btn btn-primary" id="btn-save-settings" onclick="saveGeneralSettings()">Save All Portal Settings</button>
@@ -827,9 +855,16 @@
             lblSetNpQr: "NayaPay QR Image Link (Optional):",
             lblSetRq: "Raqami Account / IBAN:",
             lblSetRqQr: "Raqami QR Image Link (Optional):",
-            lblSetChatOn: "Enable Smart Course Assistant Popup",
+            lblSetChatOn: "Enable \"Ask Agent\" Popup on Portal",
             lblSetChatSub: "Auto-opens after portal loads to share live lecture prices & direct buy links (students can close with ×)",
-            lblSetChatWelcome: "Assistant Welcome Message (Optional):",
+            lblSetChatMode: "Active Agent Engine (1-Click Switch):",
+            optChatBuiltin: "Built-in GitHub Agent (Free · Zero Server · Instant)",
+            optChatProxy: "Secure AI Server Endpoint (Gemini / OpenRouter / Groq)",
+            txtProxyNote: "Keep your Gemini / OpenRouter / Groq API key safely on a server (.env) and paste your HTTPS endpoint URL here. If offline, the portal automatically falls back to the Built-in Agent.",
+            lblSetChatProvider: "AI Provider:",
+            lblSetChatModel: "Model Name (Optional):",
+            lblSetChatProxyUrl: "Secure HTTPS Backend Endpoint URL:",
+            lblSetChatWelcome: "Ask Agent Welcome Message (Optional):",
             phSetChatWelcome: "Leave blank for automatic bilingual welcome message",
             btnSaveSettings: "Save All Portal Settings",
             noLectures: "No lectures added yet.",
@@ -951,9 +986,16 @@
             lblSetNpQr: "NayaPay QR لنک (اختیاری):",
             lblSetRq: "Raqami اکاؤنٹ / IBAN:",
             lblSetRqQr: "Raqami QR لنک (اختیاری):",
-            lblSetChatOn: "اسمارٹ کورس اسسٹنٹ چیٹ بوٹ آن رکھیں",
+            lblSetChatOn: "پورٹل پر \"Ask Agent\" چیٹ بوٹ آن رکھیں",
             lblSetChatSub: "پورٹل لوڈ ہوتے ہی خود کھلے گا، لیکچرز اور فیس بتائے گا اور سیدھا خریدنے کا بٹن دے گا (× سے بند ہو سکتا ہے)",
-            lblSetChatWelcome: "چیٹ بوٹ کا خوش آمدید پیغام (اختیاری):",
+            lblSetChatMode: "ایکٹیو ایجنٹ انجن (1-کلک سوئچ):",
+            optChatBuiltin: "بلٹ اِن گٹ ہب ایجنٹ (مفت · بغیر سرور · فوری)",
+            optChatProxy: "محفوظ AI سرور اینڈپوائنٹ (Gemini / OpenRouter / Groq)",
+            txtProxyNote: "اپنی Gemini / OpenRouter / Groq API key محفوظ سرور (.env) پر رکھیں اور یہاں صرف HTTPS اینڈپوائنٹ لنک دیں۔ سرور بند ہو تو خودکار طور پر بلٹ اِن ایجنٹ چلے گا۔",
+            lblSetChatProvider: "AI پرووائیڈر:",
+            lblSetChatModel: "ماڈل کا نام (اختیاری):",
+            lblSetChatProxyUrl: "محفوظ HTTPS بیک اینڈ لنک:",
+            lblSetChatWelcome: "ایجنٹ کا خوش آمدید پیغام (اختیاری):",
             phSetChatWelcome: "خالی چھوڑیں تو خودکار اردو/انگلش پیغام آئے گا",
             btnSaveSettings: "تمام سیٹنگز محفوظ کریں",
             noLectures: "ابھی کوئی لیکچر موجود نہیں۔",
@@ -1104,6 +1146,13 @@
         document.getElementById("lbl-set-rq-qr").innerText = t.lblSetRqQr;
         document.getElementById("lbl-set-chat-on").innerText = t.lblSetChatOn;
         document.getElementById("lbl-set-chat-sub").innerText = t.lblSetChatSub;
+        document.getElementById("lbl-set-chat-mode").innerText = t.lblSetChatMode;
+        document.getElementById("opt-chat-builtin").innerText = t.optChatBuiltin;
+        document.getElementById("opt-chat-proxy").innerText = t.optChatProxy;
+        document.getElementById("txt-proxy-note").innerText = t.txtProxyNote;
+        document.getElementById("lbl-set-chat-provider").innerText = t.lblSetChatProvider;
+        document.getElementById("lbl-set-chat-model").innerText = t.lblSetChatModel;
+        document.getElementById("lbl-set-chat-proxy-url").innerText = t.lblSetChatProxyUrl;
         document.getElementById("lbl-set-chat-welcome").innerText = t.lblSetChatWelcome;
         document.getElementById("set-chat-welcome").placeholder = t.phSetChatWelcome;
         document.getElementById("btn-save-settings").innerText = t.btnSaveSettings;
@@ -1269,9 +1318,19 @@
         document.getElementById("set-rq").value = s.raqami || "";
         document.getElementById("set-rq-qr").value = s.raqamiQr || "";
         document.getElementById("set-chat-enabled").checked = s.chatEnabled !== false;
+        document.getElementById("set-chat-mode").value = s.chatMode === "proxy" ? "proxy" : "builtin";
+        document.getElementById("set-chat-provider").value = s.chatProvider || "gemini";
+        document.getElementById("set-chat-model").value = s.chatModel || "";
+        document.getElementById("set-chat-proxy-url").value = s.chatProxyUrl || "";
+        toggleProxyFields();
         document.getElementById("set-chat-welcome").value = s.chatWelcome || "";
         if (s.upcomingColor) document.getElementById("upcoming-color").value = s.upcomingColor;
         if (s.upcomingSize) document.getElementById("upcoming-size").value = s.upcomingSize;
+    }
+
+    function toggleProxyFields() {
+        const mode = document.getElementById("set-chat-mode").value;
+        document.getElementById("chat-proxy-fields").style.display = mode === "proxy" ? "block" : "none";
     }
 
     async function saveGeneralSettings() {
@@ -1294,6 +1353,10 @@
             raqami: document.getElementById("set-rq").value.trim(),
             raqamiQr: document.getElementById("set-rq-qr").value.trim(),
             chatEnabled: document.getElementById("set-chat-enabled").checked,
+            chatMode: document.getElementById("set-chat-mode").value,
+            chatProvider: document.getElementById("set-chat-provider").value,
+            chatModel: document.getElementById("set-chat-model").value.trim(),
+            chatProxyUrl: document.getElementById("set-chat-proxy-url").value.trim(),
             chatWelcome: document.getElementById("set-chat-welcome").value.trim()
         };
         await fetch(`${dbUrl}/portal/settings.json`, {
