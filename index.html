@@ -1353,9 +1353,215 @@
                 left: 14px;
             }
         }
+
+        /* Event Landing Page Splash Overlay (20s Auto-Close + × Dismiss) */
+        .event-splash {
+            position: fixed;
+            inset: 0;
+            z-index: 120;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background: rgba(7, 13, 25, 0.86);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: eventFadeIn 0.28s ease-out;
+        }
+        .event-splash.open {
+            display: flex;
+        }
+        @keyframes eventFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .event-card {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+            max-height: 92vh;
+            overflow-y: auto;
+            background: linear-gradient(155deg, #0b1325 0%, #111c33 58%, #0c1424 100%);
+            color: #ffffff;
+            border: 1px solid rgba(245, 158, 11, 0.36);
+            border-radius: 16px;
+            box-shadow: 0 28px 64px -16px rgba(0, 0, 0, 0.68);
+            animation: eventCardUp 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes eventCardUp {
+            from { opacity: 0; transform: translateY(16px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .event-progress-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+        }
+        .event-progress-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+            transition: width 1s linear;
+        }
+        .event-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .event-countdown {
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: #fbbf24;
+            letter-spacing: 0.03em;
+            font-variant-numeric: tabular-nums;
+            background: rgba(245, 158, 11, 0.14);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            padding: 5px 11px;
+            border-radius: 6px;
+        }
+        .event-close-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-size: 1.45rem;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.16s, border-color 0.16s, transform 0.15s;
+        }
+        .event-close-btn:hover {
+            background: rgba(239, 68, 68, 0.24);
+            border-color: rgba(248, 113, 113, 0.55);
+            transform: scale(1.04);
+        }
+        .event-poster {
+            width: 100%;
+            max-height: 260px;
+            object-fit: cover;
+            display: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: #020617;
+        }
+        .event-body {
+            padding: 24px 24px 22px;
+        }
+        .event-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.74rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        .event-kicker::before {
+            content: "";
+            width: 18px;
+            height: 2px;
+            background: #f59e0b;
+            display: inline-block;
+        }
+        .event-title {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: clamp(1.55rem, 3.6vw, 2.15rem);
+            font-weight: 700;
+            line-height: 1.22;
+            color: #ffffff;
+            margin: 0 0 12px;
+        }
+        [dir="rtl"] .event-title {
+            font-family: 'Noto Nastaliq Urdu', 'Plus Jakarta Sans', sans-serif;
+            line-height: 1.85;
+        }
+        .event-desc {
+            font-size: 0.94rem;
+            line-height: 1.65;
+            color: #cbd5e1;
+            margin: 0 0 22px;
+            white-space: pre-line;
+        }
+        .event-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .event-cta-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #f59e0b;
+            color: #0b1325;
+            font-weight: 800;
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: background 0.16s, transform 0.15s;
+        }
+        .event-cta-btn:hover {
+            background: #fbbf24;
+            transform: translateY(-1px);
+        }
+        .event-skip-btn {
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.86rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.16s, border-color 0.16s;
+        }
+        .event-skip-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        @media (max-width: 520px) {
+            .event-body { padding: 18px; }
+            .event-actions { flex-direction: column; align-items: stretch; }
+            .event-cta-btn, .event-skip-btn { width: 100%; text-align: center; }
+        }
     </style>
 <script src="/_aistudio-iframe.js?v=29045eb3"></script></head>
 <body oncontextmenu="return false;">
+
+<!-- Event Landing Page Overlay (Auto-closes after 20s or immediately on ×) -->
+<div id="event-splash" class="event-splash" role="dialog" aria-modal="true" aria-labelledby="event-title" onclick="if(event.target === this) closeEventSplash()">
+    <div class="event-card">
+        <div class="event-progress-track">
+            <div id="event-progress-fill" class="event-progress-fill"></div>
+        </div>
+        <div class="event-topbar">
+            <span id="event-countdown" class="event-countdown">Closes in 20s</span>
+            <button type="button" id="event-close-btn" class="event-close-btn" onclick="closeEventSplash()" aria-label="Close event announcement">&times;</button>
+        </div>
+        <img id="event-poster" class="event-poster" src="" alt="Event Poster" onerror="this.style.display='none'">
+        <div class="event-body">
+            <div id="event-date" class="event-kicker">SPECIAL EVENT</div>
+            <h2 id="event-title" class="event-title"></h2>
+            <p id="event-desc" class="event-desc"></p>
+            <div class="event-actions">
+                <a id="event-cta-btn" class="event-cta-btn" href="#" target="_blank" rel="noopener noreferrer">Register / Details →</a>
+                <button type="button" id="event-skip-btn" class="event-skip-btn" onclick="closeEventSplash()">Enter Portal →</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Top Navigation Bar -->
 <nav class="top-nav">
@@ -1678,7 +1884,11 @@
             chatByeReply: "Allah Hafiz! You can reopen this assistant anytime from the bottom button if you need help.",
             chatTeacherReply: (portalName, teacher, count) => teacher ? `${portalName} lectures are taught by ${teacher}. There are currently ${count} HD lecture${count === 1 ? "" : "s"} available on this portal.` : `${portalName} currently offers ${count} HD video lecture${count === 1 ? "" : "s"} with instant PIN-protected access.`,
             chatPinRulesReply: "Each access PIN unlocks its assigned HD lecture + PDF notes for your chosen validity period (e.g. 7–30 days). For security, PINs are locked to one mobile/browser — if you change your device or face any PIN issue, just message us on WhatsApp and Admin will reset it for you.",
-            chatFallback: (portalName) => `I'm the ${portalName} Course Assistant — I can help you with lectures, fees, PDF notes, payment accounts, and PIN access. Tap one of the quick buttons below or type a lecture number (e.g. "Lecture 1").`
+            chatFallback: (portalName) => `I'm the ${portalName} Course Assistant — I can help you with lectures, fees, PDF notes, payment accounts, and PIN access. Tap one of the quick buttons below or type a lecture number (e.g. "Lecture 1").`,
+            eventDefaultKicker: "SPECIAL ANNOUNCEMENT",
+            eventCountdown: (sec) => `Closes in ${sec}s`,
+            eventSkipBtn: "Continue to Portal →",
+            eventDefaultBtn: "Register / Join Now →"
         },
         ur: {
             dir: "rtl",
@@ -1775,7 +1985,11 @@
             chatByeReply: "اللہ حافظ! ضرورت پڑنے پر نیچے بٹن سے چیٹ دوبارہ کھول سکتے ہیں۔",
             chatTeacherReply: (portalName, teacher, count) => teacher ? `${portalName} کے لیکچرز ${teacher} پڑھاتے ہیں۔ اس وقت پورٹل پر ${count} HD لیکچرز دستیاب ہیں۔` : `${portalName} پر اس وقت ${count} HD ویڈیو لیکچرز پِن رسائی کے ساتھ دستیاب ہیں۔`,
             chatPinRulesReply: "ہر پِن (PIN) آپ کے منتخب کردہ لیکچر اور PDF نوٹس کو مقررہ مدت تک کھولتا ہے۔ سکیورٹی کے لیے پِن ایک موبائل/براؤزر پر لاک ہوتا ہے — اگر موبائل تبدیل ہو یا کوئی مسئلہ آئے تو واٹس ایپ پر رابطہ کریں، ایڈمن فوراً ری سیٹ کر دیں گے۔",
-            chatFallback: (portalName) => `میں ${portalName} کا کورس اسسٹنٹ ہوں — میں آپ کو لیکچرز، فیس، PDF نوٹس، پیمنٹ اکاؤنٹس اور پِن کے بارے میں بتا سکتا ہوں۔ نیچے دیے گئے بٹن دبائیں یا لیکچر نمبر لکھیں (مثلاً "Lecture 1")۔`
+            chatFallback: (portalName) => `میں ${portalName} کا کورس اسسٹنٹ ہوں — میں آپ کو لیکچرز، فیس، PDF نوٹس، پیمنٹ اکاؤنٹس اور پِن کے بارے میں بتا سکتا ہوں۔ نیچے دیے گئے بٹن دبائیں یا لیکچر نمبر لکھیں (مثلاً "Lecture 1")۔`,
+            eventDefaultKicker: "خاص اعلان / ایونٹ",
+            eventCountdown: (sec) => `${sec} سیکنڈ میں بند ہوگا`,
+            eventSkipBtn: "پورٹل پر جائیں ←",
+            eventDefaultBtn: "رجسٹر / تفصیل دیکھیں ←"
         }
     };
 
@@ -1815,6 +2029,12 @@
         document.getElementById("student-question").placeholder = t.questionPlaceholder;
         document.getElementById("btn-submit-qa").innerText = t.submitQaBtn;
         document.getElementById("footer-right").innerText = t.footerRight;
+        const skipBtn = document.getElementById("event-skip-btn");
+        if (skipBtn) skipBtn.innerText = t.eventSkipBtn;
+        if (eventSplashOpen && eventRemainingSec > 0) {
+            const cd = document.getElementById("event-countdown");
+            if (cd) cd.innerText = t.eventCountdown(eventRemainingSec);
+        }
         updateAssistantUI();
 
         renderBranding();
@@ -1888,8 +2108,116 @@
         } catch (err) {
             document.getElementById("loader").innerText = t.loadError;
         }
+        showEventSplashIfEnabled();
+    }
+
+    // Event Landing Page (Auto-closes after configured seconds, default 20s, or immediately on ×)
+    let eventSplashTimer = null;
+    let eventSplashOpen = false;
+    let eventRemainingSec = 20;
+
+    function showEventSplashIfEnabled() {
+        const s = siteData.settings || {};
+        const hasContent = Boolean((s.eventTitle || "").trim() || (s.eventDesc || "").trim() || (s.eventImage || "").trim());
+        if (s.eventEnabled !== true || !hasContent) {
+            initAssistant();
+            return;
+        }
+
+        const splash = document.getElementById("event-splash");
+        if (!splash) {
+            initAssistant();
+            return;
+        }
+
+        const t = I18N[currentLang];
+        const totalSec = Math.max(5, Math.min(120, parseInt(s.eventSeconds, 10) || 20));
+        eventRemainingSec = totalSec;
+
+        const posterEl = document.getElementById("event-poster");
+        if (s.eventImage && s.eventImage.trim()) {
+            posterEl.src = s.eventImage.trim();
+            posterEl.style.display = "block";
+        } else {
+            posterEl.removeAttribute("src");
+            posterEl.style.display = "none";
+        }
+
+        document.getElementById("event-date").innerText = (s.eventDate || "").trim() || t.eventDefaultKicker;
+        document.getElementById("event-title").innerText = (s.eventTitle || "").trim() || (s.siteName || "SIDS STUDIOS");
+        const descEl = document.getElementById("event-desc");
+        const descText = (s.eventDesc || "").trim();
+        descEl.innerText = descText;
+        descEl.style.display = descText ? "block" : "none";
+
+        const ctaBtn = document.getElementById("event-cta-btn");
+        const customBtnText = (s.eventBtnText || "").trim();
+        const customBtnUrl = (s.eventBtnUrl || "").trim();
+        const waNum = (s.whatsapp || "").replace(/\D/g, "");
+        if (customBtnText || customBtnUrl) {
+            let finalHref = customBtnUrl;
+            if (!finalHref && waNum) {
+                const msg = encodeURIComponent(`Assalam-o-Alaikum! I saw your event announcement (${(s.eventTitle || "Event").trim()}) on ${(s.siteName || "Sids Studios").trim()} and would like details.`);
+                finalHref = `https://wa.me/${waNum}?text=${msg}`;
+            }
+            if (finalHref) {
+                ctaBtn.href = finalHref;
+                ctaBtn.innerText = customBtnText || t.eventDefaultBtn;
+                ctaBtn.style.display = "inline-flex";
+            } else {
+                ctaBtn.style.display = "none";
+            }
+        } else {
+            ctaBtn.style.display = "none";
+        }
+
+        document.getElementById("event-skip-btn").innerText = t.eventSkipBtn;
+        const cdEl = document.getElementById("event-countdown");
+        const fillEl = document.getElementById("event-progress-fill");
+        cdEl.innerText = t.eventCountdown(eventRemainingSec);
+        fillEl.style.transition = "none";
+        fillEl.style.width = "100%";
+
+        eventSplashOpen = true;
+        splash.classList.add("open");
+        document.body.style.overflow = "hidden";
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                fillEl.style.transition = "width 1s linear";
+                fillEl.style.width = `${Math.max(0, ((eventRemainingSec - 1) / totalSec) * 100)}%`;
+            });
+        });
+
+        clearInterval(eventSplashTimer);
+        eventSplashTimer = setInterval(() => {
+            eventRemainingSec -= 1;
+            if (eventRemainingSec <= 0) {
+                closeEventSplash();
+                return;
+            }
+            const curT = I18N[currentLang];
+            cdEl.innerText = curT.eventCountdown(eventRemainingSec);
+            fillEl.style.width = `${Math.max(0, ((eventRemainingSec - 1) / totalSec) * 100)}%`;
+        }, 1000);
+    }
+
+    function closeEventSplash() {
+        clearInterval(eventSplashTimer);
+        eventSplashTimer = null;
+        if (!eventSplashOpen) return;
+        eventSplashOpen = false;
+        const splash = document.getElementById("event-splash");
+        if (splash) splash.classList.remove("open");
+        document.body.style.overflow = "";
         initAssistant();
     }
+
+    document.addEventListener("keydown", function(ev) {
+        if (ev.key === "Escape" && eventSplashOpen) {
+            closeEventSplash();
+        }
+    });
 
     function renderBranding() {
         const t = I18N[currentLang];
