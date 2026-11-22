@@ -751,6 +751,59 @@
 
             <button class="btn btn-primary" id="btn-save-settings" onclick="saveGeneralSettings()">Save All Portal Settings</button>
         </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 id="txt-event-head">Event Landing Page (20s Auto-Close Popup)</h2>
+            </div>
+
+            <div class="toggle-row" style="margin-top:4px;">
+                <div>
+                    <strong id="lbl-set-event-on" style="font-size:0.86rem;">Enable Event Landing Page on Portal</strong>
+                    <div id="lbl-set-event-sub" style="font-size:0.76rem; color:var(--muted);">Appears when students open the site, auto-closes after 20 seconds, or closes immediately with ×</div>
+                </div>
+                <input type="checkbox" id="set-event-enabled" style="width:22px; height:22px; flex-shrink:0;">
+            </div>
+
+            <label id="lbl-set-event-title">Event Title / Headline:</label>
+            <input type="text" id="set-event-title" placeholder="e.g. Live Masterclass Workshop — Free Registration Open">
+
+            <div class="grid-2">
+                <div>
+                    <label id="lbl-set-event-date">Event Date / Tag:</label>
+                    <input type="text" id="set-event-date" placeholder="e.g. SUNDAY · 9:00 PM PKT">
+                </div>
+                <div>
+                    <label id="lbl-set-event-sec">Auto-Close Timer (Seconds):</label>
+                    <input type="number" id="set-event-seconds" min="5" max="120" value="20" class="mono" placeholder="20">
+                </div>
+            </div>
+
+            <label id="lbl-set-event-desc">Event Details / Description:</label>
+            <textarea id="set-event-desc" rows="3" placeholder="Write key details, offer, speaker info, or joining instructions..."></textarea>
+
+            <label id="lbl-set-event-img">Event Banner / Poster Image (Optional):</label>
+            <input type="hidden" id="set-event-image">
+            <div class="img-upload-box">
+                <img id="prev-event-image" class="img-preview-thumb" alt="Event Banner Preview" style="width:96px; height:60px;">
+                <input type="file" id="file-event-image" accept="image/*" style="display:none;" onchange="handleGalleryUpload(this, 'set-event-image', 'prev-event-image', 960)">
+                <button type="button" class="btn-upload" id="btn-up-event-image" onclick="document.getElementById('file-event-image').click()">Upload from Gallery</button>
+                <button type="button" class="btn-clear-img" id="btn-clr-event-image" onclick="clearImgField('set-event-image', 'prev-event-image')">Remove</button>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <label id="lbl-set-event-btn-text">Action Button Text (Optional):</label>
+                    <input type="text" id="set-event-btn-text" placeholder="e.g. Register on WhatsApp">
+                </div>
+                <div>
+                    <label id="lbl-set-event-btn-url">Action Button Link (Optional — WhatsApp if blank):</label>
+                    <input type="text" id="set-event-btn-url" class="mono" placeholder="https://... (or leave blank for WhatsApp)">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="btn-save-event" onclick="saveGeneralSettings()">Save Event Landing Page</button>
+        </div>
     </div>
 
 </div>
@@ -867,6 +920,21 @@
             lblSetChatWelcome: "Ask Agent Welcome Message (Optional):",
             phSetChatWelcome: "Leave blank for automatic bilingual welcome message",
             btnSaveSettings: "Save All Portal Settings",
+            eventHead: "Event Landing Page (20s Auto-Close Popup)",
+            lblSetEventOn: "Enable Event Landing Page on Portal",
+            lblSetEventSub: "Appears when students open the site, auto-closes after 20 seconds, or closes immediately with ×",
+            lblSetEventTitle: "Event Title / Headline:",
+            phSetEventTitle: "e.g. Live Masterclass Workshop — Registration Open",
+            lblSetEventDate: "Event Date / Tag:",
+            phSetEventDate: "e.g. SUNDAY · 9:00 PM PKT",
+            lblSetEventSec: "Auto-Close Timer (Seconds):",
+            lblSetEventDesc: "Event Details / Description:",
+            phSetEventDesc: "Write key details, offer, speaker info, or joining instructions...",
+            lblSetEventImg: "Event Banner / Poster Image (Optional):",
+            lblSetEventBtnText: "Action Button Text (Optional):",
+            phSetEventBtnText: "e.g. Register on WhatsApp",
+            lblSetEventBtnUrl: "Action Button Link (Optional — WhatsApp if blank):",
+            btnSaveEvent: "Save Event Landing Page",
             noLectures: "No lectures added yet.",
             noPins: "No PINs generated yet.",
             noUpcoming: "No active announcements.",
@@ -998,6 +1066,21 @@
             lblSetChatWelcome: "ایجنٹ کا خوش آمدید پیغام (اختیاری):",
             phSetChatWelcome: "خالی چھوڑیں تو خودکار اردو/انگلش پیغام آئے گا",
             btnSaveSettings: "تمام سیٹنگز محفوظ کریں",
+            eventHead: "ایونٹ لینڈنگ پیج (20 سیکنڈ آٹو کلوز پاپ اپ)",
+            lblSetEventOn: "پورٹل پر ایونٹ لینڈنگ پیج آن رکھیں",
+            lblSetEventSub: "ویب سائٹ کھلتے ہی ایونٹ پاپ اپ دکھے گا، 20 سیکنڈ بعد خود بند ہو جائے گا یا × سے فوراً ہٹایا جا سکے گا",
+            lblSetEventTitle: "ایونٹ کا عنوان (Headline):",
+            phSetEventTitle: "مثال: لائیو ماسٹر کلاس ورکشاپ — رجسٹریشن جاری ہے",
+            lblSetEventDate: "ایونٹ کی تاریخ / وقت:",
+            phSetEventDate: "مثال: اتوار · رات 9 بجے",
+            lblSetEventSec: "آٹو کلوز ٹائمر (سیکنڈز):",
+            lblSetEventDesc: "ایونٹ کی تفصیلات:",
+            phSetEventDesc: "ایونٹ، آفر یا شمولیت کی اہم تفصیلات یہاں لکھیں...",
+            lblSetEventImg: "ایونٹ کا بینر / پوسٹر تصویر (اختیاری):",
+            lblSetEventBtnText: "بٹن کا نام (اختیاری):",
+            phSetEventBtnText: "مثال: واٹس ایپ پر رجسٹر کریں",
+            lblSetEventBtnUrl: "بٹن کا لنک (اختیاری — خالی ہو تو واٹس ایپ کھلے گا):",
+            btnSaveEvent: "ایونٹ لینڈنگ پیج محفوظ کریں",
             noLectures: "ابھی کوئی لیکچر موجود نہیں۔",
             noPins: "ابھی کوئی پِن نہیں بنایا گیا۔",
             noUpcoming: "کوئی اعلان موجود نہیں۔",
@@ -1156,6 +1239,23 @@
         document.getElementById("lbl-set-chat-welcome").innerText = t.lblSetChatWelcome;
         document.getElementById("set-chat-welcome").placeholder = t.phSetChatWelcome;
         document.getElementById("btn-save-settings").innerText = t.btnSaveSettings;
+        document.getElementById("txt-event-head").innerText = t.eventHead;
+        document.getElementById("lbl-set-event-on").innerText = t.lblSetEventOn;
+        document.getElementById("lbl-set-event-sub").innerText = t.lblSetEventSub;
+        document.getElementById("lbl-set-event-title").innerText = t.lblSetEventTitle;
+        document.getElementById("set-event-title").placeholder = t.phSetEventTitle;
+        document.getElementById("lbl-set-event-date").innerText = t.lblSetEventDate;
+        document.getElementById("set-event-date").placeholder = t.phSetEventDate;
+        document.getElementById("lbl-set-event-sec").innerText = t.lblSetEventSec;
+        document.getElementById("lbl-set-event-desc").innerText = t.lblSetEventDesc;
+        document.getElementById("set-event-desc").placeholder = t.phSetEventDesc;
+        document.getElementById("lbl-set-event-img").innerText = t.lblSetEventImg;
+        document.getElementById("btn-up-event-image").innerText = t.btnUploadGallery;
+        document.getElementById("btn-clr-event-image").innerText = t.btnRemoveImg;
+        document.getElementById("lbl-set-event-btn-text").innerText = t.lblSetEventBtnText;
+        document.getElementById("set-event-btn-text").placeholder = t.phSetEventBtnText;
+        document.getElementById("lbl-set-event-btn-url").innerText = t.lblSetEventBtnUrl;
+        document.getElementById("btn-save-event").innerText = t.btnSaveEvent;
 
         renderAdminBrand();
         renderLecturesAdmin();
@@ -1324,6 +1424,15 @@
         document.getElementById("set-chat-proxy-url").value = s.chatProxyUrl || "";
         toggleProxyFields();
         document.getElementById("set-chat-welcome").value = s.chatWelcome || "";
+        document.getElementById("set-event-enabled").checked = s.eventEnabled === true;
+        document.getElementById("set-event-title").value = s.eventTitle || "";
+        document.getElementById("set-event-date").value = s.eventDate || "";
+        document.getElementById("set-event-seconds").value = s.eventSeconds || 20;
+        document.getElementById("set-event-desc").value = s.eventDesc || "";
+        document.getElementById("set-event-image").value = s.eventImage || "";
+        syncImgPreview("set-event-image", "prev-event-image");
+        document.getElementById("set-event-btn-text").value = s.eventBtnText || "";
+        document.getElementById("set-event-btn-url").value = s.eventBtnUrl || "";
         if (s.upcomingColor) document.getElementById("upcoming-color").value = s.upcomingColor;
         if (s.upcomingSize) document.getElementById("upcoming-size").value = s.upcomingSize;
     }
@@ -1357,7 +1466,15 @@
             chatProvider: document.getElementById("set-chat-provider").value,
             chatModel: document.getElementById("set-chat-model").value.trim(),
             chatProxyUrl: document.getElementById("set-chat-proxy-url").value.trim(),
-            chatWelcome: document.getElementById("set-chat-welcome").value.trim()
+            chatWelcome: document.getElementById("set-chat-welcome").value.trim(),
+            eventEnabled: document.getElementById("set-event-enabled").checked,
+            eventTitle: document.getElementById("set-event-title").value.trim(),
+            eventDate: document.getElementById("set-event-date").value.trim(),
+            eventSeconds: Math.max(5, Math.min(120, parseInt(document.getElementById("set-event-seconds").value, 10) || 20)),
+            eventDesc: document.getElementById("set-event-desc").value.trim(),
+            eventImage: document.getElementById("set-event-image").value.trim(),
+            eventBtnText: document.getElementById("set-event-btn-text").value.trim(),
+            eventBtnUrl: document.getElementById("set-event-btn-url").value.trim()
         };
         await fetch(`${dbUrl}/portal/settings.json`, {
             method: "PUT",
