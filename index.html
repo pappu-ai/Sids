@@ -1001,15 +1001,17 @@
             letter-spacing: 0.03em;
         }
 
-        /* Moving Anti-Piracy Watermark */
+        /* Anti-Piracy Watermark */
         .fixed-watermark {
             position: absolute;
-            top: 20%;
-            left: 14%;
+            top: 42px;
+            right: 14px;
+            bottom: auto;
+            left: auto;
             z-index: 22;
-            color: rgba(255, 255, 255, 0.56);
-            background: rgba(7, 13, 25, 0.52);
-            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.65);
+            background: rgba(7, 13, 25, 0.58);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             padding: 4px 10px;
             border-radius: 6px;
             font-size: 0.74rem;
@@ -1017,7 +1019,6 @@
             pointer-events: none;
             letter-spacing: 0.6px;
             direction: ltr;
-            transition: top 1.4s ease-in-out, left 1.4s ease-in-out;
             white-space: nowrap;
         }
 
@@ -1116,7 +1117,7 @@
             .ctrl-time { font-size: 0.68rem; }
             .yt-top-shield { height: 52px; padding: 8px 10px 0; }
             .big-play-btn { width: 56px; height: 56px; font-size: 1.35rem; }
-            .fixed-watermark { font-size: 0.66rem; padding: 3px 7px; }
+            .fixed-watermark { font-size: 0.66rem; padding: 3px 7px; top: 38px; right: 10px; }
         }
 
         .notes-btn {
@@ -1552,8 +1553,8 @@
                 bottom: 12px;
                 width: auto;
                 max-width: none;
-                height: 76vh;
-                max-height: 540px;
+                height: 68vh;
+                max-height: 460px;
             }
             [dir="rtl"] .chat-widget {
                 right: 12px;
@@ -1689,7 +1690,7 @@
             display: inline-block;
         }
         .event-title {
-            font-family: 'Newsreader', Georgia, serif;
+            font-family: 'Plus Jakarta Sans', Georgia, serif;
             font-size: clamp(1.55rem, 3.6vw, 2.15rem);
             font-weight: 700;
             line-height: 1.22;
@@ -1753,7 +1754,7 @@
             .event-cta-btn, .event-skip-btn { width: 100%; text-align: center; }
         }
     </style>
-<script src="/_aistudio-iframe.js?v=29045eb3"></script></head>
+</head>
 <body oncontextmenu="return false;">
 
 <!-- Event Landing Page Overlay (Auto-closes after 20s or immediately on ×) -->
@@ -1867,7 +1868,7 @@
             <div id="yt-iframe-container"></div>
             <div id="player-click-shield" class="player-click-shield" onclick="togglePlayerPlay()"></div>
             <div id="yt-top-shield" class="yt-top-shield">
-                <span class="shield-badge">🔒 Protected HD Stream</span>
+                <span class="shield-badge" id="txt-shield-badge">🔒 Protected HD Stream</span>
                 <span id="shield-portal-label" style="opacity:0.75;">SIDS STUDIOS</span>
             </div>
             <div id="player-pause-curtain" class="player-pause-curtain" onclick="togglePlayerPlay()">
@@ -2077,6 +2078,7 @@
             whatsappMsg: (num, title) => `Assalam-o-Alaikum! I have paid the fee for Lecture #${num} (${title}). Please send me the access PIN. Here is my receipt:`,
             backBtn: "← Back to All Lectures",
             downloadNotesBtn: "Download Lecture PDF Notes",
+            shieldBadge: "🔒 Protected HD Stream",
             qaHeading: "Q&A (Ask a question about this lecture)",
             namePlaceholder: "Your Name (Optional)",
             questionPlaceholder: "Write your question here...",
@@ -2183,6 +2185,7 @@
             whatsappMsg: (num, title) => `السلام علیکم! میں نے لیکچر #${num} (${title}) کی پیمنٹ کر دی ہے۔ براہ کرم مجھے اس لیکچر کا پِن (PIN) بھیج دیں۔ یہ میری رسید ہے:`,
             backBtn: "← تمام لیکچرز پر واپس جائیں",
             downloadNotesBtn: "لیکچر کے PDF نوٹس ڈاؤن لوڈ کریں",
+            shieldBadge: "🔒 محفوظ HD ویڈیو",
             qaHeading: "سوال و جواب (اس لیکچر کے متعلق سوال پوچھیں)",
             namePlaceholder: "آپ کا نام (اختیاری)",
             questionPlaceholder: "اپنا سوال یہاں لکھیں...",
@@ -2271,6 +2274,7 @@
         document.getElementById("txt-bar-lectures").innerText = t.barLectures;
         document.getElementById("txt-bar-notes").innerText = t.barNotes;
         document.getElementById("lecture-search").placeholder = t.searchPlaceholder;
+        document.getElementById("txt-shield-badge").innerText = t.shieldBadge;
         document.getElementById("txt-pin-label").innerText = t.pinLabel;
         document.getElementById("pin-input").placeholder = t.pinPlaceholder;
         document.getElementById("btn-verify-pin").innerText = t.verifyBtn;
@@ -2805,7 +2809,6 @@
     let playerProgressTimer = null;
     let watermarkTimer = null;
     let watermarkClockTimer = null;
-    let activeWatermarkPrefix = "";
     let currentSpeedIdx = 0;
     const PLAYER_SPEEDS = [1, 1.25, 1.5, 2, 0.75];
 
@@ -2838,10 +2841,8 @@
     function normalizeDirectEmbedUrl(url) {
         let u = (url || "").trim();
         if (!u) return "";
-        // If Admin pasted full <iframe> snippet, extract src URL
         const iframeSrcMatch = u.match(/src=["']([^"']+)["']/i);
         if (iframeSrcMatch) u = iframeSrcMatch[1].trim();
-        // Auto-convert Bunny Stream Direct Play URL (player.mediadelivery.net/play/...) to Embed URL
         const bunnyMatch = u.match(/^https?:\/\/(?:player|iframe)\.mediadelivery\.net\/(?:play|embed)\/([^/?#]+)\/([^/?#]+)(\?.*)?$/i);
         if (bunnyMatch) {
             return `https://iframe.mediadelivery.net/embed/${bunnyMatch[1]}/${bunnyMatch[2]}${bunnyMatch[3] || ""}`;
@@ -2859,22 +2860,11 @@
     function startMovingWatermark(pin, studentName) {
         stopMovingWatermark();
         const wm = document.getElementById("watermark");
-        activeWatermarkPrefix = studentName ? `${studentName} · ${pin}` : `PIN: ${pin}`;
-
-        const updateClock = () => {
-            const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-            wm.innerText = `${activeWatermarkPrefix} · ${now}`;
-        };
-        const movePos = () => {
-            const topPct = Math.floor(Math.random() * 52) + 18;
-            const leftPct = Math.floor(Math.random() * 44) + 8;
-            wm.style.top = topPct + "%";
-            wm.style.left = leftPct + "%";
-        };
-        updateClock();
-        movePos();
-        watermarkClockTimer = setInterval(updateClock, 1000);
-        watermarkTimer = setInterval(movePos, 4200);
+        wm.style.top = "42px";
+        wm.style.right = "14px";
+        wm.style.bottom = "auto";
+        wm.style.left = "auto";
+        wm.innerText = studentName ? `${studentName} · ${pin}` : `PIN: ${pin}`;
     }
 
     function stopMovingWatermark() {
@@ -2941,7 +2931,6 @@
 
         startMovingWatermark(pin, studentName || "");
 
-        // Direct Domain-Locked Embeds (Bunny.net Stream / Vimeo / Cloudflare Stream)
         const directEmbedUrl = normalizeDirectEmbedUrl(rawUrl);
         if (directEmbedUrl) {
             box.classList.add("direct-embed");
@@ -2951,7 +2940,6 @@
             topShieldEl.style.display = "none";
             container.innerHTML = `<iframe src="${escapeHtml(directEmbedUrl)}" referrerpolicy="origin" loading="lazy" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
         } else {
-            // Shielded YouTube Custom Player (Zero YouTube title, Share button, Copy Link, or Logo visible)
             shieldEl.style.display = "block";
             controlsEl.style.display = "flex";
             topShieldEl.style.display = "flex";
@@ -2968,6 +2956,8 @@
             const videoId = extractYouTubeId(rawUrl);
             container.innerHTML = `<div id="yt-player-mount" style="width:100%;height:100%;"></div>`;
 
+            const safeOrigin = /^https?:\/\//i.test(window.location.origin) ? window.location.origin : "https://www.youtube-nocookie.com";
+
             loadYouTubeIframeAPI().then((YT) => {
                 if (document.getElementById("player-section").style.display !== "block") return;
                 ytPlayer = new YT.Player("yt-player-mount", {
@@ -2983,7 +2973,7 @@
                         rel: 0,
                         showinfo: 0,
                         cc_load_policy: 0,
-                        origin: window.location.origin
+                        origin: safeOrigin
                     },
                     events: {
                         onReady: function() {
@@ -3125,7 +3115,7 @@
                 const div = document.createElement("div");
                 div.className = "qa-item";
                 div.innerHTML = `
-                    <div style="font-weight:700; font-size:0.9rem;">${escapeHtml(q.name || t.studentFallback)} <span class="mono" style="color:var(--slate-500); font-weight:400; font-size:0.78rem;">(${escapeHtml(q.pin)})</span></div>
+                    <div style="font-weight:700; font-size:0.9rem;">${escapeHtml(q.name || t.studentFallback)}</div>
                     <div style="margin-top:4px;">${escapeHtml(q.text)}</div>
                     ${q.reply ? `<div class="qa-reply"><strong>${escapeHtml(t.teacherReplyLabel)}</strong> ${escapeHtml(q.reply)}</div>` : ""}
                 `;
@@ -3160,7 +3150,6 @@
     // SMART PORTAL ASSISTANT
     // ==========================
     let assistantInitialized = false;
-    let assistantAutoOpened = false;
 
     function updateAssistantUI() {
         const t = I18N[currentLang];
@@ -3202,17 +3191,6 @@
             const customWelcome = (s.chatWelcome || "").trim();
             const welcomeText = customWelcome || t.chatWelcomeDefault(portalName, lecs.length);
             appendBotMessage(welcomeText);
-        }
-
-        if (!assistantAutoOpened) {
-            assistantAutoOpened = true;
-            setTimeout(() => {
-                const modalOpen = document.getElementById("access-modal").style.display === "block";
-                const playerOpen = document.getElementById("player-section").style.display === "block";
-                if (!modalOpen && !playerOpen) {
-                    openAssistant();
-                }
-            }, 850);
         }
     }
 
@@ -3440,7 +3418,6 @@
         const q = query.toLowerCase().trim();
         const cleanQ = q.replace(/[?!.,]+/g, "").trim();
 
-        // 1. Conversational small-talk (ALWAYS check before lecture/buy matchers)
         if (/^(how\s+(are|r)\s+(you|u)|hru|how\s+is\s+it\s+going|what'?s\s+up|wassup|kaise\s+ho|kaisy\s+ho|kaisay\s+ho|kese\s+ho|kya\s+haal|kia\s+hal|kya\s+hal|theek\s+ho|thik\s+ho|sab\s+theek|کیسے\s+ہیں|کیا\s+حال)/.test(cleanQ)) {
             appendBotMessage(t.chatHowAreYou(portalName));
             return;
@@ -3462,7 +3439,6 @@
             return;
         }
 
-        // 2. Specific lecture number match (e.g. "lecture 1", "lec 2", "#3", "class 1", or lone number "1")
         const numMatch = q.match(/(?:lecture|lec|class|video|part|chapter|no|num|#|لیکچر|کلاس)\s*#?\s*(\d+)/i) || q.match(/^(\d+)$/);
         if (numMatch) {
             const targetNum = numMatch[1];
@@ -3473,15 +3449,12 @@
             }
         }
 
-        // 3. Instructor / academy info
         if (/(teacher|instructor|sir\b|ustad|professor|who\s+teaches|kon\s+parha|academy\s+name|استاد|لیکچرار)/i.test(q)) {
             appendBotMessage(t.chatTeacherReply(portalName, (s.teacherName || "").trim(), lecs.length));
             return;
         }
 
-        // 4. Device lock, expiry, PIN problem / support
         if (/(device|lock|expire|expiry|valid|validity|days|kitne\s+din|kitnay\s+din|mobile\s+change|reset|block|issue|problem|error|not\s+working|nahi\s+chal|شئیر|ڈیوائس|مدت)/i.test(q)) {
-            const pay = buildPaymentHtml();
             const waOnly = (s.whatsapp || "").replace(/[^0-9]/g, "")
                 ? `<a href="https://wa.me/${(s.whatsapp || "").replace(/[^0-9]/g, "")}" target="_blank" rel="noopener noreferrer" class="chat-wa-btn">${escapeHtml(t.chatWaBtn)}</a>`
                 : "";
@@ -3489,25 +3462,21 @@
             return;
         }
 
-        // 5. PDF Notes intent
         if (/(notes?|pdf|handout|book|workbook|نوٹس|پی ڈی ایف)/i.test(q)) {
             replyNotes();
             return;
         }
 
-        // 6. Payment accounts / WhatsApp intent
         if (/(jazz|easypaisa|easy\s?paisa|nayapay|naya\s?pay|raqami|account|bank|whatsapp|contact|number|qr|receipt|screenshot|اکاؤنٹ|واٹس ایپ|نمبر|رابطہ|رسید)/i.test(q)) {
             replyPayment();
             return;
         }
 
-        // 7. How to buy / PIN instructions intent (strict phrases — never bare "how" or "kaise")
         if (/(how\s+to\s+(buy|pay|unlock|watch|get|use|join|register)|how\s+does\s+it\s+work|kaise\s+(kharid|khareed|buy|pay|mile|chal|unlock|dekh|open)|tarika|tareeqa|step|steps|process|pin\b|unlock|kharid|khareed|\bbuy\b|purchase|خرید|طریقہ|پِن)/i.test(q) && !/(price|fee|kitn|rate|فیس|قیمت)/i.test(q)) {
             appendBotMessage(t.chatHowtoText, buildLectureCardsHtml(lecs.slice(0, 3), false));
             return;
         }
 
-        // 8. Upcoming / announcements intent
         if (/(upcoming|next\s+lec|schedule|announcement|agla|kab\s+a|اعلان|اگلا|شیڈول)/i.test(q)) {
             const items = Object.values(siteData.upcoming || {});
             if (items.length > 0) {
@@ -3519,7 +3488,6 @@
             return;
         }
 
-        // 9. Specific topic/title keyword match against live lectures (word-boundary, >=3 chars, strict stop-words)
         const stopWords = new Set([
             "the", "and", "for", "with", "what", "how", "are", "you", "your", "can", "will", "this", "that",
             "from", "have", "has", "was", "were", "much", "does", "cost", "price", "prices", "fee", "fees",
@@ -3543,19 +3511,16 @@
             }
         }
 
-        // 10. All lectures / prices / fees / details intent
         if (/(all|list|lecture|lectures|course|courses|price|prices|fee|fees|rate|cost|kitna|kitne|kitnay|paisa|paise|paisay|pkr|rs\b|detail|details|syllabus|video|free|demo|discount|فیس|قیمت|لیکچر|کورس|تفصیل|سب|تمام)/i.test(q)) {
             replyAllLectures();
             return;
         }
 
-        // 11. Greeting with extra text (e.g. "salam bhai")
         if (/^(hi|hello|hey|aoa|salam|salaam|assalam|asalam|سلام|السلام)\b/i.test(cleanQ)) {
             appendBotMessage(t.chatGreetReply(portalName, lecs.length));
             return;
         }
 
-        // 12. Clean fallback (never spam lecture cards for unrelated messages)
         appendBotMessage(t.chatFallback(portalName));
     }
 
