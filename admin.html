@@ -1614,7 +1614,8 @@
 
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         const suffix = Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
-        const pinCode = `${lecId}-${suffix}`;
+        const safePrefix = lecId.replace(/[^A-Za-z0-9]/g, "").toUpperCase().slice(0, 12) || "LEC";
+        const pinCode = `${safePrefix}-${suffix}`;
         const expiresAt = Date.now() + (days * 24 * 60 * 60 * 1000);
 
         const payload = {
