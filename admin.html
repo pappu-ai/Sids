@@ -518,13 +518,13 @@
                 </div>
             </div>
 
-            <div class="toggle-row">
-                <div>
-                    <strong id="lbl-dev-lock" style="font-size:0.86rem;">Single Device / Browser Lock</strong>
-                    <div id="lbl-dev-lock-sub" style="font-size:0.76rem; color:var(--muted);">When ON, this PIN only works on one mobile or browser</div>
-                </div>
-                <input type="checkbox" id="pin-device-lock" checked style="width:22px; height:22px; flex-shrink:0;">
-            </div>
+            <label id="lbl-dev-lock">Device Lock Policy:</label>
+            <select id="pin-lock-mode">
+                <option value="mobile_pc" id="opt-lock-mp" selected>1 Mobile + 1 PC Allowed (Recommended)</option>
+                <option value="single" id="opt-lock-single">1 Device Only (Strict Single Browser)</option>
+                <option value="off" id="opt-lock-off">No Device Lock (Unlimited Devices)</option>
+            </select>
+            <div id="lbl-dev-lock-sub" style="font-size:0.76rem; color:var(--muted); margin-top:4px; margin-bottom:12px;">Students can watch on 1 Mobile phone + 1 PC/Laptop — blocks sharing with extra phones or PCs</div>
 
             <button class="btn btn-success" id="btn-gen-pin" onclick="generatePin()">Generate New PIN</button>
 
@@ -851,8 +851,11 @@
             optD90: "90 Days (3 Months)",
             lblPinStudent: "Student Name (Optional):",
             phPinStudent: "e.g. Ali Raza",
-            lblDevLock: "Single Device / Browser Lock",
-            lblDevLockSub: "When ON, this PIN only works on one mobile or browser",
+            lblDevLock: "Device Lock Policy:",
+            optLockMp: "1 Mobile + 1 PC Allowed (Recommended)",
+            optLockSingle: "1 Device Only (Strict Single Browser)",
+            optLockOff: "No Device Lock (Unlimited Devices)",
+            lblDevLockSub: "Students can watch on 1 Mobile phone + 1 PC/Laptop — blocks sharing with extra phones or PCs",
             btnGenPin: "Generate New PIN",
             pinReady: "New PIN is ready:",
             btnCopyPin: "Copy PIN",
@@ -997,8 +1000,11 @@
             optD90: "90 دن (3 مہینے)",
             lblPinStudent: "طالب علم کا نام (اختیاری):",
             phPinStudent: "مثال: علی رضا",
-            lblDevLock: "ایک ڈیوائس / براؤزر لاک",
-            lblDevLockSub: "ON رکھنے پر یہ پِن صرف ایک موبائل یا براؤزر پر چلے گا",
+            lblDevLock: "ڈیوائس لاک سیٹنگ:",
+            optLockMp: "1 موبائل + 1 پی سی کی اجازت (بہترین)",
+            optLockSingle: "صرف 1 ڈیوائس (سخت لاک)",
+            optLockOff: "کوئی لاک نہیں (لامحدود ڈیوائسز)",
+            lblDevLockSub: "طالب علم اپنے 1 موبائل اور 1 پی سی پر دیکھ سکے گا — اضافی موبائل یا پی سی پر شیئر نہیں ہو سکے گا",
             btnGenPin: "نیا پِن بنائیں (Generate PIN)",
             pinReady: "نیا پِن تیار ہے:",
             btnCopyPin: "پِن کاپی کریں",
@@ -1163,6 +1169,9 @@
         document.getElementById("lbl-pin-student").innerText = t.lblPinStudent;
         document.getElementById("pin-student-name").placeholder = t.phPinStudent;
         document.getElementById("lbl-dev-lock").innerText = t.lblDevLock;
+        document.getElementById("opt-lock-mp").innerText = t.optLockMp;
+        document.getElementById("opt-lock-single").innerText = t.optLockSingle;
+        document.getElementById("opt-lock-off").innerText = t.optLockOff;
         document.getElementById("lbl-dev-lock-sub").innerText = t.lblDevLockSub;
         document.getElementById("btn-gen-pin").innerText = t.btnGenPin;
         document.getElementById("txt-pin-ready").innerText = t.pinReady;
@@ -1600,7 +1609,8 @@
 
         const days = parseInt(document.getElementById("pin-duration").value, 10);
         const studentName = document.getElementById("pin-student-name").value.trim();
-        const deviceLock = document.getElementById("pin-device-lock").checked;
+        const lockMode = document.getElementById("pin-lock-mode").value || "mobile_pc";
+        const deviceLock = lockMode !== "off";
 
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         const suffix = Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
@@ -1613,7 +1623,10 @@
             days: days,
             expiresAt: expiresAt,
             deviceLock: deviceLock,
+            lockMode: lockMode,
             boundDevice: "",
+            boundMobile: "",
+            boundDesktop: "",
             blocked: false,
             createdAt: Date.now()
         };
@@ -1662,7 +1675,16 @@
             const isExpired = Date.now() > p.expiresAt;
             const statusText = p.blocked ? t.statusBlocked : isExpired ? t.statusExpired : `${t.statusActive} (${expDate})`;
             const statusColor = p.blocked || isExpired ? "var(--danger)" : "var(--success)";
-            const devStatus = p.deviceLock ? (p.boundDevice ? t.devLocked : t.devReady) : t.devOff;
+            let devStatus = t.devOff;
+            if (p.deviceLock) {
+                if (p.lockMode === "mobile_pc") {
+                    const mTxt = p.boundMobile ? "M:✓" : "M:–";
+                    const dTxt = p.boundDesktop ? "PC:✓" : "PC:–";
+                    devStatus = `1M+1PC (${mTxt} · ${dTxt})`;
+                } else {
+                    devStatus = p.boundDevice ? t.devLocked : t.devReady;
+                }
+            }
 
             const div = document.createElement("div");
             div.className = "item-box";
@@ -1701,9 +1723,9 @@
 
     async function resetPinDevice(code) {
         const t = ADMIN_I18N[adminLang];
-        await fetch(`${dbUrl}/pins/${encodeURIComponent(code)}/boundDevice.json`, {
-            method: "PUT",
-            body: JSON.stringify("")
+        await fetch(`${dbUrl}/pins/${encodeURIComponent(code)}.json`, {
+            method: "PATCH",
+            body: JSON.stringify({ boundDevice: "", boundMobile: "", boundDesktop: "" })
         });
         showToast(t.toastDevReset);
         loadAllData();
