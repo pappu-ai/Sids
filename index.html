@@ -858,14 +858,43 @@
         .video-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%;
-            background: #000000;
+            aspect-ratio: 16 / 9;
+            background: #020617;
             border-radius: 14px;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-touch-callout: none;
             border: 1px solid var(--slate-800);
-            box-shadow: 0 14px 32px rgba(7, 13, 25, 0.2);
+            box-shadow: 0 18px 40px rgba(7, 13, 25, 0.28);
+            direction: ltr;
+        }
+
+        .video-wrapper.pseudo-fs {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            width: 100vw;
+            height: 100vh;
+            aspect-ratio: auto;
+            border-radius: 0;
+            border: none;
+        }
+
+        .video-wrapper:fullscreen,
+        .video-wrapper:-webkit-full-screen {
+            width: 100vw;
+            height: 100vh;
+            aspect-ratio: auto;
+            border-radius: 0;
+            border: none;
+        }
+
+        #yt-iframe-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .video-wrapper iframe {
@@ -875,33 +904,219 @@
             width: 100%;
             height: 100%;
             border: 0;
+            pointer-events: none;
         }
 
+        .video-wrapper.direct-embed iframe {
+            pointer-events: auto;
+        }
+
+        /* Full transparent shield blocking all clicks/hover/copy on YouTube iframe */
+        .player-click-shield {
+            position: absolute;
+            inset: 0;
+            z-index: 15;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        /* Top opaque gradient mask hiding YouTube title & Share/Copy link bar */
         .yt-top-shield {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 55px;
-            background: transparent;
-            z-index: 15;
+            height: 64px;
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.98) 0%, rgba(2, 6, 23, 0.88) 55%, rgba(2, 6, 23, 0) 100%);
+            z-index: 18;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 12px 16px 0;
+            pointer-events: none;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.78);
+            letter-spacing: 0.04em;
         }
 
+        .shield-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: #fbbf24;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        /* Dark pause/ended curtain completely hiding YouTube 'More Videos' & logo */
+        .player-pause-curtain {
+            position: absolute;
+            inset: 0;
+            z-index: 19;
+            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.72) 0%, rgba(2, 6, 23, 0.96) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .player-pause-curtain.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .big-play-btn {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: #f59e0b;
+            color: #0b1325;
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            padding-left: 4px;
+            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.42);
+            transition: transform 0.16s ease, background 0.16s ease;
+        }
+
+        .player-pause-curtain:hover .big-play-btn {
+            transform: scale(1.06);
+            background: #fbbf24;
+        }
+
+        .pause-curtain-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            letter-spacing: 0.03em;
+        }
+
+        /* Moving Anti-Piracy Watermark */
         .fixed-watermark {
             position: absolute;
-            bottom: 44px;
-            left: 14px;
-            z-index: 20;
-            color: rgba(255, 255, 255, 0.45);
-            background: rgba(7, 13, 25, 0.48);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            padding: 3px 10px;
-            border-radius: 5px;
-            font-size: 0.78rem;
+            top: 20%;
+            left: 14%;
+            z-index: 22;
+            color: rgba(255, 255, 255, 0.56);
+            background: rgba(7, 13, 25, 0.52);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.74rem;
             font-weight: 700;
             pointer-events: none;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.6px;
             direction: ltr;
+            transition: top 1.4s ease-in-out, left 1.4s ease-in-out;
+            white-space: nowrap;
+        }
+
+        /* Custom Bottom Control Bar (covers YouTube bottom bar & logo completely) */
+        .player-controls {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 25;
+            background: linear-gradient(180deg, rgba(2, 6, 23, 0.12) 0%, rgba(2, 6, 23, 0.96) 35%, #020617 100%);
+            padding: 14px 14px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .seek-bar-wrap {
+            width: 100%;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .seek-bar-track {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.22);
+            border-radius: 99px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .seek-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #f59e0b;
+            border-radius: 99px;
+            transition: width 0.2s linear;
+        }
+
+        .ctrl-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: nowrap;
+        }
+
+        .ctrl-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ctrl-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 7px;
+            padding: 5px 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .ctrl-btn:hover {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: rgba(245, 158, 11, 0.55);
+        }
+
+        .ctrl-btn.primary {
+            background: #f59e0b;
+            color: #0b1325;
+            border-color: #f59e0b;
+            min-width: 38px;
+        }
+
+        .ctrl-time {
+            color: #cbd5e1;
+            font-size: 0.74rem;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 4px;
+        }
+
+        @media (max-width: 520px) {
+            .ctrl-btn { padding: 4px 7px; font-size: 0.72rem; min-height: 28px; }
+            .ctrl-time { font-size: 0.68rem; }
+            .yt-top-shield { height: 52px; padding: 8px 10px 0; }
+            .big-play-btn { width: 56px; height: 56px; font-size: 1.35rem; }
+            .fixed-watermark { font-size: 0.66rem; padding: 3px 7px; }
         }
 
         .notes-btn {
@@ -1648,10 +1863,38 @@
         </div>
         <h2 id="active-lec-title" style="margin-bottom:14px; color:var(--slate-900); font-weight:800; font-size:1.35rem;"></h2>
 
-        <div class="video-wrapper" id="video-box">
-            <div class="yt-top-shield"></div>
-            <div id="watermark" class="fixed-watermark mono">PIN: ----</div>
+        <div class="video-wrapper" id="video-box" oncontextmenu="return false;">
             <div id="yt-iframe-container"></div>
+            <div id="player-click-shield" class="player-click-shield" onclick="togglePlayerPlay()"></div>
+            <div id="yt-top-shield" class="yt-top-shield">
+                <span class="shield-badge">🔒 Protected HD Stream</span>
+                <span id="shield-portal-label" style="opacity:0.75;">SIDS STUDIOS</span>
+            </div>
+            <div id="player-pause-curtain" class="player-pause-curtain" onclick="togglePlayerPlay()">
+                <div class="big-play-btn" id="big-play-icon">▶</div>
+                <div class="pause-curtain-label" id="pause-curtain-text">Tap to Play Protected Lecture</div>
+            </div>
+            <div id="watermark" class="fixed-watermark mono">PIN: ----</div>
+            <div id="player-controls" class="player-controls">
+                <div class="seek-bar-wrap" id="seek-bar-wrap" onclick="seekPlayerByClick(event)">
+                    <div class="seek-bar-track">
+                        <div class="seek-bar-fill" id="seek-bar-fill"></div>
+                    </div>
+                </div>
+                <div class="ctrl-row">
+                    <div class="ctrl-group">
+                        <button type="button" class="ctrl-btn primary" id="btn-play-pause" onclick="togglePlayerPlay()" aria-label="Play or Pause">▶</button>
+                        <button type="button" class="ctrl-btn mono" onclick="skipPlayerSeconds(-10)" title="Back 10s">-10s</button>
+                        <button type="button" class="ctrl-btn mono" onclick="skipPlayerSeconds(10)" title="Forward 10s">+10s</button>
+                        <span class="ctrl-time mono" id="ctrl-time-display">00:00 / 00:00</span>
+                    </div>
+                    <div class="ctrl-group">
+                        <button type="button" class="ctrl-btn mono" id="btn-player-speed" onclick="cyclePlayerSpeed()">1x</button>
+                        <button type="button" class="ctrl-btn" id="btn-player-mute" onclick="togglePlayerMute()" aria-label="Mute or Unmute">🔊</button>
+                        <button type="button" class="ctrl-btn" id="btn-player-fs" onclick="togglePlayerFullscreen()" aria-label="Fullscreen">⛶</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="notes-container"></div>
@@ -1850,7 +2093,12 @@
             pinWrongLec: "This PIN is for a different lecture. Please select the matching lecture.",
             pinExpired: "This PIN has expired. Please request a new PIN.",
             pinDeviceLocked: "This PIN is already bound to another device/browser.",
+            pinMobileLocked: "This PIN is already linked to another Mobile phone. (1 Mobile + 1 PC allowed)",
+            pinDesktopLocked: "This PIN is already linked to another PC/Laptop. (1 Mobile + 1 PC allowed)",
             pinNetError: "Connection error. Please try again.",
+            playerTapPlay: "Tap to Play Protected Lecture",
+            playerPaused: "Paused — Tap to Resume",
+            playerEnded: "Lecture Completed — Tap to Replay",
             footerSuffix: "Official Digital Academy",
             footerRight: "PIN-Protected HD Lectures",
             chatLauncher: "Ask Agent",
@@ -1951,7 +2199,12 @@
             pinWrongLec: "یہ پِن اس لیکچر کے لیے نہیں ہے۔ متعلقہ لیکچر پر استعمال کریں۔",
             pinExpired: "اس پِن کی مدت ختم ہو چکی ہے۔ نیا پِن حاصل کریں۔",
             pinDeviceLocked: "یہ پِن کسی دوسرے موبائل یا براؤزر پر رجسٹر ہو چکا ہے۔",
+            pinMobileLocked: "یہ پِن کسی دوسرے موبائل پر پہلے سے رجسٹر ہے۔ (1 موبائل + 1 پی سی کی اجازت ہے)",
+            pinDesktopLocked: "یہ پِن کسی دوسرے پی سی/لیپ ٹاپ پر پہلے سے رجسٹر ہے۔ (1 موبائل + 1 پی سی کی اجازت ہے)",
             pinNetError: "سرور سے رابطہ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+            playerTapPlay: "محفوظ لیکچر چلانے کے لیے کلک کریں",
+            playerPaused: "ویڈیو رکی ہوئی ہے — چلانے کے لیے کلک کریں",
+            playerEnded: "لیکچر مکمل ہو گیا — دوبارہ چلانے کے لیے کلک کریں",
             footerSuffix: "آفیشل ڈیجیٹل اکیڈمی",
             footerRight: "محفوظ HD آن لائن لیکچرز",
             chatLauncher: "ایجنٹ سے پوچھیں",
@@ -2477,22 +2730,39 @@
 
             const currentDevice = getDeviceId();
             if (pinData.deviceLock) {
-                if (pinData.boundDevice && pinData.boundDevice !== currentDevice) {
-                    statusEl.style.color = "var(--danger)";
-                    statusEl.innerText = t.pinDeviceLocked;
-                    return;
-                }
-                if (!pinData.boundDevice) {
-                    await fetch(`${dbUrl}/pins/${encodeURIComponent(rawPin)}/boundDevice.json`, {
-                        method: "PUT",
-                        body: JSON.stringify(currentDevice)
-                    });
+                if (pinData.lockMode === "mobile_pc") {
+                    const devType = getDeviceType();
+                    const slotField = devType === "mobile" ? "boundMobile" : "boundDesktop";
+                    const existingSlot = pinData[slotField] || "";
+                    if (existingSlot && existingSlot !== currentDevice) {
+                        statusEl.style.color = "var(--danger)";
+                        statusEl.innerText = devType === "mobile" ? t.pinMobileLocked : t.pinDesktopLocked;
+                        return;
+                    }
+                    if (!existingSlot) {
+                        await fetch(`${dbUrl}/pins/${encodeURIComponent(rawPin)}/${slotField}.json`, {
+                            method: "PUT",
+                            body: JSON.stringify(currentDevice)
+                        });
+                    }
+                } else {
+                    if (pinData.boundDevice && pinData.boundDevice !== currentDevice) {
+                        statusEl.style.color = "var(--danger)";
+                        statusEl.innerText = t.pinDeviceLocked;
+                        return;
+                    }
+                    if (!pinData.boundDevice) {
+                        await fetch(`${dbUrl}/pins/${encodeURIComponent(rawPin)}/boundDevice.json`, {
+                            method: "PUT",
+                            body: JSON.stringify(currentDevice)
+                        });
+                    }
                 }
             }
 
             activePinCode = rawPin;
             closeModal();
-            launchSecurePlayer(selectedLectureId, rawPin);
+            launchSecurePlayer(selectedLectureId, rawPin, pinData.studentName || "");
 
         } catch (e) {
             statusEl.style.color = "var(--danger)";
@@ -2500,17 +2770,201 @@
         }
     }
 
-    function launchSecurePlayer(lecId, pin) {
-        closeAssistant();
+    function getDeviceType() {
+        const ua = navigator.userAgent || "";
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(ua) || (navigator.maxTouchPoints > 1 && window.innerWidth <= 1024);
+        return isMobile ? "mobile" : "desktop";
+    }
+
+    // =========================================
+    // SHIELDED ANTI-LINK-COPY CUSTOM YT PLAYER
+    // =========================================
+    let ytApiPromise = null;
+    let ytPlayer = null;
+    let playerProgressTimer = null;
+    let watermarkTimer = null;
+    let watermarkClockTimer = null;
+    let activeWatermarkPrefix = "";
+    let currentSpeedIdx = 0;
+    const PLAYER_SPEEDS = [1, 1.25, 1.5, 2, 0.75];
+
+    function loadYouTubeIframeAPI() {
+        if (window.YT && window.YT.Player) return Promise.resolve(window.YT);
+        if (ytApiPromise) return ytApiPromise;
+        ytApiPromise = new Promise((resolve) => {
+            const prev = window.onYouTubeIframeAPIReady;
+            window.onYouTubeIframeAPIReady = function() {
+                if (typeof prev === "function") prev();
+                resolve(window.YT);
+            };
+            const tag = document.createElement("script");
+            tag.src = "https://www.youtube.com/iframe_api";
+            document.head.appendChild(tag);
+        });
+        return ytApiPromise;
+    }
+
+    function formatPlayerTime(sec) {
+        if (!sec || isNaN(sec) || sec < 0) return "00:00";
+        const s = Math.floor(sec);
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const r = s % 60;
+        if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+        return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+    }
+
+    function isDirectSecureEmbed(url) {
+        const u = (url || "").trim();
+        return /^https?:\/\/(iframe\.mediadelivery\.net|player\.vimeo\.com|customer-[a-z0-9]+\.cloudflarestream\.com)/i.test(u);
+    }
+
+    function startMovingWatermark(pin, studentName) {
+        stopMovingWatermark();
+        const wm = document.getElementById("watermark");
+        activeWatermarkPrefix = studentName ? `${studentName} · ${pin}` : `PIN: ${pin}`;
+
+        const updateClock = () => {
+            const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+            wm.innerText = `${activeWatermarkPrefix} · ${now}`;
+        };
+        const movePos = () => {
+            const topPct = Math.floor(Math.random() * 52) + 18;
+            const leftPct = Math.floor(Math.random() * 44) + 8;
+            wm.style.top = topPct + "%";
+            wm.style.left = leftPct + "%";
+        };
+        updateClock();
+        movePos();
+        watermarkClockTimer = setInterval(updateClock, 1000);
+        watermarkTimer = setInterval(movePos, 4200);
+    }
+
+    function stopMovingWatermark() {
+        clearInterval(watermarkTimer);
+        clearInterval(watermarkClockTimer);
+        watermarkTimer = null;
+        watermarkClockTimer = null;
+    }
+
+    function destroyCustomPlayer() {
+        clearInterval(playerProgressTimer);
+        playerProgressTimer = null;
+        stopMovingWatermark();
+        if (ytPlayer && typeof ytPlayer.destroy === "function") {
+            try { ytPlayer.destroy(); } catch (e) {}
+        }
+        ytPlayer = null;
+        const box = document.getElementById("video-box");
+        if (box) {
+            box.classList.remove("pseudo-fs");
+            box.classList.remove("direct-embed");
+        }
+        if (document.fullscreenElement) {
+            try { document.exitFullscreen(); } catch (e) {}
+        }
+        document.getElementById("yt-iframe-container").innerHTML = "";
+    }
+
+    function syncPlayerControlsUI(isPlaying, ended) {
         const t = I18N[currentLang];
+        const curtain = document.getElementById("player-pause-curtain");
+        const curtainTxt = document.getElementById("pause-curtain-text");
+        const playBtn = document.getElementById("btn-play-pause");
+        const bigIcon = document.getElementById("big-play-icon");
+        if (isPlaying) {
+            curtain.classList.add("hidden");
+            playBtn.innerText = "⏸";
+        } else {
+            curtain.classList.remove("hidden");
+            curtainTxt.innerText = ended ? t.playerEnded : t.playerPaused;
+            bigIcon.innerText = ended ? "↻" : "▶";
+            playBtn.innerText = "▶";
+        }
+    }
+
+    function launchSecurePlayer(lecId, pin, studentName) {
+        closeAssistant();
+        destroyCustomPlayer();
+        const t = I18N[currentLang];
+        const s = siteData.settings || {};
         const lec = siteData.lectures[lecId];
         document.getElementById("lectures-view").style.display = "none";
         document.getElementById("player-section").style.display = "block";
         document.getElementById("active-lec-title").innerText = `${t.lecPrefix}${lec.number || lecId}: ${lec.title}`;
+        document.getElementById("shield-portal-label").innerText = (s.siteName || "SIDS STUDIOS").toUpperCase();
 
-        const videoId = extractYouTubeId(lec.youtubeUrl || "");
+        const rawUrl = (lec.youtubeUrl || "").trim();
+        const box = document.getElementById("video-box");
         const container = document.getElementById("yt-iframe-container");
-        container.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?rel=0&modestbranding=1&showinfo=0&controls=1&disablekb=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+        const shieldEl = document.getElementById("player-click-shield");
+        const curtainEl = document.getElementById("player-pause-curtain");
+        const controlsEl = document.getElementById("player-controls");
+        const topShieldEl = document.getElementById("yt-top-shield");
+
+        startMovingWatermark(pin, studentName || "");
+
+        // Direct Domain-Locked Embeds (Bunny.net Stream / Vimeo / Cloudflare Stream)
+        if (isDirectSecureEmbed(rawUrl)) {
+            box.classList.add("direct-embed");
+            shieldEl.style.display = "none";
+            curtainEl.classList.add("hidden");
+            controlsEl.style.display = "none";
+            topShieldEl.style.display = "none";
+            container.innerHTML = `<iframe src="${escapeHtml(rawUrl)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+            // Shielded YouTube Custom Player (Zero YouTube title, Share button, Copy Link, or Logo visible)
+            shieldEl.style.display = "block";
+            controlsEl.style.display = "flex";
+            topShieldEl.style.display = "flex";
+            curtainEl.classList.remove("hidden");
+            document.getElementById("pause-curtain-text").innerText = t.playerTapPlay;
+            document.getElementById("big-play-icon").innerText = "▶";
+            document.getElementById("btn-play-pause").innerText = "▶";
+            document.getElementById("seek-bar-fill").style.width = "0%";
+            document.getElementById("ctrl-time-display").innerText = "00:00 / 00:00";
+            currentSpeedIdx = 0;
+            document.getElementById("btn-player-speed").innerText = "1x";
+            document.getElementById("btn-player-mute").innerText = "🔊";
+
+            const videoId = extractYouTubeId(rawUrl);
+            container.innerHTML = `<div id="yt-player-mount" style="width:100%;height:100%;"></div>`;
+
+            loadYouTubeIframeAPI().then((YT) => {
+                if (document.getElementById("player-section").style.display !== "block") return;
+                ytPlayer = new YT.Player("yt-player-mount", {
+                    host: "https://www.youtube-nocookie.com",
+                    videoId: videoId,
+                    playerVars: {
+                        controls: 0,
+                        disablekb: 1,
+                        fs: 0,
+                        iv_load_policy: 3,
+                        modestbranding: 1,
+                        playsinline: 1,
+                        rel: 0,
+                        showinfo: 0,
+                        cc_load_policy: 0,
+                        origin: window.location.origin
+                    },
+                    events: {
+                        onReady: function() {
+                            clearInterval(playerProgressTimer);
+                            playerProgressTimer = setInterval(updatePlayerProgressUI, 400);
+                        },
+                        onStateChange: function(ev) {
+                            if (ev.data === YT.PlayerState.PLAYING) {
+                                syncPlayerControlsUI(true, false);
+                            } else if (ev.data === YT.PlayerState.PAUSED) {
+                                syncPlayerControlsUI(false, false);
+                            } else if (ev.data === YT.PlayerState.ENDED) {
+                                syncPlayerControlsUI(false, true);
+                            }
+                        }
+                    }
+                });
+            });
+        }
 
         const notesDiv = document.getElementById("notes-container");
         if (lec.notesUrl) {
@@ -2519,15 +2973,99 @@
             notesDiv.innerHTML = "";
         }
 
-        const wm = document.getElementById("watermark");
-        wm.innerText = `PIN: ${pin}`;
-
         loadQuestions(lecId);
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function updatePlayerProgressUI() {
+        if (!ytPlayer || typeof ytPlayer.getCurrentTime !== "function") return;
+        const cur = ytPlayer.getCurrentTime() || 0;
+        const dur = ytPlayer.getDuration() || 0;
+        const pct = dur > 0 ? Math.min(100, (cur / dur) * 100) : 0;
+        document.getElementById("seek-bar-fill").style.width = pct + "%";
+        document.getElementById("ctrl-time-display").innerText = `${formatPlayerTime(cur)} / ${formatPlayerTime(dur)}`;
+    }
+
+    function togglePlayerPlay() {
+        if (!ytPlayer || typeof ytPlayer.getPlayerState !== "function") return;
+        const state = ytPlayer.getPlayerState();
+        if (state === 1) {
+            ytPlayer.pauseVideo();
+            syncPlayerControlsUI(false, false);
+        } else {
+            ytPlayer.playVideo();
+            syncPlayerControlsUI(true, false);
+        }
+    }
+
+    function skipPlayerSeconds(delta) {
+        if (!ytPlayer || typeof ytPlayer.getCurrentTime !== "function") return;
+        const cur = ytPlayer.getCurrentTime() || 0;
+        const dur = ytPlayer.getDuration() || 0;
+        const target = Math.max(0, Math.min(dur || cur + delta, cur + delta));
+        ytPlayer.seekTo(target, true);
+        updatePlayerProgressUI();
+    }
+
+    function seekPlayerByClick(ev) {
+        if (!ytPlayer || typeof ytPlayer.getDuration !== "function") return;
+        const dur = ytPlayer.getDuration() || 0;
+        if (dur <= 0) return;
+        const rect = document.getElementById("seek-bar-wrap").getBoundingClientRect();
+        const ratio = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
+        ytPlayer.seekTo(ratio * dur, true);
+        updatePlayerProgressUI();
+    }
+
+    function cyclePlayerSpeed() {
+        if (!ytPlayer || typeof ytPlayer.setPlaybackRate !== "function") return;
+        currentSpeedIdx = (currentSpeedIdx + 1) % PLAYER_SPEEDS.length;
+        const rate = PLAYER_SPEEDS[currentSpeedIdx];
+        ytPlayer.setPlaybackRate(rate);
+        document.getElementById("btn-player-speed").innerText = rate + "x";
+    }
+
+    function togglePlayerMute() {
+        if (!ytPlayer || typeof ytPlayer.isMuted !== "function") return;
+        const btn = document.getElementById("btn-player-mute");
+        if (ytPlayer.isMuted()) {
+            ytPlayer.unMute();
+            btn.innerText = "🔊";
+        } else {
+            ytPlayer.mute();
+            btn.innerText = "🔇";
+        }
+    }
+
+    function togglePlayerFullscreen() {
+        const box = document.getElementById("video-box");
+        if (!box) return;
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            return;
+        }
+        if (box.classList.contains("pseudo-fs")) {
+            box.classList.remove("pseudo-fs");
+            document.body.style.overflow = "";
+            return;
+        }
+        if (box.requestFullscreen) {
+            box.requestFullscreen().catch(() => {
+                box.classList.add("pseudo-fs");
+                document.body.style.overflow = "hidden";
+            });
+        } else if (box.webkitRequestFullscreen) {
+            box.webkitRequestFullscreen();
+        } else {
+            box.classList.add("pseudo-fs");
+            document.body.style.overflow = "hidden";
+        }
+    }
+
     function closePlayer() {
-        document.getElementById("yt-iframe-container").innerHTML = "";
+        destroyCustomPlayer();
+        document.body.style.overflow = "";
         document.getElementById("player-section").style.display = "none";
         document.getElementById("lectures-view").style.display = "block";
     }
