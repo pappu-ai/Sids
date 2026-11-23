@@ -2572,7 +2572,8 @@
         loader.style.display = "none";
         filteredKeys.forEach(id => {
             const lec = lecs[id];
-            const vidId = extractYouTubeId(lec.youtubeUrl || "");
+            const isDirect = isDirectSecureEmbed(lec.youtubeUrl || "");
+            const vidId = isDirect ? "" : extractYouTubeId(lec.youtubeUrl || "");
             const customThumb = lec.thumbUrl && lec.thumbUrl.trim() ? lec.thumbUrl.trim() : "";
             const thumbUrl = customThumb || (vidId ? `https://i.ytimg.com/vi/${vidId}/hqdefault.jpg` : "");
             const card = document.createElement("div");
@@ -2693,7 +2694,8 @@
 
     async function verifyPin() {
         const t = I18N[currentLang];
-        const rawPin = document.getElementById("pin-input").value.trim().toUpperCase();
+        const exactPin = document.getElementById("pin-input").value.trim();
+        const rawPin = exactPin.toUpperCase();
         const statusEl = document.getElementById("pin-status");
         if (!rawPin) {
             statusEl.style.color = "var(--danger)";
@@ -2704,8 +2706,27 @@
         statusEl.innerText = t.pinChecking;
 
         try {
-            const res = await fetch(`${dbUrl}/pins/${encodeURIComponent(rawPin)}.json`);
-            const pinData = await res.json();
+            let matchedPinKey = rawPin;
+            let res = await fetch(`${dbUrl}/pins/${encodeURIComponent(rawPin)}.json`);
+            let pinData = await res.json();
+
+            if (!pinData && exactPin !== rawPin) {
+                res = await fetch(`${dbUrl}/pins/${encodeURIComponent(exactPin)}.json`);
+                pinData = await res.json();
+                if (pinData) matchedPinKey = exactPin;
+            }
+            if (!pinData) {
+                const allRes = await fetch(`${dbUrl}/pins.json`);
+                const allPins = await allRes.json();
+                if (allPins && typeof allPins === "object") {
+                    const normalizedInput = rawPin.replace(/\s+/g, " ");
+                    const foundKey = Object.keys(allPins).find(k => k.trim().toUpperCase().replace(/\s+/g, " ") === normalizedInput);
+                    if (foundKey) {
+                        matchedPinKey = foundKey;
+                        pinData = allPins[foundKey];
+                    }
+                }
+            }
 
             if (!pinData) {
                 statusEl.style.color = "var(--danger)";
@@ -2740,7 +2761,7 @@
                         return;
                     }
                     if (!existingSlot) {
-                        await fetch(`${dbUrl}/pins/${encodeURIComponent(rawPin)}/${slotField}.json`, {
+                        await fetch(`${dbUrl}/pins/${encodeURIComponent(matchedPinKey)}/${slotField}.json`, {
                             method: "PUT",
                             body: JSON.stringify(currentDevice)
                         });
@@ -2752,7 +2773,7 @@
                         return;
                     }
                     if (!pinData.boundDevice) {
-                        await fetch(`${dbUrl}/pins/${encodeURIComponent(rawPin)}/boundDevice.json`, {
+                        await fetch(`${dbUrl}/pins/${encodeURIComponent(matchedPinKey)}/boundDevice.json`, {
                             method: "PUT",
                             body: JSON.stringify(currentDevice)
                         });
@@ -2760,9 +2781,9 @@
                 }
             }
 
-            activePinCode = rawPin;
+            activePinCode = matchedPinKey;
             closeModal();
-            launchSecurePlayer(selectedLectureId, rawPin, pinData.studentName || "");
+            launchSecurePlayer(selectedLectureId, matchedPinKey, pinData.studentName || "");
 
         } catch (e) {
             statusEl.style.color = "var(--danger)";
@@ -2814,9 +2835,25 @@
         return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
     }
 
+    function normalizeDirectEmbedUrl(url) {
+        let u = (url || "").trim();
+        if (!u) return "";
+        // If Admin pasted full <iframe> snippet, extract src URL
+        const iframeSrcMatch = u.match(/src=["']([^"']+)["']/i);
+        if (iframeSrcMatch) u = iframeSrcMatch[1].trim();
+        // Auto-convert Bunny Stream Direct Play URL (player.mediadelivery.net/play/...) to Embed URL
+        const bunnyMatch = u.match(/^https?:\/\/(?:player|iframe)\.mediadelivery\.net\/(?:play|embed)\/([^/?#]+)\/([^/?#]+)(\?.*)?$/i);
+        if (bunnyMatch) {
+            return `https://iframe.mediadelivery.net/embed/${bunnyMatch[1]}/${bunnyMatch[2]}${bunnyMatch[3] || ""}`;
+        }
+        if (/^https?:\/\/(iframe\.mediadelivery\.net|player\.mediadelivery\.net|player\.vimeo\.com|customer-[a-z0-9]+\.cloudflarestream\.com)/i.test(u)) {
+            return u;
+        }
+        return "";
+    }
+
     function isDirectSecureEmbed(url) {
-        const u = (url || "").trim();
-        return /^https?:\/\/(iframe\.mediadelivery\.net|player\.vimeo\.com|customer-[a-z0-9]+\.cloudflarestream\.com)/i.test(u);
+        return Boolean(normalizeDirectEmbedUrl(url));
     }
 
     function startMovingWatermark(pin, studentName) {
@@ -2905,13 +2942,14 @@
         startMovingWatermark(pin, studentName || "");
 
         // Direct Domain-Locked Embeds (Bunny.net Stream / Vimeo / Cloudflare Stream)
-        if (isDirectSecureEmbed(rawUrl)) {
+        const directEmbedUrl = normalizeDirectEmbedUrl(rawUrl);
+        if (directEmbedUrl) {
             box.classList.add("direct-embed");
             shieldEl.style.display = "none";
             curtainEl.classList.add("hidden");
             controlsEl.style.display = "none";
             topShieldEl.style.display = "none";
-            container.innerHTML = `<iframe src="${escapeHtml(rawUrl)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            container.innerHTML = `<iframe src="${escapeHtml(directEmbedUrl)}" referrerpolicy="origin" loading="lazy" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
         } else {
             // Shielded YouTube Custom Player (Zero YouTube title, Share button, Copy Link, or Logo visible)
             shieldEl.style.display = "block";
